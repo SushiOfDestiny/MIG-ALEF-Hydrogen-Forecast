@@ -6,9 +6,8 @@ import tech_eco_data
 nHours = 8760
 t = np.arange(1,nHours + 1)
 
-# zones = ['PACA']
-
-areaList = ['fos', 'nice']
+zones = ['PACA']
+areaList = ['Nice', 'Fos']
 yearZero = 2020
 yearFinal = 2050
 yearStep = 10
@@ -18,22 +17,25 @@ nYears = len(yearList)
 scenario = {}
 
 scenario['resourceDemand'] =  pd.concat(
-        (
-            pd.DataFrame(data = { 
-              'YEAR': year, 
-              'AREA' : area,
-              'TIMESTAMP': t, # We add the TIMESTAMP so that it can be used as an index later. 
-              'electricity': np.zeros(nHours),
-              'hydrogen': 360 * (1 + .025) ** (k * yearStep), # Hourly constant but increasing demand
-              'gas': np.zeros(nHours), 
-              'uranium': np.zeros(nHours)
-             }) 
-        ) for k, year in enumerate(yearList) for area in areaList 
+    (
+    
+        pd.DataFrame(data = { 
+          'AREA': area,
+          'YEAR': year, 
+          'TIMESTAMP': t, # We add the TIMESTAMP so that it can be used as an index later.
+          'electricity': np.zeros(nHours),
+          'hydrogen': 360 * (1 + .025) ** (k * yearStep), # Hourly constant but increasing demand
+          'gas': np.zeros(nHours), 
+          'uranium': np.zeros(nHours)
+         } 
+        ) for k, year in enumerate(yearList)
+    for area in areaList
+    )
 )
-
-
-
-# recense les techno-conv installées dans chaque noeud, par an
+'''
+print(scenario['resourceDemand'].head())
+print(scenario['resourceDemand'].tail())
+'''
 scenario['conversionTechs'] = [] 
 
 for k, year in enumerate(yearList): 
@@ -236,7 +238,7 @@ scenario['carbonGoals'] = pd.DataFrame(data=np.linspace(974e6, 205e6, nYears),
 scenario['maxBiogasCap'] = pd.DataFrame(data=np.linspace(0, 310e6, nYears),
     index=yearList, columns=('maxBiogasCap',))
 
-scenario['gridConnection'] = pd.read_csv("Data/Raw/CalendrierHPHC_TIME.csv", sep=',', decimal='.', skiprows=0,
+scenario['gridConnection'] = pd.read_csv("./Data/Raw/CalendrierHPHC_TIME.csv", sep=',', decimal='.', skiprows=0,
                                 comment="#").set_index(["TIMESTAMP"])
 
 scenario['economicParameters'] = pd.DataFrame({
