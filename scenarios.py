@@ -13,6 +13,7 @@ yearFinal = 2050
 yearStep = 10
 yearList = [yr for yr in range(yearZero, yearFinal+yearStep, yearStep)] # +1 to include the final year
 nYears = len(yearList)
+areaList = ["Nice","Fos"]
 
 scenario = {}
 
