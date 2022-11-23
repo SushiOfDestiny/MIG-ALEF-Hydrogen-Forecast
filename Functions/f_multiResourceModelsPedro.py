@@ -9,7 +9,7 @@ def loadScenario(scenario, printTables=False):
     yearZero = scenario["yearList"][0]
     dy = scenario["yearList"][1] - yearZero
 
-    areaConsumption = scenario['resourceDemand'].melt(id_vars=['TIMESTAMP', 'YEAR'], var_name=['RESOURCES'], value_name='areaConsumption').set_index(['YEAR','TIMESTAMP', 'RESOURCES'])
+    areaConsumption = scenario['resourceDemand'].melt(id_vars=['TIMESTAMP', 'YEAR','AREA'], var_name=['RESOURCES'], value_name='areaConsumption').set_index(['YEAR','TIMESTAMP', 'AREA','RESOURCES'])
 
     TechParameters = scenario['conversionTechs'].transpose().fillna(0)
     TechParameters.index.name='TECHNOLOGIES'
@@ -97,6 +97,7 @@ def loadScenario(scenario, printTables=False):
     inputDict["carbonTax"] = CarbonTax 
     inputDict["transitionFactors"] = scenario["transitionFactors"]
     inputDict["yearList"] = scenario["yearList"]
+    inputDict["areaList"] = scenario["areaList"]
 
     return inputDict
 
@@ -115,10 +116,11 @@ def systemModelPedro(scenario,isAbstract=False):
     yearList = np.array(inputDict["yearList"])
     dy = yearList[1] - yearList[0] 
     y0 = yearList[0]
+    areaList = np.array(inputDict["areaList"])
  
 
-    areaConsumption     = inputDict["areaConsumption"].loc[(inputDict["yearList"][1:], slice(None), slice(None))]
-    availabilityFactor  = inputDict["availabilityFactor"].loc[(inputDict["yearList"][1:], slice(None), slice(None))]
+    areaConsumption     = inputDict["areaConsumption"].loc[(inputDict["yearList"][1:], slice(None), slice(None), slice(None))]
+    availabilityFactor  = inputDict["availabilityFactor"].loc[(inputDict["yearList"][1:], slice(None), slice(None), slice(None))]
     TechParameters      = inputDict["techParameters"] 
     ResParameters       = inputDict["resParameters"]
     conversionFactor    = inputDict["conversionFactor"]
@@ -144,10 +146,12 @@ def systemModelPedro(scenario,isAbstract=False):
     STOCK_TECHNO= set(StorageParameters.index.get_level_values('STOCK_TECHNO').unique())
     RESOURCES = set(ResParameters.index.get_level_values('RESOURCES').unique())
     TIMESTAMP = set(areaConsumption.index.get_level_values('TIMESTAMP').unique())
-    YEAR = set(yearList) #AREA?
+    YEAR = set(yearList)
+    AREA = set(areaList)
  
     TIMESTAMP_list = areaConsumption.index.get_level_values('TIMESTAMP').unique()
     YEAR_list=yearList
+    AREA_list = areaList
 
     HORAIRE = {'P', 'HPH', 'HCH', 'HPE', 'HCE'}
       #Subsets
@@ -177,6 +181,7 @@ def systemModelPedro(scenario,isAbstract=False):
     model.HORAIRE = Set(initialize=HORAIRE,ordered=False)
     model.YEAR_invest=Set(initialize=YEAR_list[:-1], ordered=False)
     model.YEAR_op=Set(initialize=YEAR_list[1:],ordered=False)
+    model.AREA = Set(initialize=AREA_list, ordered=False)
     model.YEAR_invest_TECHNOLOGIES= model.YEAR_invest*model.TECHNOLOGIES
     model.YEAR_invest_STOCKTECHNO = model.YEAR_invest * model.STOCK_TECHNO
     model.YEAR_op_TECHNOLOGIES= model.YEAR_op * model.TECHNOLOGIES
@@ -185,6 +190,7 @@ def systemModelPedro(scenario,isAbstract=False):
     model.RESOURCES_TECHNOLOGIES= model.RESOURCES * model.TECHNOLOGIES
     model.RESOURCES_STOCKTECHNO = model.RESOURCES * model.STOCK_TECHNO
     model.YEAR_op_TIMESTAMP_RESOURCES= model.YEAR_op * model.TIMESTAMP * model.RESOURCES
+    model.YEAR_op_TIMESTAMP_AREA_RESSOURCES = model.YEAR_op * model.TIMESTAMP * model.AREA * model.RESSOURCES
     model.TECHNOLOGIES_TECHNOLOGIES= model.TECHNOLOGIES*model.TECHNOLOGIES
 
     # Subset of Simple only required if ramp constraint
@@ -194,7 +200,7 @@ def systemModelPedro(scenario,isAbstract=False):
     ###############
     # Parameters ##
     ###############
-    model.areaConsumption = Param(model.YEAR_op_TIMESTAMP_RESOURCES, default=0,
+    model.areaConsumption = Param(model.YEAR_op_TIMESTAMP_AREA_RESOURCES, default=0,
                                   initialize=areaConsumption.loc[:, "areaConsumption"].squeeze().to_dict(), domain=Reals)
     model.availabilityFactor = Param(model.YEAR_op_TIMESTAMP_TECHNOLOGIES, domain=PercentFraction, default=1,
                                      initialize=availabilityFactor.loc[:, "availabilityFactor"].squeeze().to_dict())
@@ -211,22 +217,22 @@ def systemModelPedro(scenario,isAbstract=False):
  
 
     for COLNAME in TechParameters:
-        if COLNAME not in ["TECHNOLOGIES", "AREAS","YEAR"]:  ### each column in TechParameters will be a parameter
+        if COLNAME not in ["TECHNOLOGIES", "AREA","YEAR"]:  ### each column in TechParameters will be a parameter
             exec("model." + COLNAME + "= Param(model.YEAR_invest, model.TECHNOLOGIES, default=0, domain=Reals," +
                  "initialize=TechParameters." + COLNAME + ".loc[(inputDict['yearList'][:-1], slice(None))].squeeze().to_dict())")
 
     for COLNAME in ResParameters:
-        if COLNAME not in ["TECHNOLOGIES", "AREAS","YEAR"]:  ### each column in TechParameters will be a parameter
+        if COLNAME not in ["TECHNOLOGIES", "AREA","YEAR"]:  ### each column in TechParameters will be a parameter
             exec("model." + COLNAME + "= Param(model.YEAR_op_TIMESTAMP_RESOURCES, domain=NonNegativeReals,default=0," +
                  "initialize=ResParameters." + COLNAME + ".squeeze().to_dict())")
 
     for COLNAME in Calendrier:
-        if COLNAME not in ["TIMESTAMP","AREAS"]:
+        if COLNAME not in ["TIMESTAMP","AREA"]:
             exec("model." + COLNAME + " = Param(model.TIMESTAMP, default=0," +
                  "initialize=Calendrier." + COLNAME + ".squeeze().to_dict(),domain=Any)")
 
     for COLNAME in StorageParameters:
-        if COLNAME not in ["STOCK_TECHNO","AREAS","YEAR"]:  ### each column in StorageParameters will be a parameter
+        if COLNAME not in ["STOCK_TECHNO","AREA","YEAR"]:  ### each column in StorageParameters will be a parameter
             exec("model." + COLNAME + " =Param(model.YEAR_invest_STOCKTECHNO,domain=Any,default=0," +
                  "initialize=StorageParameters." + COLNAME + ".loc[(inputDict['yearList'][:-1], slice(None))].squeeze().to_dict())")
 
