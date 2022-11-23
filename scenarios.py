@@ -18,18 +18,24 @@ scenario = {}
 
 scenario['resourceDemand'] =  pd.concat(
     (
+    
         pd.DataFrame(data = { 
-              'YEAR': year, 
-              'TIMESTAMP': t, # We add the TIMESTAMP so that it can be used as an index later. 
-              'electricity': np.zeros(nHours),
-              'hydrogen': 360 * (1 + .025) ** (k * yearStep), # Hourly constant but increasing demand
-              'gas': np.zeros(nHours), 
-              'uranium': np.zeros(nHours)
-             } 
-        ) for k, year in enumerate(yearList) 
-    ) 
-) 
-
+          'AREA': area,
+          'YEAR': year, 
+          'TIMESTAMP': t, # We add the TIMESTAMP so that it can be used as an index later.
+          'electricity': np.zeros(nHours),
+          'hydrogen': 360 * (1 + .025) ** (k * yearStep), # Hourly constant but increasing demand
+          'gas': np.zeros(nHours), 
+          'uranium': np.zeros(nHours)
+         } 
+        ) for k, year in enumerate(yearList)
+    for area in areaList
+    )
+)
+'''
+print(scenario['resourceDemand'].head())
+print(scenario['resourceDemand'].tail())
+'''
 scenario['conversionTechs'] = [] 
 for k, year in enumerate(yearList): 
     tech = "Offshore wind - floating"
@@ -231,7 +237,7 @@ scenario['carbonGoals'] = pd.DataFrame(data=np.linspace(974e6, 205e6, nYears),
 scenario['maxBiogasCap'] = pd.DataFrame(data=np.linspace(0, 310e6, nYears),
     index=yearList, columns=('maxBiogasCap',))
 
-scenario['gridConnection'] = pd.read_csv("./Data/Raw/CalendrierHPHC_TIME.csv", sep=',', decimal='.', skiprows=0,
+scenario['gridConnection'] = pd.read_csv("Data/Raw/CalendrierHPHC_TIME.csv", sep=',', decimal='.', skiprows=0,
                                 comment="#").set_index(["TIMESTAMP"])
 
 scenario['economicParameters'] = pd.DataFrame({
