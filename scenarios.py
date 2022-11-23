@@ -29,7 +29,6 @@ scenario['resourceDemand'] =  pd.concat(
           'uranium': np.zeros(nHours)
          } 
         ) for k, year in enumerate(yearList)
-    for area in areaList
     )
 )
 '''
