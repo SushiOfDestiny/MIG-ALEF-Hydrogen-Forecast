@@ -8,6 +8,7 @@ t = np.arange(1,nHours + 1)
 
 # zones = ['PACA']
 
+areaList = ['fos', 'nice']
 yearZero = 2020
 yearFinal = 2050
 yearStep = 10
@@ -17,20 +18,24 @@ nYears = len(yearList)
 scenario = {}
 
 scenario['resourceDemand'] =  pd.concat(
-    (
-        pd.DataFrame(data = { 
+        (
+            pd.DataFrame(data = { 
               'YEAR': year, 
+              'AREA' : area,
               'TIMESTAMP': t, # We add the TIMESTAMP so that it can be used as an index later. 
               'electricity': np.zeros(nHours),
               'hydrogen': 360 * (1 + .025) ** (k * yearStep), # Hourly constant but increasing demand
               'gas': np.zeros(nHours), 
               'uranium': np.zeros(nHours)
-             } 
-        ) for k, year in enumerate(yearList) 
-    ) 
-) 
+             }) 
+        ) for k, year in enumerate(yearList) for area in areaList 
+)
 
+
+
+# recense les techno-conv installées dans chaque noeud, par an
 scenario['conversionTechs'] = [] 
+
 for k, year in enumerate(yearList): 
     tech = "Offshore wind - floating"
     maxcap = 10000
