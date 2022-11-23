@@ -19,7 +19,6 @@ scenario = {}
 
 scenario['resourceDemand'] =  pd.concat(
     (
-    
         pd.DataFrame(data = { 
           'AREA': area,
           'YEAR': year, 
