@@ -6,7 +6,7 @@ import tech_eco_data
 nHours = 8760
 t = np.arange(1,nHours + 1)
 
-zones = ['PACA']
+# zones = ['PACA']
 
 yearZero = 2020
 yearFinal = 2050
