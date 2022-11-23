@@ -231,7 +231,7 @@ scenario['carbonGoals'] = pd.DataFrame(data=np.linspace(974e6, 205e6, nYears),
 scenario['maxBiogasCap'] = pd.DataFrame(data=np.linspace(0, 310e6, nYears),
     index=yearList, columns=('maxBiogasCap',))
 
-scenario['gridConnection'] = pd.read_csv("Data\Raw\CalendrierHPHC_TIME.csv", sep=',', decimal='.', skiprows=0,
+scenario['gridConnection'] = pd.read_csv("./Data/Raw/CalendrierHPHC_TIME.csv", sep=',', decimal='.', skiprows=0,
                                 comment="#").set_index(["TIMESTAMP"])
 
 scenario['economicParameters'] = pd.DataFrame({
