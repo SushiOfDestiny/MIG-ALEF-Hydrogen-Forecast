@@ -222,6 +222,25 @@ for k, year in enumerate(yearList):
 
 scenario['storageTechs'] =  pd.concat(scenario['storageTechs'], axis=1) 
 
+scenario['transportTechs'] = []
+for k, year in enumerate(yearList):
+    tech = 'Pipeline'
+    p_max = 500
+    capex, opex, lifespan =
+    scenario['transportTechs'].append(
+        pd.dataFrame(data:{tech:
+            {'YEAR' : year, 'Category': 'Hydrogen transport',
+            'lifespan':lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost':opex,
+            'minPower':0, 'maxPower': p_max,
+            'Emission CO2':0,
+            'chargeFactor':{'hydrogenA':-1}
+            'dischargeFactor':{'hydrogenB':0.98}
+            'Disspation_per_km':0.001
+            }
+        }
+        )
+    )
+
 scenario['carbonTax'] = pd.DataFrame(data=np.linspace(0.0675,0.165, nYears),
     index=yearList, columns=('carbonTax',))
 
