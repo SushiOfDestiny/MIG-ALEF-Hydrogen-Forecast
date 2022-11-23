@@ -7,7 +7,7 @@ import pandas as pd
 
 def loadScenario(scenario, printTables=False):
     yearZero = scenario["yearList"][0]
-    dy = scenario["yearList"][1] - yearZero 
+    dy = scenario["yearList"][1] - yearZero
 
     areaConsumption = scenario['resourceDemand'].melt(id_vars=['TIMESTAMP', 'YEAR'], var_name=['RESOURCES'], value_name='areaConsumption').set_index(['YEAR','TIMESTAMP', 'RESOURCES'])
 
@@ -144,7 +144,7 @@ def systemModelPedro(scenario,isAbstract=False):
     STOCK_TECHNO= set(StorageParameters.index.get_level_values('STOCK_TECHNO').unique())
     RESOURCES = set(ResParameters.index.get_level_values('RESOURCES').unique())
     TIMESTAMP = set(areaConsumption.index.get_level_values('TIMESTAMP').unique())
-    YEAR = set(yearList)
+    YEAR = set(yearList) #AREA?
  
     TIMESTAMP_list = areaConsumption.index.get_level_values('TIMESTAMP').unique()
     YEAR_list=yearList
