@@ -9,7 +9,7 @@ t = np.arange(1,nHours + 1)
 zones = ['PACA']
 
 yearZero = 2020
-yearFinal = 2050
+yearFinal = 2040
 yearStep = 10
 yearList = [yr for yr in range(yearZero, yearFinal+yearStep, yearStep)] # +1 to include the final year
 nYears = len(yearList)
@@ -27,7 +27,7 @@ scenario['resourceDemand'] =  pd.concat(
           'electricity': np.zeros(nHours),
           'hydrogen': 360 * (1 + .025) ** (k * yearStep), # Hourly constant but increasing demand
           'gas': np.zeros(nHours), 
-          'uranium': np.zeros(nHours)
+          # 'uranium': np.zeros(nHours)
          } 
         ) for k, year in enumerate(yearList)
     for area in areaList
@@ -258,7 +258,7 @@ scenario['resourceImportPrices'] = pd.concat(
             'electricity': df_res_ref.loc[(year, slice(None), 'electricity'),'importCost'].values,
             'natural gas': 2 * df_res_ref.loc[(year, slice(None), 'gazNat'),'importCost'].values,
             'biogas': 150 * np.ones(nHours),
-            'uranium': 2.2 * np.ones(nHours),
+            # 'uranium': 2.2 * np.ones(nHours),
             'hydrogen': 6/33 * 1000 * np.ones(nHours),
         }) for k, year in enumerate(yearList[1:])
     )
@@ -273,7 +273,7 @@ scenario['resourceImportCO2eq'] = pd.concat(
             'gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)), # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'natural gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)), # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'biogas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1,
-            'uranium': 0 * np.ones(nHours),
+            # 'uranium': 0 * np.ones(nHours),
             'hydrogen': max(0, 0.05  - .03 * (year - yearZero)/(2050 - yearZero)) * 11 / 33, # Taking 100 yr GWP of H2 and 5% losses due to upstream leaks. Leaks fall to 2% in 2050 See: https://www.energypolicy.columbia.edu/research/commentary/hydrogen-leakage-potential-risk-hydrogen-economy
         }) for k, year in enumerate(yearList[1:])
     )
@@ -287,6 +287,7 @@ itechs = availabilityFactor.index.isin(ctechs, level=2)
 scenario['availability'] = availabilityFactor.loc[(slice(None), slice(None), itechs)]
 
 scenario["yearList"] = yearList 
+scenario["areaList"] = areaList
 scenario["transitionFactors"] =pd.DataFrame(
     {'TECHNO1':['Existing SMR', 'Existing SMR', 'SMR', 'SMR', 'SMR + CCS1'],
     'TECHNO2':['SMR + CCS1','SMR + CCS2', 'SMR + CCS1','SMR + CCS2','SMR + CCS2'],

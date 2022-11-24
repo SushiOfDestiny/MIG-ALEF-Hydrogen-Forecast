@@ -213,6 +213,7 @@ def systemModelPedro(scenario, isAbstract=False):
     model.RESOURCES = Set(initialize=RESOURCES, ordered=False)
     model.TIMESTAMP = Set(initialize=TIMESTAMP, ordered=False)
     model.YEAR = Set(initialize=YEAR, ordered=False)
+    model.AREA = Set(initialize=AREA, ordered=False)
     model.HORAIRE = Set(initialize=HORAIRE, ordered=False)
     model.YEAR_invest = Set(initialize=YEAR_list[:-1], ordered=False)
     model.YEAR_op = Set(initialize=YEAR_list[1:], ordered=False)
@@ -225,12 +226,11 @@ def systemModelPedro(scenario, isAbstract=False):
         model.TIMESTAMP * model.STOCK_TECHNO
     model.RESOURCES_TECHNOLOGIES = model.RESOURCES * model.TECHNOLOGIES
     model.RESOURCES_STOCKTECHNO = model.RESOURCES * model.STOCK_TECHNO
+    model.YEAR_op_TIMESTAMP_RESOURCES = model.YEAR_op * \
+        model.TIMESTAMP * model.RESOURCES
     model.YEAR_op_TIMESTAMP_RESOURCES_AREA = model.YEAR_op * \
-        model.TIMESTAMP  * model.RESOURCES * model.AREA
+        model.TIMESTAMP * model.RESOURCES * model.AREA
     model.TECHNOLOGIES_TECHNOLOGIES = model.TECHNOLOGIES*model.TECHNOLOGIES
-
-    # SETS with AREA ??
-    model.AREA = Set(initialize=AREA, ordered=False)
 
     # Subset of Simple only required if ramp constraint
     model.TIMESTAMP_MinusOne = Set(
@@ -460,9 +460,10 @@ def systemModelPedro(scenario, isAbstract=False):
     # c'est quoi model.emission ??
     def CarbonDef_rule(model, y, t, area):
         return sum((model.power_Dvar[y, t, tech, area] * model.EmissionCO2[y-dy, tech]) for tech in model.TECHNOLOGIES) + \
-            sum(model.importation_Dvar[y, t, res, area]*model.emission[y, t, res] for res in model.RESOURCES) == model.carbon_Pvar[y, t, area]
+            sum(model.importation_Dvar[y, t, res, area]*model.emission[y, t, res]
+                for res in model.RESOURCES) == model.carbon_Pvar[y, t, area]
     model.CarbonDefCtr = Constraint(
-        model.YEAR_op, model.TIMESTAMP, rule=CarbonDef_rule)
+        model.YEAR_op, model.TIMESTAMP, model.AREA, rule=CarbonDef_rule)
 
     # def CarbonCtr_rule(model):
     # return sum(model.carbon_Pvar[y,t] for y,t in zip(model.YEAR_op,model.TIMESTAMP)) <= sum(model.carbon_goal[y] for y in model.YEAR_op)
@@ -474,7 +475,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # CarbonCosts definition Constraint
     def CarbonCosts_rule(model, y, area):
-        return model.carbonCosts_Pvar[y,area] == sum(model.carbon_Pvar[y, t, area]*model.carbon_taxe[y]*f3(r, y) for t in model.TIMESTAMP)
+        return model.carbonCosts_Pvar[y, area] == sum(model.carbon_Pvar[y, t, area]*model.carbon_taxe[y]*f3(r, y) for t in model.TIMESTAMP)
     model.CarbonCostsCtr = Constraint(
         model.YEAR_op, model.AREA, rule=CarbonCosts_rule)
 
@@ -508,7 +509,6 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Capacity constraints selon les technologies choisies
     # clairement local
-    # test multinoeud
     if ('CCS1' and 'CCS2') in model.TECHNOLOGIES:
         def capacityCCS_rule(model, y, tech, area):
             if tech == 'CCS1':
@@ -549,6 +549,8 @@ def systemModelPedro(scenario, isAbstract=False):
     model.CapacityDemUBCtr = Constraint(
         model.YEAR_invest, model.YEAR_invest, model.TECHNOLOGIES, model.AREA, rule=CapacityDemUB_rule)
 
+    # comprends pas
+
     # def CapacityDemUP_rule(model,y, tech):
     #     if y == 1:
     #         return Constraint.Skip
@@ -578,7 +580,7 @@ def systemModelPedro(scenario, isAbstract=False):
             return model.capacity_Pvar[y, tech, area] == model.capacity_Pvar[y-dy, tech, area] - \
                 sum(model.capacityDem_Dvar[yi, y-dy, tech, area] for yi in model.YEAR_invest) + \
                 model.capacityInvest_Dvar[y-dy, tech, area] + sum(model.transInvest_Dvar[y-dy, tech1, tech, area]
-                                                            for tech1 in model.TECHNOLOGIES) - sum(model.transInvest_Dvar[y-dy, tech, tech2, area] for tech2 in model.TECHNOLOGIES)
+                                                                  for tech1 in model.TECHNOLOGIES) - sum(model.transInvest_Dvar[y-dy, tech, tech2, area] for tech2 in model.TECHNOLOGIES)
     model.CapacityTotCtr = Constraint(
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, rule=CapacityTot_rule)
 
@@ -599,7 +601,7 @@ def systemModelPedro(scenario, isAbstract=False):
         else:
             return sum(model.power_Dvar[y, t, tech, area] * model.conversionFactor[res, tech] for tech in model.TECHNOLOGIES) + \
                 model.importation_Dvar[y, t, res, area] + sum(model.storageOut_Pvar[y, t, res, s_tech, area] - model.storageIn_Pvar[y, t, res, s_tech, area] -
-                                                        model.storageConsumption_Pvar[y, t, res, s_tech, area] for s_tech in STOCK_TECHNO) == model.energy_Pvar[y, t, res, area]
+                                                              model.storageConsumption_Pvar[y, t, res, s_tech, area] for s_tech in STOCK_TECHNO) == model.energy_Pvar[y, t, res, area]
     model.ProductionCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.AREA, rule=Production_rule)
 
@@ -622,14 +624,15 @@ def systemModelPedro(scenario, isAbstract=False):
 
     def StoragePmaxTot_rule(model, y, s_tech, area):  # INEQ forall t, tech
         if y == y0+dy:
-            return model.Pmax_Pvar[y, s_tech, area] == model.PmaxInvest_Dvar[y-dy, s_tech] - model.PmaxDel_Dvar[y-dy, s_tech]
+            return model.Pmax_Pvar[y, s_tech, area] == model.PmaxInvest_Dvar[y-dy, s_tech, area] - model.PmaxDel_Dvar[y-dy, s_tech, area]
         else:
             return model.Pmax_Pvar[y, s_tech, area] == model.Pmax_Pvar[y-dy, s_tech, area] + model.PmaxInvest_Dvar[y-dy, s_tech, area] - model.PmaxDel_Dvar[y-dy, s_tech, area]
     model.StoragePmaxTotCtr = Constraint(
         model.YEAR_op, model.STOCK_TECHNO, model.AREA, rule=StoragePmaxTot_rule)
 
     # storageCosts definition Constraint
-    def storageCostsDef_rule(model, y, s_tech, area):  # EQ forall s_tech in STOCK_TECHNO
+    # EQ forall s_tech in STOCK_TECHNO
+    def storageCostsDef_rule(model, y, s_tech, area):
         return sum((model.storageEnergyCost[yi, s_tech] * model.Cmax_Pvar[yi+dy, s_tech, area] +
                     model.storagePowerCost[yi, s_tech] * model.Pmax_Pvar[yi+dy, s_tech, area]) * f1(i, model.storagelifeSpan[yi, s_tech]) * f3(r, y-dy) for yi in yearList[yearList < y]) \
             + model.storageOperationCost[y-dy, s_tech]*f3(
@@ -641,7 +644,7 @@ def systemModelPedro(scenario, isAbstract=False):
     def storageCapacity_rule(model, y, s_tech, area):  # INEQ forall s_tech
         return model.CmaxInvest_Dvar[y, s_tech, area] <= model.c_max[y, s_tech]
     model.storageCapacityCtr = Constraint(
-        model.YEAR_invest, model.STOCK_TECHNO, rule=storageCapacity_rule)
+        model.YEAR_invest, model.STOCK_TECHNO, model.AREA, rule=storageCapacity_rule)
 
     def storageCapacityDel_rule(model, y, stech, area):
         if model.storageYearStart[y, stech] > 0:
@@ -784,4 +787,8 @@ def systemModelPedro(scenario, isAbstract=False):
         model.rampCtrMoins2 = Constraint(
             model.YEAR_op, model.TIMESTAMP_MinusThree, model.TECHNOLOGIES, model.AREA, rule=rampCtrMoins2_rule)
 
+    # test création contrainte sur part d'électrolyse dans prod H -> cf anaelle-raw-perso
+
     return model
+
+
