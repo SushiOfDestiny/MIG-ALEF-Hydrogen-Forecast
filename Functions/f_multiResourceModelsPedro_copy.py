@@ -51,7 +51,7 @@ def loadScenario(scenario, printTables=False):
     for k in TransportParametersList:
         if k not in TransportParameters:
             TransportParameters[k] = 0
-    TransportParameters.drop(columns=['chargeFactor', 'dischargeFactor','Dissipation_per_km'], inplace=True)
+    TransportParameters.drop(columns=['chargeFactors', 'dischargeFactors','dissipation'], inplace=True)
     TransportParameters['yearStart'] = TransportParameters['YEAR'] - \
         TransportParameters['lifeSpan']//dy * dy
     TransportParameters.loc[TransportParameters['yearStart'] < yearZero, 'yearStart'] = 0
@@ -211,7 +211,7 @@ def systemModelPedro(scenario, isAbstract=False):
         StorageParameters.index.get_level_values('STOCK_TECHNO').unique())
     RESOURCES = set(ResParameters.index.get_level_values('RESOURCES').unique())
     TRANS_TECHNO = set(
-        StorageParameters.index.get_level_values('TRANS_TECHNO').unique())
+        TransportParameters.index.get_level_values('TRANS_TECHNO').unique())
     RESOURCES = set(ResParameters.index.get_level_values('RESOURCES').unique())
     TIMESTAMP = set(
         areaConsumption.index.get_level_values('TIMESTAMP').unique())
@@ -252,7 +252,7 @@ def systemModelPedro(scenario, isAbstract=False):
     # Sets       ##
     ###############
     model.TECHNOLOGIES = Set(initialize=TECHNOLOGIES, ordered=False)
-    model.TRANS_TECHNO = Set(intialize=TRANS_TECHNO, ordered=False)
+    model.TRANS_TECHNO = Set(initialize=TRANS_TECHNO, ordered=False)
     model.STOCK_TECHNO = Set(initialize=STOCK_TECHNO, ordered=False)
     model.RESOURCES = Set(initialize=RESOURCES, ordered=False)
     model.TIMESTAMP = Set(initialize=TIMESTAMP, ordered=False)
