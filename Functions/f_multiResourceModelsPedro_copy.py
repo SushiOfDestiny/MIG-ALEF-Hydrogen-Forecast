@@ -261,6 +261,7 @@ def systemModelPedro(scenario, isAbstract=False):
     model.YEAR_invest = Set(initialize=YEAR_list[:-1], ordered=False)
     model.YEAR_op = Set(initialize=YEAR_list[1:], ordered=False)
     model.AREA = Set(initialize=AREA, ordered=False)
+    model.AREA_AREA = model.AREA * model.AREA
     model.YEAR_invest_TECHNOLOGIES = model.YEAR_invest*model.TECHNOLOGIES
     model.YEAR_invest_STOCKTECHNO = model.YEAR_invest * model.STOCK_TECHNO
     model.YEAR_op_TECHNOLOGIES = model.YEAR_op * model.TECHNOLOGIES
@@ -384,6 +385,20 @@ def systemModelPedro(scenario, isAbstract=False):
     # Energy consumed the in a storage mean at time t (other than the one stored)
     model.storageConsumption_Pvar = Var(
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.STOCK_TECHNO, model.AREA, domain=NonNegativeReals)
+
+    # Transport
+    # Maximum transport flow from area a to b
+    model.TmaxTot_Pvar = Var(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA)    
+    # New transport flow from area a to b
+    model.TInvest_Dvar = Var(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA)
+    # Deleted transport flow from area a to b
+    model.TDel_Dvar = Var(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA)
+    # Instant flow at time t from area a to b 
+    model.FlowTot_Dvar = Var(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, model.TIMESTAMP)
 
     # Investment
     # Capacity of a conversion mean invested in year y in area 'area'
