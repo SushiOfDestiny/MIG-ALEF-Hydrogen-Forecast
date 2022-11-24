@@ -235,17 +235,18 @@ for k, year in enumerate(yearList):
     capex, opex, lifespan = 0,0,0
     scenario['transportTechs'].append(
         pd.DataFrame(data={tech:
-            {'YEAR' : year, 'Category': 'Hydrogen transport',
-            'lifespan':lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost':opex,
+            {'YEAR' : year, 'resource': 'hydrogen',
+            'lifeSpan':lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost':opex,
             'minPower':0, 'maxPower': p_max,
             'Emission CO2':0,
-            'chargeFactor':{'hydrogenA':-1.0},
-            'dischargeFactor':{'hydrogenB':1.0},
-            'Dissipation_per_km':0.0
+            'chargeFactors':{'hydrogen':-1.0},
+            'dischargeFactors':{'hydrogen':1.0},
+            'dissipation':0.0
             }
         }
         )
     )
+scenario['transportTechs'] =  pd.concat(scenario['transportTechs'], axis=1) 
 
 scenario['carbonTax'] = pd.DataFrame(data=np.linspace(0.0675,0.165, nYears),
     index=yearList, columns=('carbonTax',))
