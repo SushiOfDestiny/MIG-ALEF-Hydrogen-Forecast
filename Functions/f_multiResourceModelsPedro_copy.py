@@ -53,7 +53,7 @@ def loadScenario(scenario, printTables=False):
             TransportParameters[k] = 0
     TransportParameters.drop(columns=['transportChargeFactors', 'transportDischargeFactors','transportDissipation'], inplace=True)
     TransportParameters['yearStart'] = TransportParameters['YEAR'] - \
-        TransportParameters['lifeSpan']//dy * dy
+        TransportParameters['transportlifeSpan']//dy * dy
     TransportParameters.loc[TransportParameters['yearStart'] < yearZero, 'yearStart'] = 0
     TransportParameters.set_index(['YEAR', TransportParameters.index], inplace=True)
 
