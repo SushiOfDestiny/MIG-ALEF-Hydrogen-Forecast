@@ -45,17 +45,17 @@ def loadScenario(scenario, printTables=False):
         ['YEAR', StorageParameters.index], inplace=True)
 
     #ajout transport 
-    TransParameters = scenario['transportTechs'].transpose().fillna(0)
-    TransParameters.index.name = 'TRANSPORT'
-    TransParametersList = ['powerCost', 'operationCost', 'investCost', 'minPower', 'maxPower', 'Emisson CO2']
-    for k in TransParametersList:
-        if k not in TransParameters:
-            TransParameters[k] = 0
-    TransParameters.drop(columns=['chargeFactor', 'dischargeFactor','Dissipation_per_km'], inplace=True)
-    TransParameters['yearStart'] = TransParameters['YEAR'] - \
-        TransParameters['lifeSpan']//dy * dy
-    TransParameters.loc[TransParameters['yearStart'] < yearZero, 'yearStart'] = 0
-    TransParameters.set_index(['YEAR', TransParameters.index], inplace=True)
+    TransportParameters = scenario['transportTechs'].transpose().fillna(0)
+    TransportParameters.index.name = 'TRANSPORT'
+    TransportParametersList = ['powerCost', 'operationCost', 'investCost', 'minPower', 'maxPower', 'Emisson CO2']
+    for k in TransportParametersList:
+        if k not in TransportParameters:
+            TransportParameters[k] = 0
+    TransportParameters.drop(columns=['chargeFactor', 'dischargeFactor','Dissipation_per_km'], inplace=True)
+    TransportParameters['yearStart'] = TransportParameters['YEAR'] - \
+        TransportParameters['lifeSpan']//dy * dy
+    TransportParameters.loc[TransportParameters['yearStart'] < yearZero, 'yearStart'] = 0
+    TransportParameters.set_index(['YEAR', TransportParameters.index], inplace=True)
 
     CarbonTax = scenario['carbonTax'].copy()
     CarbonTax.index.name = 'YEAR'
@@ -92,9 +92,6 @@ def loadScenario(scenario, printTables=False):
     storageFactors = pd.merge(storageFactors, df['dissipation'], how='outer').fillna(
         0).set_index(['RESOURCES', 'TECHNOLOGIES'])
 
-    print(df)
-    exit
-
     Calendrier = scenario['gridConnection']
     Economics = scenario['economicParameters'].melt(
         var_name='Eco').set_index('Eco')
@@ -123,6 +120,7 @@ def loadScenario(scenario, printTables=False):
     inputDict["areaConsumption"] = areaConsumption
     inputDict["availabilityFactor"] = availabilityFactor
     inputDict["techParameters"] = TechParameters
+    inputDict["transportParameters"] = TransportParameters
     inputDict["resParameters"] = ResParameters
     inputDict["conversionFactor"] = conversionFactor
     inputDict["economics"] = Economics
@@ -161,6 +159,7 @@ def systemModelPedro(scenario, isAbstract=False):
     availabilityFactor = inputDict["availabilityFactor"].loc[(
         inputDict["yearList"][1:], slice(None), slice(None))]
     TechParameters = inputDict["techParameters"]
+    TransportParameters = inputDict["transportParamaters"]
     ResParameters = inputDict["resParameters"]
     conversionFactor = inputDict["conversionFactor"]
     Economics = inputDict["economics"]
@@ -192,6 +191,10 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # AREA?
     AREA = set(areaList)
+
+    #TRANSPORT
+    TRANSPORT = set(
+        TransportParameters.index.fet_level_values('TRANSPORT').unique())
 
     TIMESTAMP_list = areaConsumption.index.get_level_values(
         'TIMESTAMP').unique()
@@ -225,6 +228,7 @@ def systemModelPedro(scenario, isAbstract=False):
     # Sets       ##
     ###############
     model.TECHNOLOGIES = Set(initialize=TECHNOLOGIES, ordered=False)
+    model.TRANSPORT = Set(intialize=TRANSPORT, ordered=False)
     model.STOCK_TECHNO = Set(initialize=STOCK_TECHNO, ordered=False)
     model.RESOURCES = Set(initialize=RESOURCES, ordered=False)
     model.TIMESTAMP = Set(initialize=TIMESTAMP, ordered=False)
