@@ -47,13 +47,13 @@ def loadScenario(scenario, printTables=False):
     #ajout transport 
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
     TransportParameters.index.name = 'TRANS_TECHNO'
-    TransportParametersList = ['transportPowerCost', 'transportOperationCost', 'transportInvestCost', 'minPower', 'maxPower', 'EmissonCO2']
+    TransportParametersList = ['transportPowerCost', 'transportOperationCost', 'transportInvestCost', 'transportMinPower', 'transportMaxPower', 'transportEmissonCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
             TransportParameters[k] = 0
-    TransportParameters.drop(columns=['chargeFactors', 'dischargeFactors','dissipation'], inplace=True)
+    TransportParameters.drop(columns=['transportChargeFactors', 'transportDischargeFactors','transportDissipation'], inplace=True)
     TransportParameters['yearStart'] = TransportParameters['YEAR'] - \
-        TransportParameters['transportlifeSpan']//dy * dy
+        TransportParameters['lifeSpan']//dy * dy
     TransportParameters.loc[TransportParameters['yearStart'] < yearZero, 'yearStart'] = 0
     TransportParameters.set_index(['YEAR', TransportParameters.index], inplace=True)
 
@@ -261,6 +261,7 @@ def systemModelPedro(scenario, isAbstract=False):
     model.YEAR_invest = Set(initialize=YEAR_list[:-1], ordered=False)
     model.YEAR_op = Set(initialize=YEAR_list[1:], ordered=False)
     model.AREA = Set(initialize=AREA, ordered=False)
+    model.AREA_AREA = model.AREA * model.AREA
     model.YEAR_invest_TECHNOLOGIES = model.YEAR_invest*model.TECHNOLOGIES
     model.YEAR_invest_STOCKTECHNO = model.YEAR_invest * model.STOCK_TECHNO
     model.YEAR_op_TECHNOLOGIES = model.YEAR_op * model.TECHNOLOGIES
@@ -385,6 +386,20 @@ def systemModelPedro(scenario, isAbstract=False):
     # Energy consumed the in a storage mean at time t (other than the one stored)
     model.storageConsumption_Pvar = Var(
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.STOCK_TECHNO, model.AREA, domain=NonNegativeReals)
+
+    # Transport
+    # Maximum transport flow from area a to b
+    model.TmaxTot_Pvar = Var(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)    
+    # New transport flow from area a to b
+    model.TInvest_Dvar = Var(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+    # Deleted transport flow from area a to b
+    model.TDel_Dvar = Var(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+    # Instant flow at time t from area a to b 
+    model.FlowTot_Dvar = Var(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, model.TIMESTAMP, domain=Reals)
 
     # Investment
     # Capacity of a conversion mean invested in year y in area 'area'
@@ -839,5 +854,7 @@ def systemModelPedro(scenario, isAbstract=False):
                 return Constraint.Skip
         model.rampCtrMoins2 = Constraint(
             model.YEAR_op, model.TIMESTAMP_MinusThree, model.TECHNOLOGIES, model.AREA, rule=rampCtrMoins2_rule)
+
+    # Contraintes sur le transport.
 
     return model
