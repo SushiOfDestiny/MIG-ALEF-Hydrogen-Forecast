@@ -7,7 +7,6 @@ nHours = 8760
 t = np.arange(1,nHours + 1)
 
 zones = ['PACA']
-areaList = ['Nice', 'Fos']
 yearZero = 2020
 yearFinal = 2050
 yearStep = 10
@@ -20,7 +19,6 @@ scenario['resourceDemand'] =  pd.concat(
     (
     
         pd.DataFrame(data = { 
-          'AREA': area,
           'YEAR': year, 
           'TIMESTAMP': t, # We add the TIMESTAMP so that it can be used as an index later.
           'electricity': np.zeros(nHours),
