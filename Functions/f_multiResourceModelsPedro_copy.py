@@ -46,8 +46,8 @@ def loadScenario(scenario, printTables=False):
 
     #ajout transport 
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
-    TransportParameters.index.name = 'TRANSPORT'
-    TransportParametersList = ['powerCost', 'operationCost', 'investCost', 'minPower', 'maxPower', 'Emisson CO2']
+    TransportParameters.index.name = 'TRANS_TECHO'
+    TransportParametersList = ['powerCost', 'operationCost', 'investCost', 'minPower', 'maxPower', 'EmissonCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
             TransportParameters[k] = 0
@@ -194,7 +194,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     #TRANSPORT
     TRANSPORT = set(
-        TransportParameters.index.fet_level_values('TRANSPORT').unique())
+        TransportParameters.index.get_level_values('TRANSPORT').unique())
 
     TIMESTAMP_list = areaConsumption.index.get_level_values(
         'TIMESTAMP').unique()
@@ -331,7 +331,7 @@ def systemModelPedro(scenario, isAbstract=False):
                                  domain=NonNegativeReals, initialize=0)  # Improtation of a resource at time t in the area 'area'
     # Amount of a resource at time t in the area 'area'
     model.energy_Pvar = Var(model.YEAR_op, model.TIMESTAMP,
-                            model.RESOURCES, model.AREA,)
+                            model.RESOURCES, model.AREA)
     # Puissance souscrite max par plage horaire pour l'année d'opération y dans area
     model.max_PS_Dvar = Var(model.YEAR_op, model.HORAIRE, model.AREA,
                             domain=NonNegativeReals)
