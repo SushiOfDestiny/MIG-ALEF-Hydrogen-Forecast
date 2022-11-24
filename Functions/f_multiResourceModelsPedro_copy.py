@@ -46,7 +46,7 @@ def loadScenario(scenario, printTables=False):
 
     #ajout transport 
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
-    TransportParameters.index.name = 'TRANS_TECHO'
+    TransportParameters.index.name = 'TRANS_TECHNO'
     TransportParametersList = ['powerCost', 'operationCost', 'investCost', 'minPower', 'maxPower', 'EmissonCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
@@ -185,16 +185,15 @@ def systemModelPedro(scenario, isAbstract=False):
     STOCK_TECHNO = set(
         StorageParameters.index.get_level_values('STOCK_TECHNO').unique())
     RESOURCES = set(ResParameters.index.get_level_values('RESOURCES').unique())
+    TRANS_TECHNO = set(
+        StorageParameters.index.get_level_values('TRANS_TECHNO').unique())
+    RESOURCES = set(ResParameters.index.get_level_values('RESOURCES').unique())
     TIMESTAMP = set(
         areaConsumption.index.get_level_values('TIMESTAMP').unique())
     YEAR = set(yearList)
 
-    # AREA?
+    # AREA
     AREA = set(areaList)
-
-    #TRANSPORT
-    TRANSPORT = set(
-        TransportParameters.index.get_level_values('TRANSPORT').unique())
 
     TIMESTAMP_list = areaConsumption.index.get_level_values(
         'TIMESTAMP').unique()
@@ -228,7 +227,7 @@ def systemModelPedro(scenario, isAbstract=False):
     # Sets       ##
     ###############
     model.TECHNOLOGIES = Set(initialize=TECHNOLOGIES, ordered=False)
-    model.TRANSPORT = Set(intialize=TRANSPORT, ordered=False)
+    model.TRANS_TECHNO = Set(intialize=TRANS_TECHNO, ordered=False)
     model.STOCK_TECHNO = Set(initialize=STOCK_TECHNO, ordered=False)
     model.RESOURCES = Set(initialize=RESOURCES, ordered=False)
     model.TIMESTAMP = Set(initialize=TIMESTAMP, ordered=False)
