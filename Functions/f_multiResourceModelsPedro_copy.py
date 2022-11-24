@@ -47,13 +47,13 @@ def loadScenario(scenario, printTables=False):
     #ajout transport 
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
     TransportParameters.index.name = 'TRANS_TECHNO'
-    TransportParametersList = ['powerCost', 'operationCost', 'investCost', 'minPower', 'maxPower', 'EmissonCO2']
+    TransportParametersList = ['transportPowerCost', 'transportOperationCost', 'transportInvestCost', 'minPower', 'maxPower', 'EmissonCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
             TransportParameters[k] = 0
     TransportParameters.drop(columns=['chargeFactors', 'dischargeFactors','dissipation'], inplace=True)
     TransportParameters['yearStart'] = TransportParameters['YEAR'] - \
-        TransportParameters['lifeSpan']//dy * dy
+        TransportParameters['transportlifeSpan']//dy * dy
     TransportParameters.loc[TransportParameters['yearStart'] < yearZero, 'yearStart'] = 0
     TransportParameters.set_index(['YEAR', TransportParameters.index], inplace=True)
 
@@ -101,7 +101,7 @@ def loadScenario(scenario, printTables=False):
         df2[k1] = pd.DataFrame(data={trans: df_stransport.loc[(
             trans,2020), k1+'Factors'] for trans in stranstechSet}).fillna(0)
         df2[k1].index.name = 'RESOURCES'
-        df2[k1] = df[k1].reset_index(['RESOURCES']).melt(
+        df2[k1] = df2[k1].reset_index(['RESOURCES']).melt(
             id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='transportFactor' + k2)
 
         df2['dissipation'] = pd.concat(pd.DataFrame(
@@ -110,8 +110,8 @@ def loadScenario(scenario, printTables=False):
               'TECHNOLOGIES': trans}) for trans in stranstechSet
         )
     transportFactors = pd.merge(
-        df['charge'], df['discharge'], how='outer').fillna(0)
-    transportFactors = pd.merge(transportFactors, df['dissipation'], how='outer').fillna(
+        df2['charge'], df2['discharge'], how='outer').fillna(0)
+    transportFactors = pd.merge(transportFactors, df2['dissipation'], how='outer').fillna(
         0).set_index(['RESOURCES', 'TECHNOLOGIES'])
 
     Calendrier = scenario['gridConnection']
@@ -266,6 +266,7 @@ def systemModelPedro(scenario, isAbstract=False):
     model.YEAR_op_TECHNOLOGIES = model.YEAR_op * model.TECHNOLOGIES
     model.YEAR_op_TIMESTAMP_TECHNOLOGIES = model.YEAR_op * \
         model.TIMESTAMP * model.TECHNOLOGIES
+    model.YEAR_op_TIMESTAMP_RESOURCES = model.YEAR_op * model.TIMESTAMP * model.RESOURCES
     model.YEAR_op_TIMESTAMP_STOCKTECHNO = model.YEAR_op * \
         model.TIMESTAMP * model.STOCK_TECHNO
     model.YEAR_invest_TRANSTECHNO = model.YEAR_invest * model.TRANS_TECHNO
