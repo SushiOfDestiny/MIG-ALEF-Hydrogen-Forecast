@@ -92,6 +92,28 @@ def loadScenario(scenario, printTables=False):
     storageFactors = pd.merge(storageFactors, df['dissipation'], how='outer').fillna(
         0).set_index(['RESOURCES', 'TECHNOLOGIES'])
 
+    df_stransport = scenario['transportTechs'].transpose(
+    ).set_index('YEAR', append=True)
+    stranstechSet = set([k[0] for k in df_stransportconv.index.values])
+
+    df ={}
+    for k1, k2 in (('charge','In'),('discharge','Out')):
+        df[k1] = pd.DataFrame(data={trans: df_stransport.loc[(
+            trans,2020), k1+'Factors'] for trans in stranstechSet}).fillna(0)
+        df[k1].index.name = 'RESOURCES'
+        df[k1] = df[k1].reset_index(['RESOURCES']).melt(
+            id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='transportFactor' + k2)
+
+        df['dissipation'] = pd.concat(pd.DataFrame(
+        data={'dissipation': [df_stransport.loc[(trans, 2020), 'dissipation']],
+              'RESOURCES': df_stransport.loc[(trans, 2020), 'resource'],
+              'TECHNOLOGIES': trans}) for trans in stranstechSet
+        )
+        transportFactors = pd.merge(
+            df['charge'], df['discharge'], how='outer').fillna(0)
+        transportFactors = pd.merge(transportFactors, df['dissipation'], how='outer').fillna(
+            0).set_index(['RESOURCES', 'TECHNOLOGIES'])
+
     Calendrier = scenario['gridConnection']
     Economics = scenario['economicParameters'].melt(
         var_name='Eco').set_index('Eco')
