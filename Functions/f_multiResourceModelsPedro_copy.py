@@ -209,17 +209,23 @@ def systemModelPedro(scenario, isAbstract=False):
     STOCK_TECHNO = set(
         StorageParameters.index.get_level_values('STOCK_TECHNO').unique())
     RESOURCES = set(ResParameters.index.get_level_values('RESOURCES').unique())
+    TRANS_TECHNO = set(
+        StorageParameters.index.get_level_values('TRANS_TECHNO').unique())
+    RESOURCES = set(ResParameters.index.get_level_values('RESOURCES').unique())
     TIMESTAMP = set(
         areaConsumption.index.get_level_values('TIMESTAMP').unique())
     YEAR = set(yearList)
 
-    # AREA?
+    # AREA
     AREA = set(areaList)
 
+<<<<<<< HEAD
     #TRANSPORT
     TRANSPORT = set(
         TransportParameters.index.fet_level_values('TRANSPORT').unique())
 
+=======
+>>>>>>> 7e3e44039c4a4f286fc69e6189df82f65b035cb2
     TIMESTAMP_list = areaConsumption.index.get_level_values(
         'TIMESTAMP').unique()
 
@@ -252,7 +258,7 @@ def systemModelPedro(scenario, isAbstract=False):
     # Sets       ##
     ###############
     model.TECHNOLOGIES = Set(initialize=TECHNOLOGIES, ordered=False)
-    model.TRANSPORT = Set(intialize=TRANSPORT, ordered=False)
+    model.TRANS_TECHNO = Set(intialize=TRANS_TECHNO, ordered=False)
     model.STOCK_TECHNO = Set(initialize=STOCK_TECHNO, ordered=False)
     model.RESOURCES = Set(initialize=RESOURCES, ordered=False)
     model.TIMESTAMP = Set(initialize=TIMESTAMP, ordered=False)
