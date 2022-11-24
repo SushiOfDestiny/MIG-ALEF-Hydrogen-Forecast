@@ -47,7 +47,7 @@ def loadScenario(scenario, printTables=False):
     # ajout transport
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
     TransportParameters.index.name = 'TRANS_TECHNO'
-    TransportParametersList = ['transportPowerCost', 'transportOperationCost', 'transportInvestCost', 'transportMinPower', 'transportMaxPower', 'transportEmissonCO2']
+    TransportParametersList = ['transportPowerCost', 'transportOperationCost', 'transportInvestCost', 'transportMinPower', 'transportMaxPower', 'transportEmissionCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
             TransportParameters[k] = 0
@@ -398,7 +398,7 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
     # Instant flow at time t from area a to b 
     model.FlowTot_Dvar = Var(
-        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, model.TIMESTAMP, domain=Reals)
+        model.YEAR_invest, model.TIMESTAMP, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
 
     # Investment
     # Capacity of a conversion mean invested in year y in area 'area'
@@ -475,15 +475,15 @@ def systemModelPedro(scenario, isAbstract=False):
             + model.carbonCosts_Pvar[y, area]
             for y in model.YEAR_op for area in model.AREA) \
             + 0.5*sum(
-            distance[area1, area2] * (
+            distance[area1_area2] * (
                 sum(
-                (model.transportPowerCost[y, ttech] + model.carbone_taxe * trans_emissions_co2[y, ttech]) * abs(
-                    trans_energy[y, t, ttech, area1, area2])
+                (model.transportPowerCost[y, ttech] + model.carbone_taxe * model.transportEmissionCO2[y, ttech]) * abs(
+                    model.FlowTot_Dvar[y, t, ttech, area1_area2])
                 for t in model.TIMESTAMP)
-            + (trans_capex[y, ttech] * f1(r, trans_lifetime[y -
-               1, ttech]) + trans_opex[y, ttech]*f3(r, y)) * trans_Pvar[y, ttech, area1, area2]
+            + (model.transportInvestCost[y, ttech] * f1(r, model.transportLifespan[y -
+               1, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1_area2]
                )
-            for y in model.YEAR_op for ttech in model.TRANS_TECHNO for area1 in model.AREA for area2 in model.AREA
+            for y in model.YEAR_op for ttech in model.TRANS_TECHNO for area1_area2 in model.AREA_AREA
         )
     model.OBJ = Objective(rule=ObjectiveFunction_rule, sense=minimize)
 
