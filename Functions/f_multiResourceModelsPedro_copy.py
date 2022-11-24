@@ -481,7 +481,7 @@ def systemModelPedro(scenario, isAbstract=False):
             + 0.5*sum(
             distance[area1, area2] * (
                 sum(
-                (transport_power_cost[y, ttech] + model.carbone_taxe * trans_emissions_co2[y, ttech]) * abs(
+                (model.transportPowerCost[y, ttech] + model.carbone_taxe * trans_emissions_co2[y, ttech]) * abs(
                     trans_energy[y, t, ttech, area1, area2])
                 for t in model.TIMESTAMP)
             + (trans_capex[y, ttech] * f1(r, trans_lifetime[y -
