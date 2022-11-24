@@ -9,7 +9,7 @@ t = np.arange(1,nHours + 1)
 zones = ['PACA']
 
 yearZero = 2020
-yearFinal = 2050
+yearFinal = 2040
 yearStep = 10
 yearList = [yr for yr in range(yearZero, yearFinal+yearStep, yearStep)] # +1 to include the final year
 nYears = len(yearList)
@@ -305,6 +305,7 @@ itechs = availabilityFactor.index.isin(ctechs, level=2)
 scenario['availability'] = availabilityFactor.loc[(slice(None), slice(None), itechs)]
 
 scenario["yearList"] = yearList 
+scenario["areaList"] = areaList
 scenario["transitionFactors"] =pd.DataFrame(
     {'TECHNO1':['Existing SMR', 'Existing SMR', 'SMR', 'SMR', 'SMR + CCS1'],
     'TECHNO2':['SMR + CCS1','SMR + CCS2', 'SMR + CCS1','SMR + CCS2','SMR + CCS2'],

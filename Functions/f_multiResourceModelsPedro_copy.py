@@ -46,7 +46,11 @@ def loadScenario(scenario, printTables=False):
 
     #ajout transport 
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
+<<<<<<< HEAD
     TransportParameters.index.name = 'TRANSPORT'
+=======
+    TransportParameters.index.name = 'TRANS_TECHO'
+>>>>>>> f2ee3bf62522fb2efcfba5fdd40b5ef1b5bd9d69
     TransportParametersList = ['powerCost', 'operationCost', 'investCost', 'minPower', 'maxPower', 'EmissonCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
@@ -216,7 +220,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     #TRANSPORT
     TRANSPORT = set(
-        TransportParameters.index.fet_level_values('TRANSPORT').unique())
+        TransportParameters.index.get_level_values('TRANSPORT').unique())
 
     TIMESTAMP_list = areaConsumption.index.get_level_values(
         'TIMESTAMP').unique()
@@ -258,6 +262,7 @@ def systemModelPedro(scenario, isAbstract=False):
     model.HORAIRE = Set(initialize=HORAIRE, ordered=False)
     model.YEAR_invest = Set(initialize=YEAR_list[:-1], ordered=False)
     model.YEAR_op = Set(initialize=YEAR_list[1:], ordered=False)
+    model.AREA = Set(initialize=AREA, ordered=False)
     model.YEAR_invest_TECHNOLOGIES = model.YEAR_invest*model.TECHNOLOGIES
     model.YEAR_invest_STOCKTECHNO = model.YEAR_invest * model.STOCK_TECHNO
     model.YEAR_op_TECHNOLOGIES = model.YEAR_op * model.TECHNOLOGIES
@@ -267,12 +272,13 @@ def systemModelPedro(scenario, isAbstract=False):
         model.TIMESTAMP * model.STOCK_TECHNO
     model.RESOURCES_TECHNOLOGIES = model.RESOURCES * model.TECHNOLOGIES
     model.RESOURCES_STOCKTECHNO = model.RESOURCES * model.STOCK_TECHNO
+    model.YEAR_op_TIMESTAMP_RESOURCES = model.YEAR_op * \
+        model.TIMESTAMP  * model.RESOURCES
     model.YEAR_op_TIMESTAMP_RESOURCES_AREA = model.YEAR_op * \
         model.TIMESTAMP  * model.RESOURCES * model.AREA
     model.TECHNOLOGIES_TECHNOLOGIES = model.TECHNOLOGIES*model.TECHNOLOGIES
 
-    # SETS with AREA ??
-    model.AREA = Set(initialize=AREA, ordered=False)
+
 
     # Subset of Simple only required if ramp constraint
     model.TIMESTAMP_MinusOne = Set(
@@ -504,7 +510,7 @@ def systemModelPedro(scenario, isAbstract=False):
         return sum((model.power_Dvar[y, t, tech, area] * model.EmissionCO2[y-dy, tech]) for tech in model.TECHNOLOGIES) + \
             sum(model.importation_Dvar[y, t, res, area]*model.emission[y, t, res] for res in model.RESOURCES) == model.carbon_Pvar[y, t, area]
     model.CarbonDefCtr = Constraint(
-        model.YEAR_op, model.TIMESTAMP, rule=CarbonDef_rule)
+        model.YEAR_op, model.TIMESTAMP, model.AREA, rule=CarbonDef_rule)
 
     # def CarbonCtr_rule(model):
     # return sum(model.carbon_Pvar[y,t] for y,t in zip(model.YEAR_op,model.TIMESTAMP)) <= sum(model.carbon_goal[y] for y in model.YEAR_op)
@@ -664,7 +670,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     def StoragePmaxTot_rule(model, y, s_tech, area):  # INEQ forall t, tech
         if y == y0+dy:
-            return model.Pmax_Pvar[y, s_tech, area] == model.PmaxInvest_Dvar[y-dy, s_tech] - model.PmaxDel_Dvar[y-dy, s_tech]
+            return model.Pmax_Pvar[y, s_tech, area] == model.PmaxInvest_Dvar[y-dy, s_tech,area] - model.PmaxDel_Dvar[y-dy, s_tech, area]
         else:
             return model.Pmax_Pvar[y, s_tech, area] == model.Pmax_Pvar[y-dy, s_tech, area] + model.PmaxInvest_Dvar[y-dy, s_tech, area] - model.PmaxDel_Dvar[y-dy, s_tech, area]
     model.StoragePmaxTotCtr = Constraint(
@@ -683,7 +689,7 @@ def systemModelPedro(scenario, isAbstract=False):
     def storageCapacity_rule(model, y, s_tech, area):  # INEQ forall s_tech
         return model.CmaxInvest_Dvar[y, s_tech, area] <= model.c_max[y, s_tech]
     model.storageCapacityCtr = Constraint(
-        model.YEAR_invest, model.STOCK_TECHNO, rule=storageCapacity_rule)
+        model.YEAR_invest, model.STOCK_TECHNO, model.AREA, rule=storageCapacity_rule)
 
     def storageCapacityDel_rule(model, y, stech, area):
         if model.storageYearStart[y, stech] > 0:

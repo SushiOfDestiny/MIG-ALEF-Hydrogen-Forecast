@@ -7,7 +7,7 @@ from pyomo.opt import SolverFactory
 import time 
 import os 
 
-from Functions.f_multiResourceModelsPedro import systemModelPedro
+from Functions.f_multiResourceModelsPedro_copy import systemModelPedro
 from Functions.f_optimization import getVariables_panda, getConstraintsDual_panda
 
 from scenarios import scenario
