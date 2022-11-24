@@ -44,6 +44,19 @@ def loadScenario(scenario, printTables=False):
     StorageParameters.set_index(
         ['YEAR', StorageParameters.index], inplace=True)
 
+    #ajout transport 
+    TransParameters = scenario['transportTechs'].transpose().fillna(0)
+    TransParameters.index.name = 'TRANSPORT'
+    TransParametersList = ['powerCost', 'operationCost', 'investCost', 'minPower', 'maxPower', 'Emisson CO2']
+    for k in TransParametersList:
+        if k not in TransParameters:
+            TransParameters[k] = 0
+    TransParameters.drop(columns=['chargeFactor', 'dischargeFactor','Dissipation_per_km'], inplace=True)
+    TransParameters['yearStart'] = TransParameters['YEAR'] - \
+        TransParameters['lifeSpan']//dy * dy
+    TransParameters.loc[TransParameters['yearStart'] < yearZero, 'yearStart'] = 0
+    TransParameters.set_index(['YEAR', TransParameters.index], inplace=True)
+
     CarbonTax = scenario['carbonTax'].copy()
     CarbonTax.index.name = 'YEAR'
 
@@ -78,6 +91,9 @@ def loadScenario(scenario, printTables=False):
         df['charge'], df['discharge'], how='outer').fillna(0)
     storageFactors = pd.merge(storageFactors, df['dissipation'], how='outer').fillna(
         0).set_index(['RESOURCES', 'TECHNOLOGIES'])
+
+    print(df)
+    exit
 
     Calendrier = scenario['gridConnection']
     Economics = scenario['economicParameters'].melt(
