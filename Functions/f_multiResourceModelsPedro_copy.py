@@ -46,11 +46,7 @@ def loadScenario(scenario, printTables=False):
 
     #ajout transport 
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
-<<<<<<< HEAD
-    TransportParameters.index.name = 'TRANSPORT'
-=======
-    TransportParameters.index.name = 'TRANS_TECHO'
->>>>>>> f2ee3bf62522fb2efcfba5fdd40b5ef1b5bd9d69
+    TransportParameters.index.name = 'TRANS_TECHNO'
     TransportParametersList = ['powerCost', 'operationCost', 'investCost', 'minPower', 'maxPower', 'EmissonCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
@@ -100,23 +96,23 @@ def loadScenario(scenario, printTables=False):
     ).set_index('YEAR', append=True)
     stranstechSet = set([k[0] for k in df_stransportconv.index.values])
 
-    df ={}
+    df2 ={}
     for k1, k2 in (('charge','In'),('discharge','Out')):
-        df[k1] = pd.DataFrame(data={trans: df_stransport.loc[(
+        df2[k1] = pd.DataFrame(data={trans: df_stransport.loc[(
             trans,2020), k1+'Factors'] for trans in stranstechSet}).fillna(0)
-        df[k1].index.name = 'RESOURCES'
-        df[k1] = df[k1].reset_index(['RESOURCES']).melt(
+        df2[k1].index.name = 'RESOURCES'
+        df2[k1] = df[k1].reset_index(['RESOURCES']).melt(
             id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='transportFactor' + k2)
 
-        df['dissipation'] = pd.concat(pd.DataFrame(
+        df2['dissipation'] = pd.concat(pd.DataFrame(
         data={'dissipation': [df_stransport.loc[(trans, 2020), 'dissipation']],
               'RESOURCES': df_stransport.loc[(trans, 2020), 'resource'],
               'TECHNOLOGIES': trans}) for trans in stranstechSet
         )
-        transportFactors = pd.merge(
-            df['charge'], df['discharge'], how='outer').fillna(0)
-        transportFactors = pd.merge(transportFactors, df['dissipation'], how='outer').fillna(
-            0).set_index(['RESOURCES', 'TECHNOLOGIES'])
+    transportFactors = pd.merge(
+        df['charge'], df['discharge'], how='outer').fillna(0)
+    transportFactors = pd.merge(transportFactors, df['dissipation'], how='outer').fillna(
+        0).set_index(['RESOURCES', 'TECHNOLOGIES'])
 
     Calendrier = scenario['gridConnection']
     Economics = scenario['economicParameters'].melt(
@@ -147,6 +143,7 @@ def loadScenario(scenario, printTables=False):
     inputDict["availabilityFactor"] = availabilityFactor
     inputDict["techParameters"] = TechParameters
     inputDict["transportParameters"] = TransportParameters
+    inputDict["transportFactors"] = transportFactors
     inputDict["resParameters"] = ResParameters
     inputDict["conversionFactor"] = conversionFactor
     inputDict["economics"] = Economics
@@ -185,7 +182,8 @@ def systemModelPedro(scenario, isAbstract=False):
     availabilityFactor = inputDict["availabilityFactor"].loc[(
         inputDict["yearList"][1:], slice(None), slice(None))]
     TechParameters = inputDict["techParameters"]
-    TransportParameters = inputDict["transportParamaters"]
+    TransportParameters = inputDict["transportParameters"]
+    transportFactors = inputDict["transportFactors"]
     ResParameters = inputDict["resParameters"]
     conversionFactor = inputDict["conversionFactor"]
     Economics = inputDict["economics"]
@@ -220,7 +218,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     #TRANSPORT
     TRANSPORT = set(
-        TransportParameters.index.get_level_values('TRANSPORT').unique())
+        TransportParameters.index.fet_level_values('TRANSPORT').unique())
 
     TIMESTAMP_list = areaConsumption.index.get_level_values(
         'TIMESTAMP').unique()
@@ -272,13 +270,9 @@ def systemModelPedro(scenario, isAbstract=False):
         model.TIMESTAMP * model.STOCK_TECHNO
     model.RESOURCES_TECHNOLOGIES = model.RESOURCES * model.TECHNOLOGIES
     model.RESOURCES_STOCKTECHNO = model.RESOURCES * model.STOCK_TECHNO
-    model.YEAR_op_TIMESTAMP_RESOURCES = model.YEAR_op * \
-        model.TIMESTAMP  * model.RESOURCES
     model.YEAR_op_TIMESTAMP_RESOURCES_AREA = model.YEAR_op * \
         model.TIMESTAMP  * model.RESOURCES * model.AREA
     model.TECHNOLOGIES_TECHNOLOGIES = model.TECHNOLOGIES*model.TECHNOLOGIES
-
-
 
     # Subset of Simple only required if ramp constraint
     model.TIMESTAMP_MinusOne = Set(
@@ -510,7 +504,7 @@ def systemModelPedro(scenario, isAbstract=False):
         return sum((model.power_Dvar[y, t, tech, area] * model.EmissionCO2[y-dy, tech]) for tech in model.TECHNOLOGIES) + \
             sum(model.importation_Dvar[y, t, res, area]*model.emission[y, t, res] for res in model.RESOURCES) == model.carbon_Pvar[y, t, area]
     model.CarbonDefCtr = Constraint(
-        model.YEAR_op, model.TIMESTAMP, model.AREA, rule=CarbonDef_rule)
+        model.YEAR_op, model.TIMESTAMP, rule=CarbonDef_rule)
 
     # def CarbonCtr_rule(model):
     # return sum(model.carbon_Pvar[y,t] for y,t in zip(model.YEAR_op,model.TIMESTAMP)) <= sum(model.carbon_goal[y] for y in model.YEAR_op)
@@ -670,7 +664,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     def StoragePmaxTot_rule(model, y, s_tech, area):  # INEQ forall t, tech
         if y == y0+dy:
-            return model.Pmax_Pvar[y, s_tech, area] == model.PmaxInvest_Dvar[y-dy, s_tech,area] - model.PmaxDel_Dvar[y-dy, s_tech, area]
+            return model.Pmax_Pvar[y, s_tech, area] == model.PmaxInvest_Dvar[y-dy, s_tech] - model.PmaxDel_Dvar[y-dy, s_tech]
         else:
             return model.Pmax_Pvar[y, s_tech, area] == model.Pmax_Pvar[y-dy, s_tech, area] + model.PmaxInvest_Dvar[y-dy, s_tech, area] - model.PmaxDel_Dvar[y-dy, s_tech, area]
     model.StoragePmaxTotCtr = Constraint(
@@ -689,7 +683,7 @@ def systemModelPedro(scenario, isAbstract=False):
     def storageCapacity_rule(model, y, s_tech, area):  # INEQ forall s_tech
         return model.CmaxInvest_Dvar[y, s_tech, area] <= model.c_max[y, s_tech]
     model.storageCapacityCtr = Constraint(
-        model.YEAR_invest, model.STOCK_TECHNO, model.AREA, rule=storageCapacity_rule)
+        model.YEAR_invest, model.STOCK_TECHNO, rule=storageCapacity_rule)
 
     def storageCapacityDel_rule(model, y, stech, area):
         if model.storageYearStart[y, stech] > 0:
