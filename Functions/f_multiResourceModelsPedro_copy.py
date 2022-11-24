@@ -94,7 +94,7 @@ def loadScenario(scenario, printTables=False):
 
     df_stransport = scenario['transportTechs'].transpose(
     ).set_index('YEAR', append=True)
-    stranstechSet = set([k[0] for k in df_stransportconv.index.values])
+    stranstechSet = set([k[0] for k in df_stransport.index.values])
 
     df2 ={}
     for k1, k2 in (('charge','In'),('discharge','Out')):
@@ -135,6 +135,7 @@ def loadScenario(scenario, printTables=False):
         print(conversionFactor)
         print(StorageParameters)
         print(storageFactors)
+        print(transportFactors)
         print(ResParameters)
         print(availabilityFactor)
 
@@ -219,13 +220,6 @@ def systemModelPedro(scenario, isAbstract=False):
     # AREA
     AREA = set(areaList)
 
-<<<<<<< HEAD
-    #TRANSPORT
-    TRANSPORT = set(
-        TransportParameters.index.fet_level_values('TRANSPORT').unique())
-
-=======
->>>>>>> 7e3e44039c4a4f286fc69e6189df82f65b035cb2
     TIMESTAMP_list = areaConsumption.index.get_level_values(
         'TIMESTAMP').unique()
 
