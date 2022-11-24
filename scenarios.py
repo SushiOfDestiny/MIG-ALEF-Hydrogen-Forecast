@@ -266,6 +266,17 @@ scenario['economicParameters'] = pd.DataFrame({
     }
 )
 
+scenario['distances'] = pd.DataFrame({
+    # à remplir avec des clés du type (area1, area2)
+    # unité = km
+    # à modifier
+    # crochets ?
+    ("fos", "fos"): 0,
+    ("fos", "nice"): 10,
+    ("nice", "fos"): 10,
+    ("nice", "nice"):0
+})
+
 df_res_ref = pd.read_csv('./Data/Raw/set2020-2050_horaire_TIMExRESxYEAR.csv', 
     sep=',', decimal='.', skiprows=0,comment="#").set_index(["YEAR", "TIMESTAMP",'RESOURCES'])
 

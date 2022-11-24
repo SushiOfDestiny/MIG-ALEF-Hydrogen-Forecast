@@ -118,6 +118,9 @@ def loadScenario(scenario, printTables=False):
     Economics = scenario['economicParameters'].melt(
         var_name='Eco').set_index('Eco')
 
+    # df distances
+    Distances = scenario['distances'].melt(var_name='area1_area2').set_index('area1_area2')
+
     ResParameters = pd.concat((
         k.melt(id_vars=['TIMESTAMP', 'YEAR'], var_name=[
                'RESOURCES'], value_name=name).set_index(['YEAR', 'TIMESTAMP', 'RESOURCES'])
@@ -148,6 +151,7 @@ def loadScenario(scenario, printTables=False):
     inputDict["resParameters"] = ResParameters
     inputDict["conversionFactor"] = conversionFactor
     inputDict["economics"] = Economics
+    inputDict["distances"] = Distances #ajout
     inputDict["calendar"] = Calendrier
     inputDict["storageParameters"] = StorageParameters
     inputDict["storageFactors"] = storageFactors
@@ -188,6 +192,7 @@ def systemModelPedro(scenario, isAbstract=False):
     ResParameters = inputDict["resParameters"]
     conversionFactor = inputDict["conversionFactor"]
     Economics = inputDict["economics"]
+    Distances = inputDict["distances"]
     Calendrier = inputDict["calendar"]
     StorageParameters = inputDict["storageParameters"]
     storageFactors = inputDict["storageFactors"]
@@ -464,6 +469,7 @@ def systemModelPedro(scenario, isAbstract=False):
     ########################
 
     # locale
+    # distancess indéfinie c'est normal
     def ObjectiveFunction_rule(model):  # OBJ
         return sum(
             sum(model.powerCosts_Pvar[y, tech, area] + model.capacityCosts_Pvar[y, tech, area]
@@ -476,7 +482,7 @@ def systemModelPedro(scenario, isAbstract=False):
             + model.carbonCosts_Pvar[y, area]
             for y in model.YEAR_op for area in model.AREA) \
             + 0.5*sum(
-            distance[area1_area2] * (
+            Distances.loc[area1_area2].value * (
                 sum(
                 (model.transportPowerCost[y, ttech] + model.carbone_taxe * model.transportEmissionCO2[y, ttech]) * abs(
                     model.FlowTot_Dvar[y, t, ttech, area1_area2])
