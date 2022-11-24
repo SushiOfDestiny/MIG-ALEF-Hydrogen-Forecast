@@ -268,6 +268,8 @@ def systemModelPedro(scenario, isAbstract=False):
         model.TIMESTAMP * model.TECHNOLOGIES
     model.YEAR_op_TIMESTAMP_STOCKTECHNO = model.YEAR_op * \
         model.TIMESTAMP * model.STOCK_TECHNO
+    model.YEAR_invest_TRANSTECHNO = model.YEAR_invest * model.TRANS_TECHNO
+    model.RESOURCES_TRANSTECHNO = model.RESOURCES * model.TRANS_TECHNO
     model.RESOURCES_TECHNOLOGIES = model.RESOURCES * model.TECHNOLOGIES
     model.RESOURCES_STOCKTECHNO = model.RESOURCES * model.STOCK_TECHNO
     model.YEAR_op_TIMESTAMP_RESOURCES_AREA = model.YEAR_op * \
@@ -334,6 +336,17 @@ def systemModelPedro(scenario, isAbstract=False):
         if COLNAME not in ["TECHNOLOGIES", "RESOURCES"]:
             exec("model." + COLNAME + " =Param(model.RESOURCES_STOCKTECHNO,domain=NonNegativeReals,default=0," +
                  "initialize=storageFactors." + COLNAME + ".squeeze().to_dict())")
+
+    for COLNAME in TransportParameters:
+        # each column in StorageParameters will be a parameter
+        if COLNAME not in ["TRANS_TECHNO", "AREA", "YEAR"]:
+            exec("model." + COLNAME + " =Param(model.YEAR_invest_TRANSTECHNO,domain=Any,default=0," +
+                 "initialize=TransportParameters." + COLNAME + ".loc[(inputDict['yearList'][:-1], slice(None))].squeeze().to_dict())")
+
+    for COLNAME in transportFactors:
+        if COLNAME not in ["TECHNOLOGIES", "RESOURCES"]:
+            exec("model." + COLNAME + " =Param(model.RESOURCES_TRANSTECHNO,domain=NonNegativeReals,default=0," +
+                 "initialize=transportFactors." + COLNAME + ".squeeze().to_dict())")
 
     # global fin
 
