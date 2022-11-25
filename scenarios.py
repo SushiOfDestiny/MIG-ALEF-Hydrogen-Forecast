@@ -192,16 +192,16 @@ for k, year in enumerate(yearList):
 
     scenario['storageTechs'].append(
         pd.DataFrame(data={tech: 
-                { 'YEAR': year, 'resource': 'electricity',
+                { 'YEAR': year, 'resource': 'electricity',  # ambiguïté du nom des paramètres ?
                 'storagelifeSpan': lifespan, 
                 'storagePowerCost': capex_per_kW, 
                 'storageEnergyCost': capex_per_kWh, 
                 'storageOperationCost': opex1, # TODO: according to RTE OPEX seems to vary with energy rather than power
                 'p_max': 5000, 
                 'c_max': 50000, 
-                'chargeFactors': {'electricity': 0.9200},
-                'dischargeFactors': {'electricity': 1.09},
-                'dissipation': 0.0085,
+                'storageChargeFactors': {'electricity': 0.9200},
+                'storageDischargeFactors': {'electricity': 1.09},
+                'storageDissipation': 0.0085,  
                 }, 
             }
          )
@@ -218,9 +218,9 @@ for k, year in enumerate(yearList):
                 'storageOperationCost': 2e3, 
                 'p_max': 10000, 
                 'c_max': 100000, 
-                'chargeFactors': {'electricity': 0.0168, 'hydrogen': 1.0},
-                'dischargeFactors': {'hydrogen': 1.0},
-                'dissipation': 0,
+                'storageChargeFactors': {'electricity': 0.0168, 'hydrogen': 1.0},
+                'storageDischargeFactors': {'hydrogen': 1.0},
+                'storageDissipation': 0,
                 }, 
             }
          )
@@ -230,22 +230,47 @@ scenario['storageTechs'] =  pd.concat(scenario['storageTechs'], axis=1)
 
 scenario['transportTechs'] = []
 for k, year in enumerate(yearList):
-    tech = 'Pipeline'
+    ttech = 'Pipeline'
     p_max = 500
     capex, opex, lifespan = 0,0,0
     scenario['transportTechs'].append(
-        pd.DataFrame(data={tech:
-            {'YEAR' : year, 'Category': 'Hydrogen transport',
-            'transportLifespan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+        pd.DataFrame(data={ttech:
+            {'YEAR' : year, 'resource': 'hydrogen',  # transportResource ?
+            'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
-            'transportChargeFactor': 0.001,
-            'transportDischargeFactor':0.001,
+            'transportChargeFactors': {'hydrogen' : 0.01},
+            'transportDischargeFactors': {'hydrogen' : 0.01},
             'transportDissipation':0.0
             }
         }
         )
     )
+
+
+# ttech = truck transporting hydrogen
+for k, year in enumerate(yearList):
+    ttech = 'truckTransportingHydrogen'
+    p_max = 500  # to change
+    capex, opex, lifespan = 0,0,0
+    scenario['transportTechs'].append(
+        pd.DataFrame(data={ttech:
+            {'YEAR' : year, 'resource': 'hydrogen',
+            'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            'transportMinPower':0, 'transportMaxPower': p_max,
+            'transportEmissionCO2':0,
+            'transportChargeFactors': {'hydrogen' : 0.01},
+            'transportDischargeFactors': {'hydrogen' : 0.01},
+            'transportDissipation':0.0
+            }
+        }
+        )
+    )
+
+
+# ttech = truck transporting electricity
+
+
 scenario['transportTechs'] =  pd.concat(scenario['transportTechs'], axis=1) 
 
 scenario['carbonTax'] = pd.DataFrame(data=np.linspace(0.0675,0.165, nYears),
@@ -265,6 +290,13 @@ scenario['economicParameters'] = pd.DataFrame({
     'financeRate': [0.04]
     }
 )
+
+scenario['distances'] = pd.DataFrame(
+    data=[0,10,10,0],
+    index=[("Fos", "Fos"),("Fos", "Nice"),("Nice", "Fos"),("Nice", "Nice")]
+    )
+
+
 
 df_res_ref = pd.read_csv('./Data/Raw/set2020-2050_horaire_TIMExRESxYEAR.csv', 
     sep=',', decimal='.', skiprows=0,comment="#").set_index(["YEAR", "TIMESTAMP",'RESOURCES'])
@@ -304,6 +336,9 @@ availabilityFactor = pd.read_csv('Data/Raw/availabilityFactor2020-2050_PACA_TIME
                                  sep=',', decimal='.', skiprows=0).set_index(["YEAR", "TIMESTAMP", "TECHNOLOGIES"])
 itechs = availabilityFactor.index.isin(ctechs, level=2)
 scenario['availability'] = availabilityFactor.loc[(slice(None), slice(None), itechs)]
+
+# availability pour transport ?
+
 
 scenario["yearList"] = yearList 
 scenario["areaList"] = areaList
