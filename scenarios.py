@@ -293,7 +293,8 @@ scenario['economicParameters'] = pd.DataFrame({
 
 scenario['distances'] = pd.DataFrame(
     data=[0,10,10,0],
-    index=[("Fos", "Fos"),("Fos", "Nice"),("Nice", "Fos"),("Nice", "Nice")]
+    index=[("Fos", "Fos"),("Fos", "Nice"),("Nice", "Fos"),("Nice", "Nice")],
+    columns=["distances"]
     )
 
 
