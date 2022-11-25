@@ -479,14 +479,14 @@ def systemModelPedro(scenario, isAbstract=False):
     # Objective Function   #
     ########################
 
-    def absFlowTot_Pvar_rule(model,y,t,res,ttech,area1_area2):
+    def absFlowTot_Pvar_rule(model,y,t,res,ttech,area1,area2):
         """creates abs_value var"""
-        if model.FlowTot_Dvar(y,t,res,ttech,area1_area2) >= 0:
-            return model.FlowTot_Dvar(y,t,res,ttech,area1_area2) == model.absFlowTot_Pvar(y,t,res,ttech,area1_area2)
+        if model.FlowTot_Dvar(y,t,res,ttech,area1,area2) >= 0:
+            return model.FlowTot_Dvar(y,t,res,ttech,area1,area2) == model.absFlowTot_Pvar(y,t,res,ttech,area1,area2)
         else:
-            return - model.FlowTot_Dvar(y,t,res,ttech,area1_area2) == model.absFlowTot_Pvar(y,t,res,ttech,area1_area2)
+            return - model.FlowTot_Dvar(y,t,res,ttech,area1,area2) == model.absFlowTot_Pvar(y,t,res,ttech,area1,area2)
     
-    model.absFlowTot_PvarCTR = Constraint(model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule=absFlowTot_Pvar_rule)
+    model.absFlowTot_PvarCTR = Constraint(model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA, model.AREA, rule=absFlowTot_Pvar_rule)
 
         
 
@@ -502,15 +502,15 @@ def systemModelPedro(scenario, isAbstract=False):
             + model.carbonCosts_Pvar[y, area]
             for y in model.YEAR_op for area in model.AREA) \
             + 0.5*sum(
-            model.distances[area1_area2] * (
+            model.distances[area1,area2] * (
                 sum(
                     (model.transportPowerCost[y, ttech]
-                        + model.carbon_taxe * model.transportEmissionCO2[y, ttech]) * model.absFlowTot_Pvar[y, t, res, ttech, area1_area2]
+                        + model.carbon_taxe * model.transportEmissionCO2[y, ttech]) * model.absFlowTot_Pvar[y, t, res, ttech, area1,area2]
                     for t in model.TIMESTAMP)
                 + (model.transportInvestCost[y, ttech] * f1(r, model.transportLifespan[y -
-                                                                                       1, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1_area2]
+                                                                                       1, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1,area2]
             )
-            for y in model.YEAR_op for ttech in model.TRANS_TECHNO for area1_area2 in model.AREA_AREA
+            for y in model.YEAR_op for ttech in model.TRANS_TECHNO for area1,area2 in model.AREA_AREA
         ) 
     model.OBJ = Objective(rule=ObjectiveFunction_rule, sense=minimize)
 
