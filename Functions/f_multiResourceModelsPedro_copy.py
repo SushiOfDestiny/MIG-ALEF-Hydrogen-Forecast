@@ -47,15 +47,19 @@ def loadScenario(scenario, printTables=False):
     # ajout transport
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
     TransportParameters.index.name = 'TRANS_TECHNO'
-    TransportParametersList = ['transportPowerCost', 'transportOperationCost', 'transportInvestCost', 'transportMinPower', 'transportMaxPower', 'transportEmissionCO2']
+    TransportParametersList = ['transportPowerCost', 'transportOperationCost',
+                               'transportInvestCost', 'transportMinPower', 'transportMaxPower', 'transportEmissionCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
             TransportParameters[k] = 0
-    TransportParameters.drop(columns=['transportChargeFactors', 'transportDischargeFactors','transportDissipation'], inplace=True)
+    TransportParameters.drop(columns=[
+                             'transportChargeFactors', 'transportDischargeFactors', 'transportDissipation'], inplace=True)
     TransportParameters['yearStart'] = TransportParameters['YEAR'] - \
         TransportParameters['transportlifeSpan']//dy * dy
-    TransportParameters.loc[TransportParameters['yearStart'] < yearZero, 'yearStart'] = 0
-    TransportParameters.set_index(['YEAR', TransportParameters.index], inplace=True)
+    TransportParameters.loc[TransportParameters['yearStart']
+                            < yearZero, 'yearStart'] = 0
+    TransportParameters.set_index(
+        ['YEAR', TransportParameters.index], inplace=True)
 
     CarbonTax = scenario['carbonTax'].copy()
     CarbonTax.index.name = 'YEAR'
@@ -119,7 +123,8 @@ def loadScenario(scenario, printTables=False):
         var_name='Eco').set_index('Eco')
 
     # df distances
-    Distances = scenario['distances'].melt(var_name='area1_area2').set_index('area1_area2')
+    Distances = scenario['distances'].melt(
+        var_name='area1_area2').set_index('area1_area2')
 
     ResParameters = pd.concat((
         k.melt(id_vars=['TIMESTAMP', 'YEAR'], var_name=[
@@ -151,7 +156,7 @@ def loadScenario(scenario, printTables=False):
     inputDict["resParameters"] = ResParameters
     inputDict["conversionFactor"] = conversionFactor
     inputDict["economics"] = Economics
-    inputDict["distances"] = Distances #ajout
+    inputDict["distances"] = Distances  # ajout
     inputDict["calendar"] = Calendrier
     inputDict["storageParameters"] = StorageParameters
     inputDict["storageFactors"] = storageFactors
@@ -272,7 +277,8 @@ def systemModelPedro(scenario, isAbstract=False):
     model.YEAR_op_TECHNOLOGIES = model.YEAR_op * model.TECHNOLOGIES
     model.YEAR_op_TIMESTAMP_TECHNOLOGIES = model.YEAR_op * \
         model.TIMESTAMP * model.TECHNOLOGIES
-    model.YEAR_op_TIMESTAMP_RESOURCES = model.YEAR_op * model.TIMESTAMP * model.RESOURCES
+    model.YEAR_op_TIMESTAMP_RESOURCES = model.YEAR_op * \
+        model.TIMESTAMP * model.RESOURCES
     model.YEAR_op_TIMESTAMP_STOCKTECHNO = model.YEAR_op * \
         model.TIMESTAMP * model.STOCK_TECHNO
     model.YEAR_invest_TRANSTECHNO = model.YEAR_invest * model.TRANS_TECHNO
@@ -393,18 +399,22 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.STOCK_TECHNO, model.AREA, domain=NonNegativeReals)
 
     # Transport
+
+    # pourquoi la ressources n'est pas une variable des flux de transport ? il me semble que l'on devrait préciser si l'on
+    # transport de l'hydrogène ou de l'électricité par exemple
+
     # Maximum transport flow from area a to b
     model.TmaxTot_Pvar = Var(
-        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)    
-    # New transport flow from area a to b
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+    # New transport flow from area a to b created at investment time YEAR_invest
     model.TInvest_Dvar = Var(
         model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
     # Deleted transport flow from area a to b
     model.TDel_Dvar = Var(
         model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
-    # Instant flow at time t from area a to b 
+    # Instant flow at time t from area a to b existing before investment time YEAR_invest
     model.FlowTot_Dvar = Var(
-        model.YEAR_invest, model.TIMESTAMP, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+        model.YEAR_invest, model.TIMESTAMP, model.TRANS_TECHNO, model.RESOURCES, model.AREA_AREA, domain=Reals)
 
     # Investment
     # Capacity of a conversion mean invested in year y in area 'area'
@@ -457,9 +467,6 @@ def systemModelPedro(scenario, isAbstract=False):
     model.carbonCosts_Pvar = Var(
         model.YEAR_op, model.AREA, domain=NonNegativeReals)
 
-
-        
-
     model.dual = Suffix(direction=Suffix.IMPORT)
     model.rc = Suffix(direction=Suffix.IMPORT)
     model.slack = Suffix(direction=Suffix.IMPORT)
@@ -484,12 +491,12 @@ def systemModelPedro(scenario, isAbstract=False):
             + 0.5*sum(
             Distances.loc[area1_area2].value * (
                 sum(
-                (model.transportPowerCost[y, ttech] + model.carbone_taxe * model.transportEmissionCO2[y, ttech]) * abs(
-                    model.FlowTot_Dvar[y, t, ttech, area1_area2])
-                for t in model.TIMESTAMP)
-            + (model.transportInvestCost[y, ttech] * f1(r, model.transportLifespan[y -
-               1, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1_area2]
-               )
+                    (model.transportPowerCost[y, ttech] + model.carbone_taxe * model.transportEmissionCO2[y, ttech]) * abs(
+                        model.FlowTot_Dvar[y, t, ttech, area1_area2])
+                    for t in model.TIMESTAMP)
+                + (model.transportInvestCost[y, ttech] * f1(r, model.transportLifespan[y -
+                                                                                       1, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1_area2]
+            )
             for y in model.YEAR_op for ttech in model.TRANS_TECHNO for area1_area2 in model.AREA_AREA
         )
     model.OBJ = Objective(rule=ObjectiveFunction_rule, sense=minimize)
@@ -681,6 +688,12 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Ressource production constraint
     # local
+    def sign_func(x):
+        if x < 0:
+            return 0
+        else:
+            return 1
+
     def Production_rule(model, y, t, res, area):  # EQ forall t, res
         if res == 'gas':
             return sum(model.power_Dvar[y, t, tech, area] * model.conversionFactor[res, tech] for tech in model.TECHNOLOGIES) + sum(model.importation_Dvar[y, t, resource, area] for resource in gasTypes) + \
@@ -691,7 +704,12 @@ def systemModelPedro(scenario, isAbstract=False):
         else:
             return sum(model.power_Dvar[y, t, tech, area] * model.conversionFactor[res, tech] for tech in model.TECHNOLOGIES) + \
                 model.importation_Dvar[y, t, res, area] + sum(model.storageOut_Pvar[y, t, res, s_tech, area] - model.storageIn_Pvar[y, t, res, s_tech, area] -
-                                                              model.storageConsumption_Pvar[y, t, res, s_tech, area] for s_tech in STOCK_TECHNO) == model.energy_Pvar[y, t, res, area]
+                                                              model.storageConsumption_Pvar[y, t, res, s_tech, area] for s_tech in STOCK_TECHNO) \
+                + sum(model.FlowTot_Dvar[y, t, ttech, res, (area1, area)] - sign_func(model.FlowTot_Dvar[y, t, ttech, res, (area1, area)])
+                      * (1-(1-model.transportChargeFactors[ttech])*(1-model.transportDischargeFactors[ttech])*(1-model.transportDissipation[ttech])**Distances.loc[(area1, area)])
+                      * model.FlowTot_Dvar[y, t, ttech, res, (area1, area)]
+                      for ttech in model.TRANS_TECH for area1 in model.AREA) \
+                == model.energy_Pvar[y, t, res, area]
     model.ProductionCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.AREA, rule=Production_rule)
 

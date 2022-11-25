@@ -238,10 +238,10 @@ for k, year in enumerate(yearList):
             {'YEAR' : year, 'resource': 'hydrogen',
             'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'minPower':0, 'maxPower': p_max,
-            'EmissionCO2':0,
-            'chargeFactors':{'hydrogen':-1.0},
-            'dischargeFactors':{'hydrogen':1.0},
-            'dissipation':0.0
+            'transportEmissionCO2':0,
+            'transportChargeFactors': 0.01, # ambiguïté avec paramètres de stockage
+            'transportDischargeFactors': 0.01,
+            'transportDissipation':0.0
             }
         }
         )
