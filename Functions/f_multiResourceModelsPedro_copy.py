@@ -98,32 +98,19 @@ def loadScenario(scenario, printTables=False):
     ).set_index('YEAR', append=True)
     transtechSet = set([k[0] for k in df_transport.index.values])
 
-<<<<<<< HEAD
-    df2 ={}
-    for k1, k2 in (('transportCharge','In'),('transportDischarge','Out')):
-        df2[k1] = pd.DataFrame(data={trans: df_stransport.loc[(
-            trans,2020), k1+'Factors'] for trans in stranstechSet}).fillna(0)
-=======
     # les dataframes df1 et df2 ont les mêmes noms de colonnes, y a t-il un risque de conflit ?
     df2 = {}
     for k1 in ('transportCharge', 'transportDischarge'):
         df2[k1] = pd.DataFrame(data={trans: df_transport.loc[(
             trans, 2020), k1+'Factors'] for trans in transtechSet}).fillna(0)
->>>>>>> 6addcea855b589d7ec500970743c65d8968e2319
         df2[k1].index.name = 'RESOURCES'
         df2[k1] = df2[k1].reset_index(['RESOURCES']).melt(
             id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='transportFactor')
 
         df2['transportDissipation'] = pd.concat(pd.DataFrame(
-<<<<<<< HEAD
-        data={'transportDissipation': [df_stransport.loc[(trans, 2020), 'transportDissipation']],
-              'RESOURCES': df_stransport.loc[(trans, 2020), 'resource'],
-              'TECHNOLOGIES': trans}) for trans in stranstechSet
-=======
             data={'transportDissipation': [df_transport.loc[(trans, 2020), 'transportDissipation']],
                   'RESOURCES': df_transport.loc[(trans, 2020), 'resource'],
                   'TECHNOLOGIES': trans}) for trans in transtechSet
->>>>>>> 6addcea855b589d7ec500970743c65d8968e2319
         )
     transportFactors = pd.merge(
         df2['transportCharge'], df2['transportDischarge'], how='outer').fillna(0)
