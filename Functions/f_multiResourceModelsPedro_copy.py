@@ -418,6 +418,7 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals
     )
 
+
     # Investment
     # Capacity of a conversion mean invested in year y in area 'area'
     model.capacityInvest_Dvar = Var(
@@ -467,6 +468,9 @@ def systemModelPedro(scenario, isAbstract=False):
     model.carbonCosts_Pvar = Var(
         model.YEAR_op, model.AREA, domain=NonNegativeReals)
 
+
+        
+
     model.dual = Suffix(direction=Suffix.IMPORT)
     model.rc = Suffix(direction=Suffix.IMPORT)
     model.slack = Suffix(direction=Suffix.IMPORT)
@@ -507,7 +511,7 @@ def systemModelPedro(scenario, isAbstract=False):
                                                                                        1, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1_area2]
             )
             for y in model.YEAR_op for ttech in model.TRANS_TECHNO for area1_area2 in model.AREA_AREA
-        )
+        ) 
     model.OBJ = Objective(rule=ObjectiveFunction_rule, sense=minimize)
 
     #################
@@ -704,7 +708,7 @@ def systemModelPedro(scenario, isAbstract=False):
         else:
             return sum(model.power_Dvar[y, t, tech, area] * model.conversionFactor[res, tech] for tech in model.TECHNOLOGIES) + \
                 model.importation_Dvar[y, t, res, area] + sum(model.storageOut_Pvar[y, t, res, s_tech, area] - model.storageIn_Pvar[y, t, res, s_tech, area] -
-                                                              model.storageConsumption_Pvar[y, t, res, s_tech, area] for s_tech in STOCK_TECHNO) \
+                                                               model.storageConsumption_Pvar[y, t, res, s_tech, area] for s_tech in STOCK_TECHNO) \
                 + sum(model.FlowTot_Dvar[y, t, ttech, res, (area1, area)] - sign_func(model.FlowTot_Dvar[y, t, ttech, res, (area1, area)])
                       * (1-(1-model.transportChargeFactors[ttech])*(1-model.transportDischargeFactors[ttech])*(1-model.transportDissipation[ttech])**model.distances[(area1, area)])
                       * model.FlowTot_Dvar[y, t, ttech, res, (area1, area)]
