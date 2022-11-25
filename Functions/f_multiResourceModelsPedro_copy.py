@@ -97,21 +97,21 @@ def loadScenario(scenario, printTables=False):
     stranstechSet = set([k[0] for k in df_stransport.index.values])
 
     df2 ={}
-    for k1, k2 in (('charge','In'),('discharge','Out')):
+    for k1, k2 in (('transportCharge','In'),('transportDischarge','Out')):
         df2[k1] = pd.DataFrame(data={trans: df_stransport.loc[(
             trans,2020), k1+'Factors'] for trans in stranstechSet}).fillna(0)
         df2[k1].index.name = 'RESOURCES'
         df2[k1] = df2[k1].reset_index(['RESOURCES']).melt(
             id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='transportFactor' + k2)
 
-        df2['dissipation'] = pd.concat(pd.DataFrame(
-        data={'dissipation': [df_stransport.loc[(trans, 2020), 'dissipation']],
+        df2['transportDissipation'] = pd.concat(pd.DataFrame(
+        data={'transportDissipation': [df_stransport.loc[(trans, 2020), 'transportDissipation']],
               'RESOURCES': df_stransport.loc[(trans, 2020), 'resource'],
               'TECHNOLOGIES': trans}) for trans in stranstechSet
         )
     transportFactors = pd.merge(
-        df2['charge'], df2['discharge'], how='outer').fillna(0)
-    transportFactors = pd.merge(transportFactors, df2['dissipation'], how='outer').fillna(
+        df2['transportCharge'], df2['transportDischarge'], how='outer').fillna(0)
+    transportFactors = pd.merge(transportFactors, df2['transportDissipation'], how='outer').fillna(
         0).set_index(['RESOURCES', 'TECHNOLOGIES'])
 
     Calendrier = scenario['gridConnection']
@@ -347,6 +347,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     for COLNAME in transportFactors:
         if COLNAME not in ["TECHNOLOGIES", "RESOURCES"]:
+            print(exec('transportFactors.'+COLNAME))
             exec("model." + COLNAME + " =Param(model.RESOURCES_TRANSTECHNO,domain=NonNegativeReals,default=0," +
                  "initialize=transportFactors." + COLNAME + ".squeeze().to_dict())")
 
