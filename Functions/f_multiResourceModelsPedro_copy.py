@@ -35,7 +35,7 @@ def loadScenario(scenario, printTables=False):
         if k not in StorageParameters:
             StorageParameters[k] = 0
     StorageParameters.drop(
-        columns=['chargeFactors', 'dischargeFactors', 'dissipation'], inplace=True)
+        columns=['storageChargeFactors', 'storageDischargeFactors', 'storageDissipation'], inplace=True)
     StorageParameters['storageYearStart'] = StorageParameters['YEAR'] - \
         round(StorageParameters['storagelifeSpan'] / dy) * dy
     StorageParameters.loc[StorageParameters['storageYearStart']
@@ -84,14 +84,14 @@ def loadScenario(scenario, printTables=False):
         df[k1] = df[k1].reset_index(['RESOURCES']).melt(
             id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='storageFactor' + k2)
 
-    df['dissipation'] = pd.concat(pd.DataFrame(
-        data={'dissipation': [df_sconv.loc[(stech, 2020), 'dissipation']],
+    df['storageDissipation'] = pd.concat(pd.DataFrame(
+        data={'storageDissipation': [df_sconv.loc[(stech, 2020), 'storageDissipation']],
               'RESOURCES': df_sconv.loc[(stech, 2020), 'resource'],
               'TECHNOLOGIES': stech}) for stech in stechSet
     )
     storageFactors = pd.merge(
         df['storageCharge'], df['storageDischarge'], how='outer').fillna(0)
-    storageFactors = pd.merge(storageFactors, df['dissipation'], how='outer').fillna(
+    storageFactors = pd.merge(storageFactors, df['storageDissipation'], how='outer').fillna(
         0).set_index(['RESOURCES', 'TECHNOLOGIES'])
 
     df_transport = scenario['transportTechs'].transpose(
@@ -793,7 +793,7 @@ def systemModelPedro(scenario, isAbstract=False):
         res = model.resource[y-dy, s_tech]
         if t > 1:
             return model.stockLevel_Pvar[y, t, s_tech, area] == model.stockLevel_Pvar[y, t - 1, s_tech, area] * (
-                1 - model.dissipation[res, s_tech]) + model.storageIn_Pvar[y, t, res, s_tech, area] * \
+                1 - model.storageDissipation[res, s_tech]) + model.storageIn_Pvar[y, t, res, s_tech, area] * \
                 model.storageFactorIn[res, s_tech] - model.storageOut_Pvar[y, t, res, s_tech, area] * model.storageFactorOut[
                 res, s_tech]
         else:

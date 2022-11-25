@@ -199,9 +199,9 @@ for k, year in enumerate(yearList):
                 'storageOperationCost': opex1, # TODO: according to RTE OPEX seems to vary with energy rather than power
                 'p_max': 5000, 
                 'c_max': 50000, 
-                'chargeFactors': {'electricity': 0.9200},
-                'dischargeFactors': {'electricity': 1.09},
-                'dissipation': 0.0085,  
+                'storageChargeFactors': {'electricity': 0.9200},
+                'storageDischargeFactors': {'electricity': 1.09},
+                'storageDissipation': 0.0085,  
                 }, 
             }
          )
@@ -218,9 +218,9 @@ for k, year in enumerate(yearList):
                 'storageOperationCost': 2e3, 
                 'p_max': 10000, 
                 'c_max': 100000, 
-                'chargeFactors': {'electricity': 0.0168, 'hydrogen': 1.0},
-                'dischargeFactors': {'hydrogen': 1.0},
-                'dissipation': 0,
+                'storageChargeFactors': {'electricity': 0.0168, 'hydrogen': 1.0},
+                'storageDischargeFactors': {'hydrogen': 1.0},
+                'storageDissipation': 0,
                 }, 
             }
          )
@@ -247,7 +247,27 @@ for k, year in enumerate(yearList):
         )
     )
 
+
 # ttech = truck transporting hydrogen
+for k, year in enumerate(yearList):
+    ttech = 'truckTransportingHydrogen'
+    p_max = 500  # to change
+    capex, opex, lifespan = 0,0,0
+    scenario['transportTechs'].append(
+        pd.DataFrame(data={ttech:
+            {'YEAR' : year, 'resource': 'hydrogen',
+            'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            'transportMinPower':0, 'transportMaxPower': p_max,
+            'transportEmissionCO2':0,
+            'transportChargeFactors': 0.01,
+            'transportDischargeFactors': 0.01,
+            'transportDissipation':0.0
+            }
+        }
+        )
+    )
+
+
 # ttech = truck transporting electricity
 
 
