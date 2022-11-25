@@ -401,28 +401,27 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Maximum transport flow from area a to b
     model.TmaxTot_Pvar = Var(
-        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
     # New transport flow from area a to b created at investment time YEAR_invest
     model.TInvest_Dvar = Var(
-        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
     # Deleted transport flow from area a to b
     model.TDel_Dvar = Var(
-        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
-    
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+
     model.transportFlowInt_Dvar = Var(
-        model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
-    # model.TransportFlowInt_Dvar[y,t,res,area1,area2] = 
-    # Instant ressource flow at time t in year y from area1 to area2, always >= 0 
+        model.YEAR_op, model.TIMESTAMP, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+    # model.TransportFlowInt_Dvar[y,t,res,area1,area2] =
+    # Instant ressource flow at time t in year y from area1 to area2, always >= 0
 
     model.transportFlowOut_Dvar = Var(
-        model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
-    # model.TransportFlowInt_Dvar[y,t,res,area1,area2] = 
-    # Instant ressource flow at time t in year y from area2 to area1, always >= 0 
+        model.YEAR_op, model.TIMESTAMP, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+    # model.TransportFlowInt_Dvar[y,t,res,area1,area2] =
+    # Instant ressource flow at time t in year y from area2 to area1, always >= 0
 
     # # absolute value
     # model.absFlowTot_Pvar = Var(
     #     model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
-    
 
     # Investment
     # Capacity of a conversion mean invested in year y in area 'area'
@@ -469,12 +468,17 @@ def systemModelPedro(scenario, isAbstract=False):
     # Cost of storage for a storage mean, explicitely defined by definition storageCostsDef
     model.storageCosts_Pvar = Var(
         model.YEAR_op, model.STOCK_TECHNO, model.AREA)
-    # cost of CO2 emssion of one area
+    # cost of CO2 emssion of one area without transport
     model.carbonCosts_Pvar = Var(
         model.YEAR_op, model.AREA, domain=NonNegativeReals)
 
-
-        
+    # cost of transport in year_op y between area1 and area2 per km
+    model.transportEconomicalCosts_Pvar = Var(
+        model.YEAR_op, model.TRANS_TECHNO, model.AREA_AREA, domain=NonNegativeReals
+    )
+    # cost of CO2 emission of transport between area1,area2 with ttech
+    model.transportCarbonCosts_Pvar = Var(
+        model.YEAR_op, model.TRANS_TECHNO, model.AREA_AREA, domain=NonNegativeReals)
 
     model.dual = Suffix(direction=Suffix.IMPORT)
     model.rc = Suffix(direction=Suffix.IMPORT)
@@ -484,16 +488,14 @@ def systemModelPedro(scenario, isAbstract=False):
     # Objective Function   #
     ########################
 
-    # def absFlowTot_Pvar_rule(model,y,t,res,ttech,area1, area2):
+    # def absFlowTot_Pvar_rule(model,y,t,ttech,area1, area2):
     #     """creates abs_value var"""
-    #     if model.FlowTot_Dvar[y,t,res,ttech,area1, area2] >= 0:
-    #         return model.FlowTot_Dvar[y,t,res,ttech,area1, area2] == model.absFlowTot_Pvar[y,t,res,ttech,area1, area2]
+    #     if model.FlowTot_Dvar[y,t,ttech,area1, area2] >= 0:
+    #         return model.FlowTot_Dvar[y,t,ttech,area1, area2] == model.absFlowTot_Pvar[y,t,ttech,area1, area2]
     #     else:
-    #         return (- model.FlowTot_Dvar[y,t,res,ttech,area1, area2]) == model.absFlowTot_Pvar[y,t,res,ttech,area1, area2]
-    
-    # model.absFlowTot_PvarCtr = Constraint(model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule=absFlowTot_Pvar_rule)
+    #         return (- model.FlowTot_Dvar[y,t,ttech,area1, area2]) == model.absFlowTot_Pvar[y,t,ttech,area1, area2]
 
-        
+    # model.absFlowTot_PvarCtr = Constraint(model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule=absFlowTot_Pvar_rule)
 
     def ObjectiveFunction_rule(model):  # OBJ
         return sum(
@@ -506,17 +508,10 @@ def systemModelPedro(scenario, isAbstract=False):
             + model.turpeCosts_Pvar[y, 'electricity', area]
             + model.carbonCosts_Pvar[y, area]
             for y in model.YEAR_op for area in model.AREA) \
-            + 0.5*sum(
-            model.distances[(area1, area2)] * (
-                sum(
-                    (model.transportPowerCost[y, ttech]
-                        + model.carbon_taxe * model.transportEmissionCO2[y, ttech]) * model.transportFlowOut_Dvar[y, t, res, ttech, area1, area2]
-                    for t in model.TIMESTAMP for res in model.RESOURCES) # à voir avec les ressources
-                + (model.transportInvestCost[y, ttech] * f1(r, model.transportLifespan[y -
-                                                                                       1, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1, area2]
-            )
-            for y in model.YEAR_op for ttech in model.TRANS_TECHNO for area1 in model.AREA for area2 in model.AREA
-        ) 
+            + (sum(model.transportCarbonCosts_Pvar[y, ttech, area1, area2] + model.transportPowerCosts[y, ttech, area1, area2] \
+                
+               for y in model.YEAR_op for ttech in model.TRANS_TECHNO for area1 in model.AREA for area2 in model.AREA
+               )
     model.OBJ = Objective(rule=ObjectiveFunction_rule, sense=minimize)
 
     #################
@@ -550,6 +545,21 @@ def systemModelPedro(scenario, isAbstract=False):
                    for yi in yearList[yearList < y]) + model.operationCost[y-dy, tech]*f3(r, y)*model.capacity_Pvar[y, tech, area] == model.capacityCosts_Pvar[y, tech, area]
     model.capacityCostsCtr = Constraint(
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, rule=capacityCostsDef_rule)
+
+    # transportPowerCosts definition Constraints
+    # combien ça coûte de faire marcher les transports (transporter une certaine énergie)
+    # entre 2 villes sur 1 an d'opération avec une ttech ?
+    def transportPowerCostsDef_rule(model, y, ttech, area1, area2):
+        return model.transportPowerCosts_Pvar[y, ttech, area1, area2] \
+            == model.distances[(area1, area2)] * model.transportPowerCost[y-dy, ttech] * sum(model.transportFlowOut_Dvar[y, t, ttech, area1, area2] for t in model.TIMESTAMP)
+    model.transportPowerCostsCtr = Constraint(
+        model.YEAR_op, model.TRANS_TECH, model.AREA_AREA, rule=transportPowerCostsDef_rule)
+
+
+    def transportEconomicalCostsDef_rule(model, y, ttech, area1, area2):
+        return model.transportEconomicalCosts[ y, ttech, area1, area2] == \
+            + (model.transportInvestCost[y-dy, ttech] * f1(r, model.transportLifespan[y - 1, ttech]) + model.transportOperationCost[y-dy, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1, area2]) * 
+
 
     # importCosts definition Constraints
     def importCostsDef_rule(model, y, res, area):
@@ -589,7 +599,16 @@ def systemModelPedro(scenario, isAbstract=False):
     model.CarbonCostsCtr = Constraint(
         model.YEAR_op, model.AREA, rule=CarbonCosts_rule)
 
+    # transportCarbonCosts definition Constraint
+    # prise en compte de l'inflation ???
+    def transportCarbonCostsDef_rule(model, y, ttech, area1, area2):
+        return model.transportCarbonCosts_Pvar[y, ttech, area1, area2] \
+            == model.distances[(area1, area2)] * model.transportEmissionCO2[y-dy, ttech] * model.carbon_taxe[y] * sum(model.transportFlowOut_Dvar[y, t, ttech, area1, area2] for t in model.TIMESTAMP)
+    model.transportCarbonCostsCtr = Constraint(
+        model.YEAR_op, model.TRANS_TECH, model.AREA_AREA, rule=transportCarbonCostsDef_rule)
+
     # TURPE
+
     def PuissanceSouscrite_rule(model, y, t, res, area):
         if res == 'electricity':
             if t in TIMESTAMP_P:
@@ -696,9 +715,10 @@ def systemModelPedro(scenario, isAbstract=False):
     model.CapacityCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.TECHNOLOGIES, model.AREA, rule=Capacity_rule)
 
-    def transportFlow_rule(model,y,t,res,ttech,area1,area2):
-        return model.transportFlowOut_Dvar[y,t,res,ttech,area1,area2] == \
-            model.transportFlowIn_Dvar[y,t,res,ttech,area1,area2] * (1-model.transportChargeFactors[ttech])*(1-model.transportDischargeFactors[ttech])*(1-model.transportDissipation[ttech])**model.distances[(area1, area2)]
+    def transportFlow_rule(model, y, t, ttech, area1, area2):
+        return model.transportFlowOut_Dvar[y, t, ttech, area1, area2] == \
+            model.transportFlowIn_Dvar[y, t, ttech, area1, area2] * (1-model.transportChargeFactors[ttech])*(
+                1-model.transportDischargeFactors[ttech])*(1-model.transportDissipation[ttech])**model.distances[(area1, area2)]
     model.transportFlowCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.TRANS_TECHNO, model.AREA_AREA, rule=transportFlow_rule
     )
@@ -713,8 +733,8 @@ def systemModelPedro(scenario, isAbstract=False):
         else:
             return sum(model.power_Dvar[y, t, tech, area] * model.conversionFactor[res, tech] for tech in model.TECHNOLOGIES) + \
                 model.importation_Dvar[y, t, res, area] + sum(model.storageOut_Pvar[y, t, res, s_tech, area] - model.storageIn_Pvar[y, t, res, s_tech, area] -
-                                                               model.storageConsumption_Pvar[y, t, res, s_tech, area] for s_tech in STOCK_TECHNO) \
-                + sum(model.transportFlowIn_Dvar[y,t,res,ttech,area1,area] - model.transportFlowOut_Dvar[y,t,res,ttech,area1,area]
+                                                              model.storageConsumption_Pvar[y, t, res, s_tech, area] for s_tech in STOCK_TECHNO) \
+                + sum(model.transportFlowIn_Dvar[y, t, ttech, area1, area] - model.transportFlowOut_Dvar[y, t, ttech, area1, area]
                       for ttech in model.TRANS_TECH for area1 in model.AREA) \
                 == model.energy_Pvar[y, t, res, area]
         # sign_func is used to substract resources' losses dut to transport iff the resource is actually transported in area
