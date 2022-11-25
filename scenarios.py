@@ -239,8 +239,8 @@ for k, year in enumerate(yearList):
             'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
-            'transportChargeFactors': 0.01,
-            'transportDischargeFactors': 0.01,
+            'transportChargeFactors': {'hydrogen' : 0.01},
+            'transportDischargeFactors': {'hydrogen' : 0.01},
             'transportDissipation':0.0
             }
         }
@@ -259,8 +259,8 @@ for k, year in enumerate(yearList):
             'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
-            'transportChargeFactors': 0.01,
-            'transportDischargeFactors': 0.01,
+            'transportChargeFactors': {'hydrogen' : 0.01},
+            'transportDischargeFactors': {'hydrogen' : 0.01},
             'transportDissipation':0.0
             }
         }
@@ -291,16 +291,12 @@ scenario['economicParameters'] = pd.DataFrame({
     }
 )
 
-scenario['distances'] = pd.DataFrame({
-    # à remplir avec des clés du type (area1, area2)
-    # unité = km
-    # à modifier
-    # crochets ?
-    ("Fos", "Fos"): 0,
-    ("Fos", "Nice"): 10,
-    ("Nice", "Fos"): 10,
-    ("Nice", "Nice"):0
-})
+scenario['distances'] = pd.DataFrame(
+    data=[0,10,10,0],
+    index=[("Fos", "Fos"),("Fos", "Nice"),("Nice", "Fos"),("Nice", "Nice")]
+    )
+
+
 
 df_res_ref = pd.read_csv('./Data/Raw/set2020-2050_horaire_TIMExRESxYEAR.csv', 
     sep=',', decimal='.', skiprows=0,comment="#").set_index(["YEAR", "TIMESTAMP",'RESOURCES'])

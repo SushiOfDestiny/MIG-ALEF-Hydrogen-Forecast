@@ -100,12 +100,12 @@ def loadScenario(scenario, printTables=False):
 
     # les dataframes df1 et df2 ont les mêmes noms de colonnes, y a t-il un risque de conflit ?
     df2 = {}
-    for k1, k2 in (('transportCharge', 'In'), ('transportDischarge', 'Out')):
+    for k1 in ('transportCharge', 'transportDischarge'):
         df2[k1] = pd.DataFrame(data={trans: df_transport.loc[(
             trans, 2020), k1+'Factors'] for trans in transtechSet}).fillna(0)
         df2[k1].index.name = 'RESOURCES'
         df2[k1] = df2[k1].reset_index(['RESOURCES']).melt(
-            id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='transportFactor' + k2)
+            id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='transportFactor')
 
         df2['transportDissipation'] = pd.concat(pd.DataFrame(
             data={'transportDissipation': [df_transport.loc[(trans, 2020), 'transportDissipation']],
@@ -304,8 +304,8 @@ def systemModelPedro(scenario, isAbstract=False):
                                      initialize=availabilityFactor.loc[:, "availabilityFactor"].squeeze().to_dict())
     model.conversionFactor = Param(model.RESOURCES_TECHNOLOGIES, default=0,
                                    initialize=conversionFactor.loc[:, "conversionFactor"].squeeze().to_dict())
-    model.carbon_goal = Param(model.YEAR_op, default=0, initialize=carbonGoals.loc[:, 'carbonGoals'].squeeze(
-    ).to_dict(), domain=NonNegativeReals)
+    # model.carbon_goal = Param(model.YEAR_op, default=0, initialize=carbonGoals.loc[:, 'carbonGoals'].squeeze(
+    # ).to_dict(), domain=NonNegativeReals)
     model.carbon_taxe = Param(model.YEAR_op, default=0, initialize=CarbonTax.loc[:, 'carbonTax'].squeeze(
     ).to_dict(), domain=NonNegativeReals)
     #model.gazBio_max = Param(model.YEAR_op, default=0,initialize={2:103000,3:206000,4:310000}, domain=NonNegativeReals)
