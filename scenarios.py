@@ -192,7 +192,7 @@ for k, year in enumerate(yearList):
 
     scenario['storageTechs'].append(
         pd.DataFrame(data={tech: 
-                { 'YEAR': year, 'resource': 'electricity',
+                { 'YEAR': year, 'resource': 'electricity',  # ambiguïté du nom des paramètres ?
                 'storagelifeSpan': lifespan, 
                 'storagePowerCost': capex_per_kW, 
                 'storageEnergyCost': capex_per_kWh, 
@@ -201,7 +201,7 @@ for k, year in enumerate(yearList):
                 'c_max': 50000, 
                 'chargeFactors': {'electricity': 0.9200},
                 'dischargeFactors': {'electricity': 1.09},
-                'dissipation': 0.0085,
+                'dissipation': 0.0085,  
                 }, 
             }
          )
@@ -230,22 +230,27 @@ scenario['storageTechs'] =  pd.concat(scenario['storageTechs'], axis=1)
 
 scenario['transportTechs'] = []
 for k, year in enumerate(yearList):
-    tech = 'Pipeline'
+    ttech = 'Pipeline'
     p_max = 500
     capex, opex, lifespan = 0,0,0
     scenario['transportTechs'].append(
-        pd.DataFrame(data={tech:
-            {'YEAR' : year, 'resource': 'hydrogen',
+        pd.DataFrame(data={ttech:
+            {'YEAR' : year, 'resource': 'hydrogen',  # transportResource ?
             'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
-            'minPower':0, 'maxPower': p_max,
+            'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
-            'transportChargeFactors': 0.01, # ambiguïté avec paramètres de stockage
+            'transportChargeFactors': 0.01,
             'transportDischargeFactors': 0.01,
             'transportDissipation':0.0
             }
         }
         )
     )
+
+# ttech = truck transporting hydrogen
+# ttech = truck transporting electricity
+
+
 scenario['transportTechs'] =  pd.concat(scenario['transportTechs'], axis=1) 
 
 scenario['carbonTax'] = pd.DataFrame(data=np.linspace(0.0675,0.165, nYears),
@@ -271,10 +276,10 @@ scenario['distances'] = pd.DataFrame({
     # unité = km
     # à modifier
     # crochets ?
-    ("fos", "fos"): 0,
-    ("fos", "nice"): 10,
-    ("nice", "fos"): 10,
-    ("nice", "nice"):0
+    ("Fos", "Fos"): 0,
+    ("Fos", "Nice"): 10,
+    ("Nice", "Fos"): 10,
+    ("Nice", "Nice"):0
 })
 
 df_res_ref = pd.read_csv('./Data/Raw/set2020-2050_horaire_TIMExRESxYEAR.csv', 
@@ -315,6 +320,9 @@ availabilityFactor = pd.read_csv('Data/Raw/availabilityFactor2020-2050_PACA_TIME
                                  sep=',', decimal='.', skiprows=0).set_index(["YEAR", "TIMESTAMP", "TECHNOLOGIES"])
 itechs = availabilityFactor.index.isin(ctechs, level=2)
 scenario['availability'] = availabilityFactor.loc[(slice(None), slice(None), itechs)]
+
+# availability pour transport ?
+
 
 scenario["yearList"] = yearList 
 scenario["areaList"] = areaList
