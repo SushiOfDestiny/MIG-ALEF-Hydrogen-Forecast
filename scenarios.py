@@ -232,7 +232,7 @@ scenario['transportTechs'] = []
 for k, year in enumerate(yearList):
     ttech = 'Pipeline'
     p_max = 500
-    capex, opex, LifeSpan = 0,0,10
+    capex, opex, LifeSpan = 10,10,10
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',  # transportResource ?
@@ -252,7 +252,7 @@ for k, year in enumerate(yearList):
 for k, year in enumerate(yearList):
     ttech = 'truckTransportingHydrogen'
     p_max = 500  # to change
-    capex, opex, LifeSpan = 0,0,10
+    capex, opex, LifeSpan = 10,10,10
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
