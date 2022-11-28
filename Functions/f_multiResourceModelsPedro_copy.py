@@ -924,4 +924,40 @@ def systemModelPedro(scenario, isAbstract=False):
     #     model.rampCtrMoins2 = Constraint(
     #         model.YEAR_op, model.TIMESTAMP_MinusThree, model.TECHNOLOGIES, model.AREA, rule=rampCtrMoins2_rule)
 
+    # Contraintes sur le transport
+    # Fixer l'investissement entre ses bornes.
+    def TInvest_min_rule(model, y, trans_tech, area_area):
+        return model.TInvest_Dvar(y, trans_tech, area_area) > model.transportMinPower[trans_tech]
+    model.TInvest_min = Constraint(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_min_rule)
+
+    def TInvest_max_rule(model, y, trans_tech, area_area):
+        return model.TInvest_Dvar(y, trans_tech, area_area) < model.transportMaxPower[trans_tech]
+    model.TInvest_max = Constraint(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_max_rule)
+   
+    # Fixer le flux inférieur à la capacité max
+    def FlowTot_lim_rule(model, y, t, trans_tech, area_area):
+        return abs(model.FlowTot_Dvar(y, trans_tech, area_area, t)) < model.TmaxTot_Pvar(y, trans_tech, area_area)
+    model.FlowTot_lim = Constraint(
+        model.YEAR_invest, model.TIMESTAMP, model.TRANS_TECHNO, model.AREA_AREA, rule = FlowTot_lim_rule)
+
+    # Définition de TmaxTot en y, en fonction de TmaxTot en y-1
+    def TmaxTot_it_rule(model, y, trans_tech, area_area):
+        if y==2020:
+            return model.TmaxTot_Pvar(y, trans_tech, area_area)==0
+        else:
+            return model.TmaxTot_Pvar(y, trans_tech, area_area) == model.TmaxTot_Pvar(y-dy, trans_tech, area_area) + \
+                model.TInvest_Dvar(y, trans_tech, area_area) - model.TDel_Dvar(y, trans_tech, area_area)
+    model.TmaxTot_it = Constraint(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TmaxTot_it_rule)
+
+    # Mise en place du lifespan
+    def LifeSpanCtr_rule(model,y, trans_tech, area_area):
+        invest_date = y - model.lifespan[trans_tech]
+        if invest_date in yearList:
+            return model.TDel_Dvar(y, trans_tech, area_area) == model.TInvest(invest_date, trans_tech, area_area)
+    model.LifeSpanCtr = Constraint(
+        model.YEAR_invest, model.TRANS_TECHN0, model.AREA_AREA, rule = LifeSpanCtr_rule)
+    
     return model
