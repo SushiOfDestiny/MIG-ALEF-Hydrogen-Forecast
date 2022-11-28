@@ -521,6 +521,8 @@ def systemModelPedro(scenario, isAbstract=False):
     i = Economics.loc['financeRate'].value
 
     def f1(r, n):  # This factor converts the investment costs into n annual repayments
+        if ((1+r)*(1-(1+r)**-n)) < 0.0001:
+            print(((1+r)*(1-(1+r)**-n)), n, r)
         return r/((1+r)*(1-(1+r)**-n))
 
     def f3(r, y):  # This factor discounts a payment to y0 values
@@ -556,6 +558,8 @@ def systemModelPedro(scenario, isAbstract=False):
 
     def transportEconomicalCostsDef_rule(model, y, ttech, area1, area2):
         """y is in YEAR_op"""
+        if model.transportLifeSpan[y, ttech] == 0:
+            print(y, ttech, area1, area2)
         return model.transportEconomicalCosts_Pvar[ y, ttech, area1, area2] == \
             sum(model.distances[(area1,area2)] * (model.transportInvestCost[y, ttech] * f1(r, model.transportLifeSpan[y, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, res, ttech, area1, area2] for res in model.RESOURCES)
     model.transportEconomicalCostsCtr = Constraint(

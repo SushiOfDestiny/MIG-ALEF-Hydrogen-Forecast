@@ -256,7 +256,7 @@ for k, year in enumerate(yearList):
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
-            'transportLifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 0.01},
