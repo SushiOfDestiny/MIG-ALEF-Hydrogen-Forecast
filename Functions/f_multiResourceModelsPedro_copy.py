@@ -23,7 +23,7 @@ def loadScenario(scenario, printTables=False):
             TechParameters[k] = 0
     TechParameters.drop(columns=['Conversion', 'Category'], inplace=True)
     TechParameters['yearStart'] = TechParameters['YEAR'] - \
-        TechParameters['lifeSpan']//dy * dy
+        TechParameters['LifeSpan']//dy * dy
     TechParameters.loc[TechParameters['yearStart'] < yearZero, 'yearStart'] = 0
     TechParameters.set_index(['YEAR', TechParameters.index], inplace=True)
 
@@ -37,7 +37,7 @@ def loadScenario(scenario, printTables=False):
     StorageParameters.drop(
         columns=['storageChargeFactors', 'storageDischargeFactors', 'storageDissipation'], inplace=True)
     StorageParameters['storageYearStart'] = StorageParameters['YEAR'] - \
-        round(StorageParameters['storagelifeSpan'] / dy) * dy
+        round(StorageParameters['storageLifeSpan'] / dy) * dy
     StorageParameters.loc[StorageParameters['storageYearStart']
                           < yearZero, 'storageYearStart'] = 0
     StorageParameters.set_index(
@@ -54,7 +54,7 @@ def loadScenario(scenario, printTables=False):
     TransportParameters.drop(columns=[
                              'transportChargeFactors', 'transportDischargeFactors', 'transportDissipation'], inplace=True)
     TransportParameters['transportYearStart'] = TransportParameters['YEAR'] - \
-        TransportParameters['transportlifeSpan']//dy * dy
+        TransportParameters['transportLifeSpan']//dy * dy
     TransportParameters.loc[TransportParameters['transportYearStart']
                             < yearZero, 'transportYearStart'] = 0
     TransportParameters.set_index(
@@ -370,6 +370,11 @@ def systemModelPedro(scenario, isAbstract=False):
     # (these are noted Dvar), and problem variables which are resulting of calculation \
     # and are convenient for the readability and the analyse of results (these are noted Pvar)
 
+    
+    # techCAPACITY = puissance maximale installée de la techno
+    # storageTechCAPACITY = énergie maximale pouvant être stockée
+    # techPOWER = puissance de fonctionnement d'une tech
+
     # Operation
     model.power_Dvar = Var(model.YEAR_op, model.TIMESTAMP, model.TECHNOLOGIES, model.AREA,
                            domain=NonNegativeReals)  # Power of a conversion mean at time t in the area 'area'
@@ -398,32 +403,37 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Transport
     # objectif : distinguer transport hydrogène de transport électricité
-    # Maximum transport flow from area a to b
+    # FLOW of a resource = POWER of its equivalent in energy
+
+    # Maximum transport flow from area a to b ie la puissance (en MWh/h) à travers une section du pipe/de la route 
     model.TmaxTot_Pvar = Var(
         model.YEAR_invest,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
-    # New transport flow from area a to b created at investment time YEAR_invest
-    model.TInvest_Dvar = Var(
-        model.YEAR_invest,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
-    # Deleted transport flow from area a to b
-    model.TDel_Dvar = Var(
-        model.YEAR_invest,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
-    # model.TransportFlowInt_Dvar[y,t,res,area1,area2] =
-    # Instant ressource flow (MWh/km) at time t in year y from area1 to area2, always >= 0 after losses due to transport
+    # model.TransportFlowIn_Dvar[y,t,res,area1,area2] =
+    # Instant resource flow (mesured in power, MWh/h) at time t in year y from area1 to area2, 
+    # always >= 0 AFTER losses due to transport
     model.transportFlowIn_Dvar = Var(
         model.YEAR_op, model.TIMESTAMP,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
     # model.TransportFlowOut_Dvar[y,t,res,area1,area2] =
-    # Instant ressource flow (MWh/km) at time t in year y from area2 to area1, always >= 0 before losses due to transport
+    # Instant resource flow (mesured in power, MWh/h) at time t in year y from area2 to area1, 
+    # always >= 0 BEFORE losses due to transport
     model.transportFlowOut_Dvar = Var(
         model.YEAR_op, model.TIMESTAMP,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
 
 
     # Investment
+
     # Capacity of a conversion mean invested in year y in area 'area'
     model.capacityInvest_Dvar = Var(
         model.YEAR_invest, model.TECHNOLOGIES, model.AREA, domain=NonNegativeReals, initialize=0)
     # Capacity of a conversion mean that is removed each year y
     model.capacityDel_Pvar = Var(
-        model.YEAR_invest, model.YEAR_invest, model.TECHNOLOGIES, model.AREA, domain=NonNegativeReals)
+        model.YEAR_invest, model.YEAR_invest, model.TECHNOLOGIES, model.AREA, domain=NonNegativeReals)    
+    # New transport flow max from area a to b created at investment time
+    model.TInvest_Dvar = Var(
+        model.YEAR_invest,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+    # Deleted transport flow from area a to b at investment time, because of end of life
+    model.TDel_Dvar = Var(
+        model.YEAR_invest,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
     # Transformation of technologies 1 into technologies 2
     model.transInvest_Dvar = Var(
         model.YEAR_invest, model.TECHNOLOGIES, model.TECHNOLOGIES, model.AREA, domain=NonNegativeReals)
@@ -449,12 +459,15 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_invest, model.STOCK_TECHNO, model.AREA, domain=NonNegativeReals)
 
     # Marginal cost for a conversion mean, explicitely defined by definition powerCostsDef
-    # en gros c'est cb ça coûte par unité de temps (1 heure) de faire tourner telle techno dans telle ville à telle date à telle puissance
+    # coût annuel d'utilisation de l'installation de tech dans une ville
+    # différent de model.powerCost[y,tech] qui est le coût de production d'1 MWh en 1 heure en l'an y par tech
     model.powerCosts_Pvar = Var(model.YEAR_op, model.TECHNOLOGIES, model.AREA)
     # Fixed costs for a conversion mean, explicitely defined by definition capacityCostsDef
     model.capacityCosts_Pvar = Var(
         model.YEAR_op, model.TECHNOLOGIES, model.AREA)
-
+    # coût annuel d'utilisation de l'installation de ttech entre 2 villes
+    # différent de model.transportPowerCost[y,ttech] qui est le coût de transport d'1 MWh en 1 heure sur 1km en l'an y par ttech
+    # entre area1 et area2
     model.transportPowerCosts_Pvar = Var(
         model.YEAR_op, model.TRANS_TECHNO, model.AREA_AREA)
         
@@ -466,10 +479,9 @@ def systemModelPedro(scenario, isAbstract=False):
     # Cost of storage for a storage mean, explicitely defined by definition storageCostsDef
     model.storageCosts_Pvar = Var(
         model.YEAR_op, model.STOCK_TECHNO, model.AREA)
-    # cost of CO2 emssion of one area without transport
+    # cost of CO2 emission of one area without transport
     model.carbonCosts_Pvar = Var(
         model.YEAR_op, model.AREA, domain=NonNegativeReals)
-
     # cost of transport in year_op y between area1 and area2 per km
     model.transportEconomicalCosts_Pvar = Var(
         model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, domain=NonNegativeReals
@@ -538,7 +550,7 @@ def systemModelPedro(scenario, isAbstract=False):
     # EQ forall tech in TECHNOLOGIES
     def capacityCostsDef_rule(model, y, tech, area):
         return sum(model.investCost[yi, tech]
-                   * f1(i, model.lifeSpan[yi, tech]) * f3(r, y-dy)
+                   * f1(i, model.LifeSpan[yi, tech]) * f3(r, y-dy)
                    * (model.capacityInvest_Dvar[yi, tech, area] - model.capacityDel_Pvar[yi, y-dy, tech, area])
                    for yi in yearList[yearList < y]) + model.operationCost[y-dy, tech]*f3(r, y)*model.capacity_Pvar[y, tech, area] == model.capacityCosts_Pvar[y, tech, area]
     model.capacityCostsCtr = Constraint(
@@ -770,7 +782,7 @@ def systemModelPedro(scenario, isAbstract=False):
     # EQ forall s_tech in STOCK_TECHNO
     def storageCostsDef_rule(model, y, s_tech, area):
         return sum((model.storageEnergyCost[yi, s_tech] * model.Cmax_Pvar[yi+dy, s_tech, area] +
-                    model.storagePowerCost[yi, s_tech] * model.Pmax_Pvar[yi+dy, s_tech, area]) * f1(i, model.storagelifeSpan[yi, s_tech]) * f3(r, y-dy) for yi in yearList[yearList < y]) \
+                    model.storagePowerCost[yi, s_tech] * model.Pmax_Pvar[yi+dy, s_tech, area]) * f1(i, model.storageLifeSpan[yi, s_tech]) * f3(r, y-dy) for yi in yearList[yearList < y]) \
             + model.storageOperationCost[y-dy, s_tech]*f3(
                 r, y) * model.Pmax_Pvar[y, s_tech, area] == model.storageCosts_Pvar[y, s_tech, area]
     model.storageCostsCtr = Constraint(
@@ -951,7 +963,7 @@ def systemModelPedro(scenario, isAbstract=False):
     model.TmaxTot = Constraint(
         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TmaxTot_rule)
 
-    # Mise en place du lifespan
+    # Mise en place du LifeSpan
     def transportLifeSpan_rule(model,y, res, ttech, area1, area2):
         invest_date = y - model.transportLifeSpan[y, ttech]
         if invest_date in yearList:
