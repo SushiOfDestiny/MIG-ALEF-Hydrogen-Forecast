@@ -408,11 +408,11 @@ def systemModelPedro(scenario, isAbstract=False):
     model.TDel_Dvar = Var(
         model.YEAR_invest,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
     # model.TransportFlowInt_Dvar[y,t,res,area1,area2] =
-    # Instant ressource flow (MWh/km) at time t in year y from area1 to area2, always >= 0
+    # Instant ressource flow (MWh/km) at time t in year y from area1 to area2, always >= 0 after losses due to transport
     model.transportFlowIn_Dvar = Var(
         model.YEAR_op, model.TIMESTAMP,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
     # model.TransportFlowOut_Dvar[y,t,res,area1,area2] =
-    # Instant ressource flow (MWh/km) at time t in year y from area2 to area1, always >= 0
+    # Instant ressource flow (MWh/km) at time t in year y from area2 to area1, always >= 0 before losses due to transport
     model.transportFlowOut_Dvar = Var(
         model.YEAR_op, model.TIMESTAMP,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
 
@@ -717,8 +717,8 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_op, model.TIMESTAMP, model.TECHNOLOGIES, model.AREA, rule=Capacity_rule)
 
     def transportFlow_rule(model, y, t, res, ttech, area1, area2):
-        return model.transportFlowOut_Dvar[y, t, res, ttech, area2, area1] == \
-            model.transportFlowIn_Dvar[y, t, res, ttech, area1, area2] * (1-model.transportFactorIn[res, ttech])*(
+        return model.transportFlowIn_Dvar[y, t, res, ttech, area2, area1] == \
+            model.transportFlowOut_Dvar[y, t, res, ttech, area1, area2] * (1-model.transportFactorIn[res, ttech])*(
                 1-model.transportFactorOut[res, ttech])*(1-model.transportDissipation[res, ttech])**model.distances[(area1, area2)]
     model.transportFlowCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule=transportFlow_rule
@@ -738,7 +738,6 @@ def systemModelPedro(scenario, isAbstract=False):
                 + sum(model.transportFlowIn_Dvar[y, t, res, ttech, area1, area] - model.transportFlowOut_Dvar[y, t, res, ttech, area1, area]
                       for ttech in model.TRANS_TECHNO for area1 in model.AREA) \
                 == model.energy_Pvar[y, t, res, area]
-        # sign_func is used to substract resources' losses dut to transport iff the resource is actually transported in area
     model.ProductionCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.AREA, rule=Production_rule)
 
@@ -926,38 +925,40 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Contraintes sur le transport
     # Fixer l'investissement entre ses bornes.
-    def TInvest_min_rule(model, y, trans_tech, area_area):
-        return model.TInvest_Dvar(y, trans_tech, area_area) > model.transportMinPower[trans_tech]
+    def TInvest_min_rule(model, y, res, ttech, area1, area2):
+        return model.TInvest_Dvar[y, res, ttech, area1, area2] >= model.transportMinPower[y, ttech]
     model.TInvest_min = Constraint(
-        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_min_rule)
+        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_min_rule)
 
-    def TInvest_max_rule(model, y, trans_tech, area_area):
-        return model.TInvest_Dvar(y, trans_tech, area_area) < model.transportMaxPower[trans_tech]
+    def TInvest_max_rule(model, y, res, ttech, area1, area2):
+        return model.TInvest_Dvar[y, res, ttech, area1, area2] <= model.transportMaxPower[y, ttech]
     model.TInvest_max = Constraint(
-        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_max_rule)
+        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_max_rule)
    
     # Fixer le flux inférieur à la capacité max
-    def FlowTot_lim_rule(model, y, t, trans_tech, area_area):
-        return abs(model.FlowTot_Dvar(y, trans_tech, area_area, t)) < model.TmaxTot_Pvar(y, trans_tech, area_area)
+    def FlowTot_lim_rule(model, y, t, res, ttech, area1, area2):
+        return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] <= model.TmaxTot_Pvar[y, res, ttech, area1, area2]
     model.FlowTot_lim = Constraint(
-        model.YEAR_invest, model.TIMESTAMP, model.TRANS_TECHNO, model.AREA_AREA, rule = FlowTot_lim_rule)
+        model.YEAR_invest, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = FlowTot_lim_rule)
 
-    # Définition de TmaxTot en y, en fonction de TmaxTot en y-1
-    def TmaxTot_it_rule(model, y, trans_tech, area_area):
+    # Définition de TmaxTot en y, en fonction de TmaxTot en y-dy
+    def TmaxTot_rule(model, y, res, ttech, area1, area2):
         if y==2020:
-            return model.TmaxTot_Pvar(y, trans_tech, area_area)==0
+            return model.TmaxTot_Pvar[y, res, ttech, area1, area2]==0
         else:
-            return model.TmaxTot_Pvar(y, trans_tech, area_area) == model.TmaxTot_Pvar(y-dy, trans_tech, area_area) + \
-                model.TInvest_Dvar(y, trans_tech, area_area) - model.TDel_Dvar(y, trans_tech, area_area)
-    model.TmaxTot_it = Constraint(
-        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TmaxTot_it_rule)
+            return model.TmaxTot_Pvar[y, res, ttech, area1, area2] == model.TmaxTot_Pvar[y-dy, res, ttech, area1, area2] + \
+                model.TInvest_Dvar[y, res, ttech, area1, area2] - model.TDel_Dvar[y, res, ttech, area1, area2]
+    model.TmaxTot = Constraint(
+        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TmaxTot_rule)
 
     # Mise en place du lifespan
-    def LifeSpanCtr_rule(model,y, trans_tech, area_area):
-        invest_date = y - model.lifespan[trans_tech]
+    def transportLifeSpan_rule(model,y, res, ttech, area1, area2):
+        invest_date = y - model.transportLifeSpan[y, ttech]
         if invest_date in yearList:
-            return model.TDel_Dvar(y, trans_tech, area_area) == model.TInvest(invest_date, trans_tech, area_area)
+            return model.TDel_Dvar[y, res, ttech, area1, area2] == model.TInvest_Dvar[invest_date, res, ttech, area1, area2]
+        else:
+            return model.TDel_Dvar[y, res, ttech, area1, area2] == 0
     model.LifeSpanCtr = Constraint(
-        model.YEAR_invest, model.TRANS_TECHN0, model.AREA_AREA, rule = LifeSpanCtr_rule)
+        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = transportLifeSpan_rule)
     
     return model
