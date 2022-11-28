@@ -192,7 +192,7 @@ for k, year in enumerate(yearList):
 
     scenario['storageTechs'].append(
         pd.DataFrame(data={tech: 
-                { 'YEAR': year, 'resource': 'electricity',  # ambiguïté du nom des paramètres ?
+                { 'YEAR': year, 'storageResource': 'electricity',  # ambiguïté du nom des paramètres ?
                 'storagelifeSpan': lifespan, 
                 'storagePowerCost': capex_per_kW, 
                 'storageEnergyCost': capex_per_kWh, 
@@ -211,7 +211,7 @@ for k, year in enumerate(yearList):
     scenario['storageTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 
-               'resource': 'hydrogen', 
+               'storageResource': 'hydrogen', 
                'storagelifeSpan': 40, 
                 'storagePowerCost': 0, 
                 'storageEnergyCost': 350e3, 
@@ -232,10 +232,10 @@ scenario['transportTechs'] = []
 for k, year in enumerate(yearList):
     ttech = 'Pipeline'
     p_max = 500
-    capex, opex, lifespan = 0,0,0
+    capex, opex, lifespan = 0,0,10
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
-            {'YEAR' : year, 'resource': 'hydrogen',  # transportResource ?
+            {'YEAR' : year, 'transportResource': 'hydrogen',  # transportResource ?
             'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
@@ -252,11 +252,11 @@ for k, year in enumerate(yearList):
 for k, year in enumerate(yearList):
     ttech = 'truckTransportingHydrogen'
     p_max = 500  # to change
-    capex, opex, lifespan = 0,0,0
+    capex, opex, lifespan = 0,0,10
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
-            {'YEAR' : year, 'resource': 'hydrogen',
-            'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            {'YEAR' : year, 'transportResource': 'hydrogen',
+            'transportLifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 0.01},
