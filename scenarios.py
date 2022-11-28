@@ -40,11 +40,11 @@ scenario['conversionTechs'] = []
 for k, year in enumerate(yearList): 
     tech = "Offshore wind - floating"
     maxcap = 10000
-    capex, opex, lifespan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+    capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Electricity production',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                 'minCapacity': 0,'maxCapacity': maxcap, 
                 'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                 'EnergyNbhourCap': 0, # used for hydroelectricity 
@@ -55,11 +55,11 @@ for k, year in enumerate(yearList):
 
     tech = "Onshore wind"
     maxcap = 10000
-    capex, opex, lifespan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+    capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Electricity production',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                 'minCapacity': 0,'maxCapacity': maxcap, 
                 'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                 'EnergyNbhourCap': 0, # used for hydroelectricity 
@@ -71,11 +71,11 @@ for k, year in enumerate(yearList):
 
     tech = "Ground PV"
     maxcap = 10000
-    capex, opex, lifespan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+    capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Electricity production',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                 'minCapacity': 0,'maxCapacity': maxcap, 
                 'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                 'EnergyNbhourCap': 0, # used for hydroelectricity 
@@ -86,11 +86,11 @@ for k, year in enumerate(yearList):
     )
 
     tech = "Electrolysis"
-    capex, opex, lifespan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+    capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Hydrogen production',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                 'minCapacity': 0,'maxCapacity': 100e3, 
                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
                 'EnergyNbhourCap': 0, # used for hydroelectricity 
@@ -101,11 +101,11 @@ for k, year in enumerate(yearList):
     )
 
     tech = "SMR"
-    capex, opex, lifespan = 800e3, 40e3, 60
+    capex, opex, LifeSpan = 800e3, 40e3, 60
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Hydrogen production',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                 'minCapacity': 0,'maxCapacity': 100e3, 
                 'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                 'EnergyNbhourCap': 0, # used for hydroelectricity 
@@ -116,11 +116,11 @@ for k, year in enumerate(yearList):
     )
 
     tech = "Existing SMR"
-    capex, opex, lifespan = 0e3, 40e3, 30
+    capex, opex, LifeSpan = 0e3, 40e3, 30
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Hydrogen production',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                 'minCapacity': 320 if year == yearZero else 0,'maxCapacity': 320 if year == yearZero  else 0, 
                 'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                 'EnergyNbhourCap': 0, # used for hydroelectricity 
@@ -131,11 +131,11 @@ for k, year in enumerate(yearList):
     )
 
     tech = "SMR + CCS1"
-    capex, opex, lifespan = 900e3, 45e3, 60
+    capex, opex, LifeSpan = 900e3, 45e3, 60
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Hydrogen production',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                 'minCapacity': 0,'maxCapacity': 100e3, 
                 'EmissionCO2': -169, 'Conversion': {'electricity': -0.17, 'hydrogen': 1, 'gas': -1.43},
                 'EnergyNbhourCap': 0, # used for hydroelectricity 
@@ -146,11 +146,11 @@ for k, year in enumerate(yearList):
     )
 
     tech = "SMR + CCS2"
-    capex, opex, lifespan = 1000e3, 50e3, 60
+    capex, opex, LifeSpan = 1000e3, 50e3, 60
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Hydrogen production',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                 'minCapacity': 0,'maxCapacity': 100e3, 
                 'EmissionCO2': -268, 'Conversion': {'electricity': -0.34, 'hydrogen': 1, 'gas': -1.43},
                 'EnergyNbhourCap': 0, # used for hydroelectricity 
@@ -161,21 +161,21 @@ for k, year in enumerate(yearList):
     )
 
     tech = "CCS1"
-    capex, opex, lifespan = 100e3, 0e3, 60
+    capex, opex, LifeSpan = 100e3, 0e3, 60
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Carbon capture',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 'capacityLim': 100e3}, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 'capacityLim': 100e3}, 
             }
          )
     )
 
     tech = "CCS2"
-    capex, opex, lifespan = 100e3, 0e3, 60
+    capex, opex, LifeSpan = 100e3, 0e3, 60
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Carbon capture',
-                'lifeSpan': lifespan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 'capacityLim': 100e3, }, 
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 'capacityLim': 100e3, }, 
             }
          )
     )
@@ -185,15 +185,15 @@ scenario['conversionTechs'] =  pd.concat(scenario['conversionTechs'], axis=1)
 scenario['storageTechs'] = [] 
 for k, year in enumerate(yearList): 
     tech = "Battery"
-    capex1, opex1, lifespan = tech_eco_data.get_capex_new_tech_RTE(tech + ' - 1h', hyp='ref', year=year)
-    capex4, opex4, lifespan = tech_eco_data.get_capex_new_tech_RTE(tech + ' - 4h', hyp='ref', year=year)
+    capex1, opex1, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech + ' - 1h', hyp='ref', year=year)
+    capex4, opex4, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech + ' - 4h', hyp='ref', year=year)
     capex_per_kWh = (capex4 - capex1) / 3
     capex_per_kW = capex1 - capex_per_kWh
 
     scenario['storageTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'storageResource': 'electricity',  # ambiguïté du nom des paramètres ?
-                'storagelifeSpan': lifespan, 
+                'storageLifeSpan': LifeSpan, 
                 'storagePowerCost': capex_per_kW, 
                 'storageEnergyCost': capex_per_kWh, 
                 'storageOperationCost': opex1, # TODO: according to RTE OPEX seems to vary with energy rather than power
@@ -212,7 +212,7 @@ for k, year in enumerate(yearList):
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 
                'storageResource': 'hydrogen', 
-               'storagelifeSpan': 40, 
+               'storageLifeSpan': 40, 
                 'storagePowerCost': 0, 
                 'storageEnergyCost': 350e3, 
                 'storageOperationCost': 2e3, 
@@ -232,11 +232,11 @@ scenario['transportTechs'] = []
 for k, year in enumerate(yearList):
     ttech = 'Pipeline'
     p_max = 500
-    capex, opex, lifespan = 0,0,10
+    capex, opex, LifeSpan = 0,0,10
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',  # transportResource ?
-            'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 0.01},
@@ -252,11 +252,11 @@ for k, year in enumerate(yearList):
 for k, year in enumerate(yearList):
     ttech = 'truckTransportingHydrogen'
     p_max = 500  # to change
-    capex, opex, lifespan = 0,0,10
+    capex, opex, LifeSpan = 0,0,10
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
-            'transportlifeSpan':lifespan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 0.01},
@@ -269,6 +269,7 @@ for k, year in enumerate(yearList):
 
 
 # ttech = truck transporting electricity
+#ttech = electric cable
 
 
 scenario['transportTechs'] =  pd.concat(scenario['transportTechs'], axis=1) 
