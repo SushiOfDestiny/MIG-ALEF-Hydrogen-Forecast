@@ -37,6 +37,13 @@ def demande_h_area(scenar, area, k, nYears):
         return [(33e3 / nHours) * demande_t_an[k]] * nHours
 
 
+def stockage_h_area(area):
+    if area == "Fos":
+        return 100000
+    else:
+        return 0
+    
+
 scenario['resourceDemand'] =  pd.concat(
     (
         pd.DataFrame(data = { 
@@ -245,7 +252,7 @@ for area in areaList:
                     'storageEnergyCost': 350e3, 
                     'storageOperationCost': 2e3, 
                     'p_max': 10000, 
-                    'c_max': 100000, 
+                    'c_max': stockage_h_area(area), 
                     'storageChargeFactors': {'electricity': 0.0168, 'hydrogen': 1.0},
                     'storageDischargeFactors': {'hydrogen': 1.0},
                     'storageDissipation': 0,
@@ -253,6 +260,7 @@ for area in areaList:
                 }
              )
         )
+
 
 scenario['storageTechs'] =  pd.concat(scenario['storageTechs'], axis=1) 
 
