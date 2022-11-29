@@ -1,3 +1,10 @@
+##########
+# RESUME #
+##########
+# 3 tailles d'électrolyseur
+# 1 capex de pipeline
+# on force la taille d'électrolyseur selon la zone
+
 import numpy as np
 import pandas as pd
 import tech_eco_data
