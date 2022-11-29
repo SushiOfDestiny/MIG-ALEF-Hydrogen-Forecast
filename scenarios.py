@@ -4,7 +4,9 @@ import tech_eco_data
 
 
 nHours = 8760
-t = np.arange(1,nHours + 1)
+timeStep = 10
+t = np.arange(1,nHours + 1)[::timeStep]
+nHours = len(t)
 
 zones = ['PACA']
 scenar = 1
@@ -18,8 +20,10 @@ areaList = ["Nice","Fos"]
 
 scenario = {}
 scenario['areaList'] = areaList
+scenario['timeStep'] = timeStep 
+scenario['lastTime'] = t[-1]
 
-def demande_h_area(scenar, area, k, nYears):
+def demande_h_area(scenar, area, k):
     # un facteur pour différencier Nice de Fos
     # différent scénarios
     if scenar == 0 :
@@ -32,9 +36,10 @@ def demande_h_area(scenar, area, k, nYears):
         demande_t_an = [100, 248, 239, 236] 
 
     if area == "Nice" :
-        return [(0.2 * 33e3 / nHours) * demande_t_an[k]] * nHours
+        return (0.05 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
     else :
-        return [(33e3 / nHours) * demande_t_an[k]] * nHours
+        print( demande_t_an[k])
+        return (33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
 
 
 scenario['resourceDemand'] =  pd.concat(
@@ -44,13 +49,14 @@ scenario['resourceDemand'] =  pd.concat(
           'YEAR': year, 
           'TIMESTAMP': t, # We add the TIMESTAMP so that it can be used as an index later.
           'electricity': np.zeros(nHours),
-          'hydrogen': demande_h_area(scenar, area, k, nYears), # Hourly constant but increasing demand
+          'hydrogen': demande_h_area(scenar, area, k), # Hourly constant but increasing demand
           'gas': np.zeros(nHours), 
          } 
         ) for k, year in enumerate(yearList)
     for area in areaList
     )
 )
+print(scenario['resourceDemand'])
 '''
 print(scenario['resourceDemand'].head())
 print(scenario['resourceDemand'].tail())
@@ -69,7 +75,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, } 
+                    'capacityLim': 100e3, 'unitPower': 8} 
                 }
              )
         )
@@ -87,7 +93,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 
+                    'capacityLim': 100e3, 'unitPower': 3
                     }, 
                 }
              )
@@ -105,7 +111,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 
+                    'capacityLim': 100e3, 'unitPower': 1
                     }, 
                 }
              )
@@ -119,9 +125,9 @@ for area in areaList:
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                     'minCapacity': 0,'maxCapacity': maxcap, 
-                    'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
+                    'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.69},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 
+                    'capacityLim': 100e3, 'unitPower': 1 
                     }, 
                 }
              )
@@ -136,7 +142,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': 100e3, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 
+                    'capacityLim': 100e3, 'unitPower': 320
                     }, 
                 }
              )
@@ -148,10 +154,10 @@ for area in areaList:
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
-                    'minCapacity': 320 if year == yearZero else 0,'maxCapacity': 320 if year == yearZero  else 0, 
+                    'minCapacity': 1 if year == yearZero else 0,'maxCapacity': 1 if year == yearZero  else 0, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 320 if year == yearZero else 0, 
+                    'capacityLim': 320 if year == yearZero else 0, 'unitPower': 320
                     }, 
                 }
              )
@@ -166,7 +172,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': 100e3, 
                     'EmissionCO2': -169, 'Conversion': {'electricity': -0.17, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 
+                    'capacityLim': 100e3, 'unitPower': 320
                     }, 
                 }
              )
@@ -181,7 +187,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': 100e3, 
                     'EmissionCO2': -268, 'Conversion': {'electricity': -0.34, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 
+                    'capacityLim': 100e3, 'unitPower': 320 
                     }, 
                 }
              )
@@ -192,7 +198,8 @@ for area in areaList:
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Carbon capture',
-                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 'capacityLim': 100e3}, 
+                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 
+                    'operationCost': opex, 'capacityLim': 100e3, 'unitPower': 320}, 
                 }
              )
         )
@@ -202,7 +209,8 @@ for area in areaList:
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Carbon capture',
-                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 'capacityLim': 100e3, }, 
+                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 
+                    'operationCost': opex, 'capacityLim': 100e3, 'unitPower': 320}, 
                 }
              )
         )
@@ -354,7 +362,7 @@ scenario['maxBiogasCap'] = pd.DataFrame(data=np.linspace(0, 310e6, nYears),
     index=yearList, columns=('maxBiogasCap',))
 
 scenario['gridConnection'] = pd.read_csv("Data/Raw/CalendrierHPHC_TIME.csv", sep=',', decimal='.', skiprows=0,
-                                comment="#").set_index(["TIMESTAMP"])
+                                comment="#").set_index(["TIMESTAMP"]).loc[t]
 
 scenario['economicParameters'] = pd.DataFrame({
     'discountRate':[0.04], 
@@ -379,10 +387,10 @@ scenario['resourceImportPrices'] = pd.concat(
             'AREA': area,
             'YEAR': year, 
             'TIMESTAMP': t, 
-            'electricity': df_res_ref.loc[(year, slice(None), 'electricity'),'importCost'].values,
-            'natural gas': 2 * df_res_ref.loc[(year, slice(None), 'gazNat'),'importCost'].values,
+            'electricity': df_res_ref.loc[(year, slice(None), 'electricity'),'importCost'].values[::timeStep],
+            'natural gas': 2 * df_res_ref.loc[(year, slice(None), 'gazNat'),'importCost'].values[::timeStep],
             'biogas': 150 * np.ones(nHours),
-            'hydrogen': 6/33 * 1000 * np.ones(nHours),
+            'hydrogen': 60/33 * 1000 * np.ones(nHours),
         }) for k, year in enumerate(yearList[1:])
     for area in areaList
     )
@@ -394,7 +402,7 @@ scenario['resourceImportCO2eq'] = pd.concat(
             'AREA': area,
             'YEAR': year, 
             'TIMESTAMP': t, 
-            'electricity': df_res_ref.loc[(year, slice(None), 'electricity'),'emission'].values,
+            'electricity': df_res_ref.loc[(year, slice(None), 'electricity'),'emission'].values[::timeStep],
             'gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)), # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'natural gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)), # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'biogas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1,
@@ -407,7 +415,7 @@ scenario['resourceImportCO2eq'] = pd.concat(
 scenario['convTechList'] = ["Offshore wind - floating", "Onshore wind", "Ground PV", "ElectrolysisS","ElectrolysisM","ElectrolysisL"]
 ctechs = scenario['convTechList']
 availabilityFactor = pd.read_csv('Data/Raw/availabilityFactor2020-2050_PACA_TIMExTECHxYEAR - renamed.csv',
-                                 sep=',', decimal='.', skiprows=0).set_index(["YEAR", "TIMESTAMP", "TECHNOLOGIES"])
+                                 sep=',', decimal='.', skiprows=0).set_index(["YEAR", "TIMESTAMP", "TECHNOLOGIES"]).loc[(slice(None), t, slice(None))]
 itechs = availabilityFactor.index.isin(ctechs, level=2)
 scenario['availability'] = availabilityFactor.loc[(slice(None), slice(None), itechs)]
 

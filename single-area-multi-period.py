@@ -27,8 +27,12 @@ print('Computational time: {:.0f} s'.format(end_clock - start_clock))
 
 res = {
     'variables': getVariables_panda(model), 
-    'constraints': getConstraintsDual_panda(model)
 }
+
+try: 
+    res['constraints'] = getConstraintsDual_panda(model)
+except KeyError: # This exception will be raised for a MILP case
+    pass 
 
 outputFolder = 'out'
 
@@ -41,6 +45,7 @@ for v in res['variables'].keys():
     print(v)
 
 for k, v in res['variables'].items():
+    print ('Writing ' + k + '...') 
     v.to_csv(outputFolder + '/' + k + '.csv',index=True)
 
 print(res['variables']['capacity_Pvar'])
