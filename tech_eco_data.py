@@ -153,5 +153,3 @@ def electrolyser_capex_Reksten2022(tech='PEM', Pel=100, year=2020):
 		alpha, beta, k0, k = 0.649, -27.33, 301.04, 11603
 
 	return (k0 + k/Pel * Pel**alpha) * (year/2020) ** beta
-
-print(electrolyser_capex_Reksten2022(Pel=10000, year = np.array([2020, 2030, 2040, 2050, 2060])))
