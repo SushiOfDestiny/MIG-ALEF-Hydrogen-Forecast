@@ -7,9 +7,9 @@ import pandas as pd
 
 def loadScenario(scenario, printTables=False):
     yearZero = scenario["yearList"][0]
-    dy = scenario["yearList"][1] - yearZero 
+    dy = scenario["yearList"][1] - yearZero
 
-    areaConsumption = scenario['resourceDemand'].melt(id_vars=['TIMESTAMP', 'YEAR'], var_name=['RESOURCES'], value_name='areaConsumption').set_index(['YEAR','TIMESTAMP', 'RESOURCES'])
+    areaConsumption = scenario['resourceDemand'].melt(id_vars=['TIMESTAMP', 'YEAR'], var_name=['RESOURCES'], value_name='areaConsumption').set_index(['YEAR','TIMESTAMP','RESOURCES'])
 
     TechParameters = scenario['conversionTechs'].transpose().fillna(0)
     TechParameters.index.name='TECHNOLOGIES'
@@ -97,7 +97,6 @@ def loadScenario(scenario, printTables=False):
     inputDict["carbonTax"] = CarbonTax 
     inputDict["transitionFactors"] = scenario["transitionFactors"]
     inputDict["yearList"] = scenario["yearList"]
-
     return inputDict
 
 
@@ -114,11 +113,10 @@ def systemModelPedro(scenario,isAbstract=False):
   
     yearList = np.array(inputDict["yearList"])
     dy = yearList[1] - yearList[0] 
-    y0 = yearList[0]
- 
+    y0 = yearList[0] 
 
-    areaConsumption     = inputDict["areaConsumption"].loc[(inputDict["yearList"][1:], slice(None), slice(None))]
-    availabilityFactor  = inputDict["availabilityFactor"].loc[(inputDict["yearList"][1:], slice(None), slice(None))]
+    areaConsumption     = inputDict["areaConsumption"].loc[(inputDict["yearList"][1:], slice(None), slice(None), slice(None))]
+    availabilityFactor  = inputDict["availabilityFactor"].loc[(inputDict["yearList"][1:], slice(None), slice(None), slice(None))]
     TechParameters      = inputDict["techParameters"] 
     ResParameters       = inputDict["resParameters"]
     conversionFactor    = inputDict["conversionFactor"]
@@ -185,6 +183,7 @@ def systemModelPedro(scenario,isAbstract=False):
     model.RESOURCES_TECHNOLOGIES= model.RESOURCES * model.TECHNOLOGIES
     model.RESOURCES_STOCKTECHNO = model.RESOURCES * model.STOCK_TECHNO
     model.YEAR_op_TIMESTAMP_RESOURCES= model.YEAR_op * model.TIMESTAMP * model.RESOURCES
+    model.YEAR_op_TIMESTAMP_AREA_RESSOURCES = model.YEAR_op * model.TIMESTAMP * model.RESSOURCES
     model.TECHNOLOGIES_TECHNOLOGIES= model.TECHNOLOGIES*model.TECHNOLOGIES
 
     # Subset of Simple only required if ramp constraint
@@ -194,7 +193,7 @@ def systemModelPedro(scenario,isAbstract=False):
     ###############
     # Parameters ##
     ###############
-    model.areaConsumption = Param(model.YEAR_op_TIMESTAMP_RESOURCES, default=0,
+    model.areaConsumption = Param(model.YEAR_op_TIMESTAMP_AREA_RESOURCES, default=0,
                                   initialize=areaConsumption.loc[:, "areaConsumption"].squeeze().to_dict(), domain=Reals)
     model.availabilityFactor = Param(model.YEAR_op_TIMESTAMP_TECHNOLOGIES, domain=PercentFraction, default=1,
                                      initialize=availabilityFactor.loc[:, "availabilityFactor"].squeeze().to_dict())
@@ -211,22 +210,22 @@ def systemModelPedro(scenario,isAbstract=False):
  
 
     for COLNAME in TechParameters:
-        if COLNAME not in ["TECHNOLOGIES", "AREAS","YEAR"]:  ### each column in TechParameters will be a parameter
+        if COLNAME not in ["TECHNOLOGIES", "YEAR"]:  ### each column in TechParameters will be a parameter
             exec("model." + COLNAME + "= Param(model.YEAR_invest, model.TECHNOLOGIES, default=0, domain=Reals," +
                  "initialize=TechParameters." + COLNAME + ".loc[(inputDict['yearList'][:-1], slice(None))].squeeze().to_dict())")
 
     for COLNAME in ResParameters:
-        if COLNAME not in ["TECHNOLOGIES", "AREAS","YEAR"]:  ### each column in TechParameters will be a parameter
+        if COLNAME not in ["TECHNOLOGIES", "YEAR"]:  ### each column in TechParameters will be a parameter
             exec("model." + COLNAME + "= Param(model.YEAR_op_TIMESTAMP_RESOURCES, domain=NonNegativeReals,default=0," +
                  "initialize=ResParameters." + COLNAME + ".squeeze().to_dict())")
 
     for COLNAME in Calendrier:
-        if COLNAME not in ["TIMESTAMP","AREAS"]:
+        if COLNAME not in ["TIMESTAMP"]:
             exec("model." + COLNAME + " = Param(model.TIMESTAMP, default=0," +
                  "initialize=Calendrier." + COLNAME + ".squeeze().to_dict(),domain=Any)")
 
     for COLNAME in StorageParameters:
-        if COLNAME not in ["STOCK_TECHNO","AREAS","YEAR"]:  ### each column in StorageParameters will be a parameter
+        if COLNAME not in ["STOCK_TECHNO","YEAR"]:  ### each column in StorageParameters will be a parameter
             exec("model." + COLNAME + " =Param(model.YEAR_invest_STOCKTECHNO,domain=Any,default=0," +
                  "initialize=StorageParameters." + COLNAME + ".loc[(inputDict['yearList'][:-1], slice(None))].squeeze().to_dict())")
 
@@ -243,38 +242,38 @@ def systemModelPedro(scenario,isAbstract=False):
     # In this section, variables are separated in two categories : decision variables wich are the reals variables of the otimisation problem (these are noted Dvar), and problem variables which are resulting of calculation and are convenient for the readability and the analyse of results (these are noted Pvar)
 
     # Operation
-    model.power_Dvar = Var(model.YEAR_op,model.TIMESTAMP, model.TECHNOLOGIES,domain=NonNegativeReals)  ### Power of a conversion mean at time t
-    model.importation_Dvar = Var(model.YEAR_op,model.TIMESTAMP, model.RESOURCES, domain=NonNegativeReals,initialize=0)  ### Improtation of a resource at time t
-    model.energy_Pvar = Var(model.YEAR_op,model.TIMESTAMP, model.RESOURCES)  ### Amount of a resource at time t
-    model.max_PS_Dvar = Var(model.YEAR_op,model.HORAIRE,domain=NonNegativeReals) ### Puissance souscrite max par plage horaire pour l'année d'opération y
-    model.carbon_Pvar=Var(model.YEAR_op,model.TIMESTAMP) ### CO2 emission at each time t
+    model.power_Dvar = Var(model.YEAR_op,model.TIMESTAMP, model.TECHNOLOGIES, model.AREA,domain=NonNegativeReals)  ### Power of a conversion mean at time t and area a
+    model.importation_Dvar = Var(model.YEAR_op,model.TIMESTAMP, model.RESOURCES, model.AREA, domain=NonNegativeReals,initialize=0)  ### Importation of a resource at time t and area a
+    model.energy_Pvar = Var(model.YEAR_op,model.TIMESTAMP, model.RESOURCES, model.AREA)  ### Amount of a resource at time t and area a 
+    model.max_PS_Dvar = Var(model.YEAR_op,model.HORAIRE, model.AREA,domain=NonNegativeReals) ### Puissance souscrite max par plage horaire pour l'année d'opération y and area a 
+    model.carbon_Pvar=Var(model.YEAR_op,model.TIMESTAMP, model.AREA) ### CO2 emission at each time t and area a 
 
     ### Storage operation variables
-    model.stockLevel_Pvar=Var(model.YEAR_op,model.TIMESTAMP,model.STOCK_TECHNO,domain=NonNegativeReals) ### level of the energy stock in a storage mean at time t
-    model.storageIn_Pvar=Var(model.YEAR_op,model.TIMESTAMP,model.RESOURCES,model.STOCK_TECHNO,domain=NonNegativeReals) ### Energy stored in a storage mean at time t
-    model.storageOut_Pvar=Var(model.YEAR_op,model.TIMESTAMP,model.RESOURCES,model.STOCK_TECHNO,domain=NonNegativeReals) ### Energy taken out of the in a storage mean at time t
-    model.storageConsumption_Pvar=Var(model.YEAR_op,model.TIMESTAMP,model.RESOURCES,model.STOCK_TECHNO,domain=NonNegativeReals) ### Energy consumed the in a storage mean at time t (other than the one stored)
+    model.stockLevel_Pvar=Var(model.YEAR_op,model.TIMESTAMP,model.STOCK_TECHNO,model.AREA,domain=NonNegativeReals) ### level of the energy stock in a storage mean at time t and area a
+    model.storageIn_Pvar=Var(model.YEAR_op,model.TIMESTAMP,model.RESOURCES,model.STOCK_TECHNO,model.AREA,domain=NonNegativeReals) ### Energy stored in a storage mean at time t and area a
+    model.storageOut_Pvar=Var(model.YEAR_op,model.TIMESTAMP,model.RESOURCES,model.STOCK_TECHNO,model.AREA,domain=NonNegativeReals) ### Energy taken out of the in a storage mean at time t and area a 
+    model.storageConsumption_Pvar=Var(model.YEAR_op,model.TIMESTAMP,model.RESOURCES,model.STOCK_TECHNO,model.AREA,domain=NonNegativeReals) ### Energy consumed the in a storage mean at time t and area a(other than the one stored)
 
     # Investment
-    model.capacityInvest_Dvar = Var(model.YEAR_invest,model.TECHNOLOGIES, domain=NonNegativeReals,initialize=0)  ### Capacity of a conversion mean invested in year y
-    model.capacityDel_Pvar = Var(model.YEAR_invest,model.YEAR_invest,model.TECHNOLOGIES,domain=NonNegativeReals) ### Capacity of a conversion mean that is removed each year y
-    model.transInvest_Dvar = Var(model.YEAR_invest,model.TECHNOLOGIES,model.TECHNOLOGIES,domain=NonNegativeReals) ### Transformation of technologies 1 into technologies 2
-    model.capacityDem_Dvar=Var(model.YEAR_invest,model.YEAR_invest,model.TECHNOLOGIES,domain=NonNegativeReals)
-    model.capacity_Pvar =  Var(model.YEAR_op,model.TECHNOLOGIES, domain=NonNegativeReals,initialize=0)
-    model.CmaxInvest_Dvar=Var(model.YEAR_invest,model.STOCK_TECHNO,domain=NonNegativeReals) # Maximum capacity of a storage mean
-    model.PmaxInvest_Dvar=Var(model.YEAR_invest,model.STOCK_TECHNO,domain=NonNegativeReals) # Maximum flow of energy in/out of a storage mean
-    model.Cmax_Pvar = Var(model.YEAR_op, model.STOCK_TECHNO,domain=NonNegativeReals)  # Maximum capacity of a storage mean
-    model.Pmax_Pvar = Var(model.YEAR_op,model.STOCK_TECHNO,domain=NonNegativeReals)  # Maximum flow of energy in/out of a storage mean
-    model.CmaxDel_Dvar = Var(model.YEAR_invest, model.STOCK_TECHNO,domain=NonNegativeReals)
-    model.PmaxDel_Dvar = Var(model.YEAR_invest, model.STOCK_TECHNO,domain=NonNegativeReals)
+    model.capacityInvest_Dvar = Var(model.YEAR_invest,model.TECHNOLOGIES, model.AREA, domain=NonNegativeReals,initialize=0)  ### Capacity of a conversion mean invested in year y and area a 
+    model.capacityDel_Pvar = Var(model.YEAR_invest,model.YEAR_invest,model.TECHNOLOGIES,model.AREA,domain=NonNegativeReals) ### Capacity of a conversion mean that is removed each year y and area a 
+    model.transInvest_Dvar = Var(model.YEAR_invest,model.TECHNOLOGIES,model.TECHNOLOGIES,model.AREA,domain=NonNegativeReals) ### Transformation of technologies 1 into technologies 2 and area a 
+    model.capacityDem_Dvar=Var(model.YEAR_invest,model.YEAR_invest,model.TECHNOLOGIES,model.AREA,domain=NonNegativeReals)
+    model.capacity_Pvar =  Var(model.YEAR_op,model.TECHNOLOGIES, model.AREA, domain=NonNegativeReals,initialize=0)
+    model.CmaxInvest_Dvar=Var(model.YEAR_invest,model.STOCK_TECHNO, model.AREA,domain=NonNegativeReals) # Maximum capacity of a storage mean
+    model.PmaxInvest_Dvar=Var(model.YEAR_invest,model.STOCK_TECHNO, model.AREA,domain=NonNegativeReals) # Maximum flow of energy in/out of a storage mean
+    model.Cmax_Pvar = Var(model.YEAR_op, model.STOCK_TECHNO,model.AREA,domain=NonNegativeReals)  # Maximum capacity of a storage mean
+    model.Pmax_Pvar = Var(model.YEAR_op,model.STOCK_TECHNO,model.AREA,domain=NonNegativeReals)  # Maximum flow of energy in/out of a storage mean
+    model.CmaxDel_Dvar = Var(model.YEAR_invest, model.STOCK_TECHNO,model.AREA,domain=NonNegativeReals)
+    model.PmaxDel_Dvar = Var(model.YEAR_invest, model.STOCK_TECHNO,model.AREA,domain=NonNegativeReals)
 
     #
-    model.powerCosts_Pvar = Var(model.YEAR_op,model.TECHNOLOGIES)  ### Marginal cost for a conversion mean, explicitely defined by definition powerCostsDef
-    model.capacityCosts_Pvar = Var(model.YEAR_op,model.TECHNOLOGIES)  ### Fixed costs for a conversion mean, explicitely defined by definition capacityCostsDef
-    model.importCosts_Pvar = Var(model.YEAR_op,model.RESOURCES)  ### Cost of ressource imported, explicitely defined by definition importCostsDef
-    model.turpeCosts_Pvar = Var(model.YEAR_op,model.RESOURCES,domain=NonNegativeReals) ### Coûts TURPE pour électricité
-    model.storageCosts_Pvar = Var(model.YEAR_op,model.STOCK_TECHNO)  ### Cost of storage for a storage mean, explicitely defined by definition storageCostsDef
-    model.carbonCosts_Pvar = Var(model.YEAR_op,domain=NonNegativeReals)
+    model.powerCosts_Pvar = Var(model.YEAR_op,model.TECHNOLOGIES,model.AREA)  ### Marginal cost for a conversion mean, explicitely defined by definition powerCostsDef
+    model.capacityCosts_Pvar = Var(model.YEAR_op,model.TECHNOLOGIES,model.AREA)  ### Fixed costs for a conversion mean, explicitely defined by definition capacityCostsDef
+    model.importCosts_Pvar = Var(model.YEAR_op,model.RESOURCES,model.AREA)  ### Cost of ressource imported, explicitely defined by definition importCostsDef
+    model.turpeCosts_Pvar = Var(model.YEAR_op,model.RESOURCES,model.AREA,domain=NonNegativeReals) ### Coûts TURPE pour électricité
+    model.storageCosts_Pvar = Var(model.YEAR_op,model.STOCK_TECHNO,model.AREA)  ### Cost of storage for a storage mean, explicitely defined by definition storageCostsDef
+    model.carbonCosts_Pvar = Var(model.YEAR_op,model.AREA,domain=NonNegativeReals)
 
     model.dual = Suffix(direction=Suffix.IMPORT)
     model.rc = Suffix(direction=Suffix.IMPORT)
@@ -286,12 +285,14 @@ def systemModelPedro(scenario,isAbstract=False):
 
     def ObjectiveFunction_rule(model):  # OBJ
         return sum(
-                    sum(model.powerCosts_Pvar[y,tech] + model.capacityCosts_Pvar[y,tech] for tech in model.TECHNOLOGIES)
-                    + sum(model.importCosts_Pvar[y,res] for res in model.RESOURCES)
-                    + sum(model.storageCosts_Pvar[y,s_tech] for s_tech in STOCK_TECHNO)
-                    + model.turpeCosts_Pvar[y,'electricity']
-                    + model.carbonCosts_Pvar[y]
-                for y in model.YEAR_op)
+                    sum(
+                        sum(model.powerCosts_Pvar[y,tech,a] + model.capacityCosts_Pvar[y,tech,a] for tech in model.TECHNOLOGIES)
+                        + sum(model.importCosts_Pvar[y,res,a] for res in model.RESOURCES)
+                        + sum(model.storageCosts_Pvar[y,s_tech,a] for s_tech in STOCK_TECHNO)
+                        + model.turpeCosts_Pvar[y,'electricity',a]
+                        + model.carbonCosts_Pvar[y,a]
+                    for y in model.YEAR_op)
+        for a in model.AREA)     
     model.OBJ = Objective(rule=ObjectiveFunction_rule, sense=minimize)
 
     #################
@@ -325,14 +326,14 @@ def systemModelPedro(scenario,isAbstract=False):
     # gaz definition Constraints
     def BiogazDef_rule(model,y,res):
         if res == 'biogas' :
-            return sum(model.importation_Dvar[y,t,res] for t in model.TIMESTAMP) <= model.gazBio_max[y]
+            return sum(sum(model.importation_Dvar[y,t,res,a] for t in model.TIMESTAMP) for a in model.AREA) <= model.gazBio_max[y]
         else : return Constraint.Skip
     model.BiogazCtr = Constraint(model.YEAR_op,model.RESOURCES,rule=BiogazDef_rule)
 
     # Carbon emission definition Constraints
-    def CarbonDef_rule(model,y,t):
-        return sum((model.power_Dvar[y,t, tech] * model.EmissionCO2[y-dy, tech]) for tech in model.TECHNOLOGIES) + sum(model.importation_Dvar[y,t,res]*model.emission[y,t,res] for res in model.RESOURCES) == model.carbon_Pvar[y,t]
-    model.CarbonDefCtr = Constraint(model.YEAR_op,model.TIMESTAMP,rule=CarbonDef_rule)
+    def CarbonDef_rule(model,y,t,a):
+        return sum((model.power_Dvar[y,t, tech,a] * model.EmissionCO2[y-dy, tech]) for tech in model.TECHNOLOGIES) + sum(model.importation_Dvar[y,t,res,a]*model.emission[y,t,res] for res in model.RESOURCES) == model.carbon_Pvar[y,t,a]
+    model.CarbonDefCtr = Constraint(model.YEAR_op,model.TIMESTAMP,model.AREA,rule=CarbonDef_rule)
 
     #def CarbonCtr_rule(model):
     #return sum(model.carbon_Pvar[y,t] for y,t in zip(model.YEAR_op,model.TIMESTAMP)) <= sum(model.carbon_goal[y] for y in model.YEAR_op)
