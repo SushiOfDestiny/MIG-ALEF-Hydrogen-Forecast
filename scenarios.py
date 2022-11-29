@@ -37,7 +37,15 @@ def demande_h_area(scenar, area, k, nYears):
     else :
         return [(33e3 / nHours) * demande_t_an[k]] * nHours
 
-scenario['resourceDemand'] = pd.concat(
+
+def stockage_h_area(area):
+    if area == "Fos":
+        return 100000
+    else:
+        return 0
+    
+
+scenario['resourceDemand'] =  pd.concat(
     (
         pd.DataFrame(data = { 
           'AREA': area,
@@ -276,24 +284,24 @@ for area in areaList:
              )
         )
 
-    tech = "Salt cavern"
-    scenario['storageTechs'].append(
-        pd.DataFrame(data={tech:
-                           {'YEAR': year,
-                            'storageResource': 'hydrogen',
-                            'storageLifeSpan': 40,
-                            'storagePowerCost': 0,
-                            'storageEnergyCost': 350e3,
-                            'storageOperationCost': 2e3,
-                            'p_max': 10000,
-                            'c_max': 100000,
-                            'storageChargeFactors': {'electricity': 0.0168, 'hydrogen': 1.0},
-                            'storageDischargeFactors': {'hydrogen': 1.0},
-                            'storageDissipation': 0,
-                            },
-                           }
-                     )
-    )
+        tech = "Salt cavern"
+        scenario['storageTechs'].append(
+            pd.DataFrame(data={tech: 
+                    {'AREA': area, 'YEAR': year, 
+                   'storageResource': 'hydrogen', 
+                   'storageLifeSpan': 40, 
+                    'storagePowerCost': 0, 
+                    'storageEnergyCost': 350e3, 
+                    'storageOperationCost': 2e3, 
+                    'p_max': 10000, 
+                    'c_max': stockage_h_area(area), 
+                    'storageChargeFactors': {'electricity': 0.0168, 'hydrogen': 1.0},
+                    'storageDischargeFactors': {'hydrogen': 1.0},
+                    'storageDissipation': 0,
+                    }, 
+                }
+             )
+        )
 
 
 scenario['storageTechs'] = pd.concat(scenario['storageTechs'], axis=1)
