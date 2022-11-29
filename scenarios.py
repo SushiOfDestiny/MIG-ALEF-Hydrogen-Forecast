@@ -409,7 +409,6 @@ scenario['resourceImportPrices'] = pd.concat(
             'electricity': df_res_ref.loc[(year, slice(None), 'electricity'), 'importCost'].values,
             'natural gas': 2 * df_res_ref.loc[(year, slice(None), 'gazNat'), 'importCost'].values,
             'biogas': 150 * np.ones(nHours),
-            'uranium': 2.2 * np.ones(nHours),
             'hydrogen': 6/33 * 1000 * np.ones(nHours),
         }) for k, year in enumerate(yearList[1:])
         for area in areaList
