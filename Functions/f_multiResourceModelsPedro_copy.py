@@ -968,10 +968,11 @@ def systemModelPedro(scenario, isAbstract=False):
     def TInvest_discr_rule(model, y, res, ttech, area1, area2):
         if model.transportMaxPowerFonc[y,ttech] == 0:
             # dans ce cas, on ne discrétise pas
-            return True
+            return Constraint.Skip
         else:
             # la puissance investie doit être un multiple de celle max de ttech
-            return model.TInvest_Dvar[y, res, ttech, area1, area2] %  model.transportMaxPowerFonc[y,ttech] <= 1
+            return model.TInvest_Dvar[y, res, ttech, area1, area2] ==  model.transportMaxPowerFonc[y,ttech]
+
     model.TInvest_discrCtr = Constraint(
          model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_discr_rule
     )
