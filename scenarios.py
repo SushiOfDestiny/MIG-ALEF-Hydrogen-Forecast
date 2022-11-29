@@ -20,15 +20,6 @@ areaList = ["Nice", "Fos"]
 scenario = {}
 scenario['areaList'] = areaList
 
-<<<<<<< HEAD
-
-def demande_h_area(k, yearStep, area):
-    # un facteur pour différencier Nice de Fos
-    if area == "Nice":
-        return 0.2 * 360 * (1 + .025) ** (k * yearStep)
-    else:
-        return 360 * (1 + .025) ** (k * yearStep)
-=======
 def demande_h_area(scenar, area, k, nYears):
     # un facteur pour différencier Nice de Fos
     # différent scénarios
@@ -40,7 +31,6 @@ def demande_h_area(scenar, area, k, nYears):
         demande_t_an = [100, 248, 239, 236] 
     elif scenar == 3 :
         demande_t_an = [100, 248, 239, 236] 
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
 
     if area == "Nice" :
         return [(0.2 * 33e3 / nHours) * demande_t_an[k]] * nHours
@@ -49,18 +39,6 @@ def demande_h_area(scenar, area, k, nYears):
 
 scenario['resourceDemand'] = pd.concat(
     (
-<<<<<<< HEAD
-        pd.DataFrame(data={
-            'AREA': area,
-            'YEAR': year,
-            # We add the TIMESTAMP so that it can be used as an index later.
-            'TIMESTAMP': t,
-            'electricity': np.zeros(nHours),
-            # Hourly constant but increasing demand
-            'hydrogen': demande_h_area(k, yearStep, area),
-            'gas': np.zeros(nHours),
-        }
-=======
         pd.DataFrame(data = { 
           'AREA': area,
           'YEAR': year, 
@@ -69,7 +47,6 @@ scenario['resourceDemand'] = pd.concat(
           'hydrogen': demande_h_area(scenar, area, k, nYears), # Hourly constant but increasing demand
           'gas': np.zeros(nHours), 
          } 
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
         ) for k, year in enumerate(yearList)
         for area in areaList
     )
@@ -100,14 +77,9 @@ for area in areaList:
 
         tech = "Onshore wind"
         maxcap = 10000
-<<<<<<< HEAD
-        capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
-            tech, hyp='ref', year=year)
-=======
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year)
         if area == "Nice" :
             capex *= 1.5
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech:
                                {'AREA': area, 'YEAR': year, 'Category': 'Electricity production',
@@ -123,14 +95,9 @@ for area in areaList:
 
         tech = "Ground PV"
         maxcap = 10000
-<<<<<<< HEAD
-        capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
-            tech, hyp='ref', year=year)
-=======
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
         if area == "Nice" :
             capex *= 2
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech:
                                {'AREA': area, 'YEAR': year, 'Category': 'Electricity production',
@@ -180,18 +147,6 @@ for area in areaList:
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
         scenario['conversionTechs'].append(
-<<<<<<< HEAD
-            pd.DataFrame(data={tech:
-                               {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
-                                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
-                                'minCapacity': 100, 'maxCapacity': 100e3,
-                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
-                                'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3,
-                                },
-                               }
-                         )
-=======
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
@@ -202,7 +157,6 @@ for area in areaList:
                     }, 
                 }
              )
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
         )
 
         tech = "SMR"
@@ -490,12 +444,7 @@ scenario['resourceImportCO2eq'] = pd.concat(
     )
 )
 
-<<<<<<< HEAD
-scenario['convTechList'] = ["Offshore wind - floating",
-                            "Onshore wind", "Ground PV", "ElectrolysisS","ElectrolysisM","ElectrolysisL"]
-=======
 scenario['convTechList'] = ["Offshore wind - floating", "Onshore wind", "Ground PV", "ElectrolysisS","ElectrolysisM","ElectrolysisL"]
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
 ctechs = scenario['convTechList']
 availabilityFactor = pd.read_csv('Data/Raw/availabilityFactor2020-2050_PACA_TIMExTECHxYEAR - renamed.csv',
                                  sep=',', decimal='.', skiprows=0).set_index(["YEAR", "TIMESTAMP", "TECHNOLOGIES"])
