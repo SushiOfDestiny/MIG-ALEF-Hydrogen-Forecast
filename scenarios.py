@@ -117,7 +117,7 @@ for area in areaList:
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
-                    { 'YEAR': year, 'Category': 'Hydrogen production',
+                    { 'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                     'minCapacity': 5,'maxCapacity': 100, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
@@ -132,7 +132,7 @@ for area in areaList:
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
-                    { 'YEAR': year, 'Category': 'Hydrogen production',
+                    { 'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                     'minCapacity': 100,'maxCapacity': 100e3, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
@@ -421,7 +421,7 @@ scenario['resourceImportCO2eq'] = pd.concat(
     )
 )
 
-scenario['convTechList'] = ["Offshore wind - floating", "Onshore wind", "Ground PV", "Electrolysis"]
+scenario['convTechList'] = ["Offshore wind - floating", "Onshore wind", "Ground PV", "ElectrolysisS","ElectrolysisM","ElectrolysisL"]
 ctechs = scenario['convTechList']
 availabilityFactor = pd.read_csv('Data/Raw/availabilityFactor2020-2050_PACA_TIMExTECHxYEAR - renamed.csv',
                                  sep=',', decimal='.', skiprows=0).set_index(["YEAR", "TIMESTAMP", "TECHNOLOGIES"])
