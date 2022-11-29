@@ -20,18 +20,10 @@ areaList = ["Nice", "Fos"]
 scenario = {}
 scenario['areaList'] = areaList
 
-<<<<<<< HEAD
-
-def demande_h_area(k, yearStep, area):
-    # un facteur pour différencier Nice de Fos
-    if area == "Nice":
-        return 0.2 * 360 * (1 + .025) ** (k * yearStep)
-    else:
-        return 360 * (1 + .025) ** (k * yearStep)
-=======
 def demande_h_area(scenar, area, k, nYears):
     # un facteur pour différencier Nice de Fos
-    # différent scénarios
+    # différents scénarios
+    # demande à Nice est 0.2 celle de Fos
     if scenar == 0 :
         demande_t_an = [100, 150, 175, 200]
     elif scenar == 1 :
@@ -40,7 +32,6 @@ def demande_h_area(scenar, area, k, nYears):
         demande_t_an = [100, 248, 239, 236] 
     elif scenar == 3 :
         demande_t_an = [100, 248, 239, 236] 
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
 
     if area == "Nice" :
         return [(0.2 * 33e3 / nHours) * demande_t_an[k]] * nHours
@@ -49,18 +40,6 @@ def demande_h_area(scenar, area, k, nYears):
 
 scenario['resourceDemand'] = pd.concat(
     (
-<<<<<<< HEAD
-        pd.DataFrame(data={
-            'AREA': area,
-            'YEAR': year,
-            # We add the TIMESTAMP so that it can be used as an index later.
-            'TIMESTAMP': t,
-            'electricity': np.zeros(nHours),
-            # Hourly constant but increasing demand
-            'hydrogen': demande_h_area(k, yearStep, area),
-            'gas': np.zeros(nHours),
-        }
-=======
         pd.DataFrame(data = { 
           'AREA': area,
           'YEAR': year, 
@@ -69,7 +48,6 @@ scenario['resourceDemand'] = pd.concat(
           'hydrogen': demande_h_area(scenar, area, k, nYears), # Hourly constant but increasing demand
           'gas': np.zeros(nHours), 
          } 
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
         ) for k, year in enumerate(yearList)
         for area in areaList
     )
@@ -100,14 +78,9 @@ for area in areaList:
 
         tech = "Onshore wind"
         maxcap = 10000
-<<<<<<< HEAD
-        capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
-            tech, hyp='ref', year=year)
-=======
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year)
         if area == "Nice" :
             capex *= 1.5
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech:
                                {'AREA': area, 'YEAR': year, 'Category': 'Electricity production',
@@ -123,14 +96,9 @@ for area in areaList:
 
         tech = "Ground PV"
         maxcap = 10000
-<<<<<<< HEAD
-        capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
-            tech, hyp='ref', year=year)
-=======
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
         if area == "Nice" :
             capex *= 2
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech:
                                {'AREA': area, 'YEAR': year, 'Category': 'Electricity production',
@@ -160,6 +128,7 @@ for area in areaList:
                          )
         )
 
+        
         tech = "ElectrolysisM"
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
@@ -180,18 +149,6 @@ for area in areaList:
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
         scenario['conversionTechs'].append(
-<<<<<<< HEAD
-            pd.DataFrame(data={tech:
-                               {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
-                                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
-                                'minCapacity': 100, 'maxCapacity': 100e3,
-                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
-                                'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3,
-                                },
-                               }
-                         )
-=======
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
@@ -202,7 +159,6 @@ for area in areaList:
                     }, 
                 }
              )
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
         )
 
         tech = "SMR"
@@ -338,65 +294,28 @@ scenario['storageTechs'] = pd.concat(scenario['storageTechs'], axis=1)
 
 scenario['transportTechs'] = []
 for k, year in enumerate(yearList):
-    ttech = 'Pipeline_S'
-    p_max = 50000
-    p_max_fonc = 100
-    capex, opex, LifeSpan = 320, 250, 40
-    scenario['transportTechs'].append(
-        pd.DataFrame(data={ttech:
-                           {'YEAR': year, 'transportResource': 'hydrogen',
-                            'transportLifeSpan': LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost': opex,
-                            'transportMinPower': 0, 'transportMaxPower': p_max,
-                            'transportEmissionCO2': 0,
-                            'transportChargeFactors': {'hydrogen': 0.01},
-                            'transportDischargeFactors': {'hydrogen': 0.01},
-                            'transportDissipation': 0.0,
-                            # puissance maximale de fonctionnement du pipeline (=débit max), fixée
-                            'transportMaxPowerFonc': p_max_fonc
-                            }
-                           }
-                     )
-    )
 
-    ttech = 'Pipeline_M'
+    # un seul capex pour le pipeline, puissance de fonctionnement non majorée
+    ttech = 'Pipeline' # anciennement Pipeline_M
     p_max = 50000
     p_max_fonc = 1000
-    capex, opex, LifeSpan = 290, 225, 40
+    capex, opex, LifeSpan = 638,1.2e-4,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
                            {'YEAR': year, 'transportResource': 'hydrogen',
-                            'transportLifeSpan': LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost': opex,
+                            'transportLifeSpan': LifeSpan, 'transportPowerCost': 3.2e-4, 'transportInvestCost': capex, 'transportOperationCost': opex,
                             'transportMinPower': 0, 'transportMaxPower': p_max,
                             'transportEmissionCO2': 0,
-                            'transportChargeFactors': {'hydrogen': 0.01},
-                            'transportDischargeFactors': {'hydrogen': 0.01},
-                            'transportDissipation': 0.0,
+                            'transportChargeFactors': {'hydrogen': 5e-3},
+                            'transportDischargeFactors': {'hydrogen': 5e-3},
+                            'transportDissipation': 2e-5 #,
                             # puissance maximale de fonctionnement du pipeline (=débit max), fixée
-                            'transportMaxPowerFonc': p_max_fonc
+                            # 'transportMaxPowerFonc': p_max_fonc
                             }
                            }
                      )
     )
 
-    ttech = 'Pipeline_L'
-    p_max = 50000
-    p_max_fonc = 10000
-    capex, opex, LifeSpan = 261, 203, 40
-    scenario['transportTechs'].append(
-        pd.DataFrame(data={ttech:
-                           {'YEAR': year, 'transportResource': 'hydrogen',
-                            'transportLifeSpan': LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost': opex,
-                            'transportMinPower': 0, 'transportMaxPower': p_max,
-                            'transportEmissionCO2': 0,
-                            'transportChargeFactors': {'hydrogen': 0.01},
-                            'transportDischargeFactors': {'hydrogen': 0.01},
-                            'transportDissipation': 0.0,
-                            # puissance maximale de fonctionnement du pipeline (=débit max), fixée
-                            'transportMaxPowerFonc': p_max_fonc
-                            }
-                           }
-                     )
-    )
 
 
 # ttech = truck transporting hydrogen
@@ -490,12 +409,7 @@ scenario['resourceImportCO2eq'] = pd.concat(
     )
 )
 
-<<<<<<< HEAD
-scenario['convTechList'] = ["Offshore wind - floating",
-                            "Onshore wind", "Ground PV", "ElectrolysisS","ElectrolysisM","ElectrolysisL"]
-=======
-scenario['convTechList'] = ["Offshore wind - floating", "Onshore wind", "Ground PV", "ElectrolysisS","ElectrolysisM","ElectrolysisL"]
->>>>>>> 1586cf0979199f9ea6913e7ac51d3c9340b46f89
+scenario['convTechList'] = ["Offshore wind - floating", "Onshore wind", "Ground PV", "ElectrolysisS", "ElectrolysisM", "ElectrolysisL"]
 ctechs = scenario['convTechList']
 availabilityFactor = pd.read_csv('Data/Raw/availabilityFactor2020-2050_PACA_TIMExTECHxYEAR - renamed.csv',
                                  sep=',', decimal='.', skiprows=0).set_index(["YEAR", "TIMESTAMP", "TECHNOLOGIES"])

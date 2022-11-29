@@ -552,6 +552,18 @@ def systemModelPedro(scenario, isAbstract=False):
             == model.powerCosts_Pvar[y, tech, area]
     model.powerCostsCtr = Constraint(
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, rule=powerCostsDef_rule)
+    
+    # impose le type d'électrolyseur selon la zone
+    def electrolysisTypeArea_rule(model, y, tech, area):
+        if (area == "Nice") and ((tech == "ElectrolysisM") or (tech == "ElectrolysisL")):
+            return model.capacityInvest_Dvar[y,tech,area] == 0
+        elif (area == "Fos") and ((tech == "ElectrolysisS") or (tech == "ElectrolysisM")):
+            return model.capacityInvest_Dvar[y,tech,area] == 0
+        else:
+            return Constraint.Skip
+    model.electrolysisTypeAreaCtr = Constraint(
+        model.YEAR_invest, model.TECHNOLOGIES, model.AREA, rule=electrolysisTypeArea_rule
+    )
 
     # capacityCosts definition Constraints
     # EQ forall tech in TECHNOLOGIES
@@ -964,21 +976,21 @@ def systemModelPedro(scenario, isAbstract=False):
     model.TInvest_max = Constraint(
         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_max_rule)
 
-    # discrétise les puissances investies en fonction des puissances max des ttech
-    def TInvest_discr_rule(model, y, res, ttech, area1, area2):
-        if model.transportMaxPowerFonc[y,ttech] == 0:
-            # dans ce cas, on ne discrétise pas
-            return Constraint.Skip
-        else:
-            # la puissance investie doit être un multiple de celle max de ttech
-            # return model.TInvest_Dvar[y, res, ttech, area1, area2] %  model.transportMaxPowerFonc[y,ttech] <= 1
-            # division euclidienne bug
-            # on fait une approximation grossière
-            return model.TInvest_Dvar[y, res, ttech, area1, area2] == model.transportMaxPowerFonc[y,ttech]
+    # # discrétise les puissances investies en fonction des puissances max des ttech
+    # def TInvest_discr_rule(model, y, res, ttech, area1, area2):
+    #     if model.transportMaxPowerFonc[y,ttech] == 0:
+    #         # dans ce cas, on ne discrétise pas
+    #         return Constraint.Skip
+    #     else:
+    #         # la puissance investie doit être un multiple de celle max de ttech
+    #         # return model.TInvest_Dvar[y, res, ttech, area1, area2] %  model.transportMaxPowerFonc[y,ttech] <= 1
+    #         # division euclidienne bug
+    #         # on fait une approximation grossière
+    #         return model.TInvest_Dvar[y, res, ttech, area1, area2] <= model.transportMaxPowerFonc[y,ttech]
 
-    model.TInvest_discrCtr = Constraint(
-         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_discr_rule
-    )
+    # model.TInvest_discrCtr = Constraint(
+    #      model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_discr_rule
+    # )
 
    
     # Fixe le flux inférieur à la capacité max 
