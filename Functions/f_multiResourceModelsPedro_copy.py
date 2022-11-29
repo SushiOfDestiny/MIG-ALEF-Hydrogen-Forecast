@@ -41,7 +41,7 @@ def loadScenario(scenario, printTables=False):
     StorageParameters.loc[StorageParameters['storageYearStart']
                           < yearZero, 'storageYearStart'] = 0
     StorageParameters.set_index(
-        ['YEAR', StorageParameters.index], inplace=True)
+        ['YEAR', StorageParameters.index,  'AREA'], inplace=True)
 
     # ajout transport
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
@@ -73,21 +73,21 @@ def loadScenario(scenario, printTables=False):
         id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='conversionFactor').set_index(['RESOURCES', 'TECHNOLOGIES'])
     
     df_sconv = scenario['storageTechs'].transpose(
-    ).set_index('YEAR', append=True)
+    ).set_index(['YEAR', 'AREA'], append=True)
     stechSet = set([k[0] for k in df_sconv.index.values])
 
     df = {}
     for k1, k2 in (('storageCharge', 'In'),  ('storageDischarge', 'Out')):
         # TODO: Take into account evolving conversion factors
         df[k1] = pd.DataFrame(data={tech: df_sconv.loc[(
-            tech, 2020), k1 + 'Factors'] for tech in stechSet}).fillna(0)
+            tech, 2020, scenario['areaList'][0]), k1 + 'Factors'] for tech in stechSet}).fillna(0)
         df[k1].index.name = 'RESOURCES'
         df[k1] = df[k1].reset_index(['RESOURCES']).melt(
             id_vars=['RESOURCES'], var_name='TECHNOLOGIES', value_name='storageFactor' + k2)
 
     df['storageDissipation'] = pd.concat(pd.DataFrame(
-        data={'storageDissipation': [df_sconv.loc[(stech, 2020), 'storageDissipation']],
-              'RESOURCES': df_sconv.loc[(stech, 2020), 'storageResource'],
+        data={'storageDissipation': [df_sconv.loc[(stech, 2020, scenario['areaList'][0]), 'storageDissipation']],
+              'RESOURCES': df_sconv.loc[(stech, 2020, scenario['areaList'][0]), 'storageResource'],
               'TECHNOLOGIES': stech}) for stech in stechSet
     )
     storageFactors = pd.merge(
@@ -287,7 +287,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     model.YEAR_op_TIMESTAMP_RESOURCES_AREA = model.YEAR_op * model.TIMESTAMP * model.RESOURCES * model.AREA
     model.YEAR_op_TIMESTAMP_TECHNOLOGIES_AREA = model.YEAR_op * model.TIMESTAMP * model.TECHNOLOGIES * model.AREA
-
+    model.YEAR_op_TIMESTAMP_STOCKTECHNO_AREA = model.YEAR_op *  model.TIMESTAMP * model.STOCK_TECHNO * model.AREA
 
     # Subset of Simple only required if ramp constraint
     model.TIMESTAMP_MinusOne = Set(
@@ -345,7 +345,7 @@ def systemModelPedro(scenario, isAbstract=False):
     for COLNAME in StorageParameters:
         # each column in StorageParameters will be a parameter
         if COLNAME not in ["STOCK_TECHNO", "AREA", "YEAR"]:
-            exec("model." + COLNAME + " =Param(model.YEAR_invest_STOCKTECHNO,domain=Any,default=0," +
+            exec("model." + COLNAME + " =Param(model.YEAR_invest, model.STOCK_TECHNO, model.AREA,domain=Any,default=0," +
                  "initialize=StorageParameters." + COLNAME + ".loc[(inputDict['yearList'][:-1], slice(None))].squeeze().to_dict())")
 
     for COLNAME in storageFactors:
@@ -412,7 +412,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Maximum transport flow from area a to b ie la puissance (en MWh/h) à travers une section du pipe/de la route 
     model.TmaxTot_Pvar = Var(
-        model.YEAR_invest,  model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+        model.YEAR_invest,  model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
     # model.TransportFlowIn_Dvar[y,t,res,area1,area2] =
     # Instant resource flow (mesured in power, MWh/h) at time t in year y from area1 to area2, 
     # always >= 0 AFTER losses due to transport
@@ -462,7 +462,7 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_invest, model.STOCK_TECHNO, model.AREA, domain=NonNegativeReals)
     model.PmaxDel_Dvar = Var(
         model.YEAR_invest, model.STOCK_TECHNO, model.AREA, domain=NonNegativeReals)
-
+    
     # Marginal cost for a conversion mean, explicitely defined by definition powerCostsDef
     # coût annuel d'utilisation de l'installation de tech dans une ville
     # différent de model.powerCost[y,tech] qui est le coût de production d'1 MWh en 1 heure en l'an y par tech
@@ -578,7 +578,7 @@ def systemModelPedro(scenario, isAbstract=False):
         if model.transportLifeSpan[y, ttech] == 0:
             print(y, ttech, area1, area2)
         return model.transportEconomicalCosts_Pvar[ y, ttech, area1, area2] == \
-            sum(model.distances[(area1,area2)] * (model.transportInvestCost[y, ttech] * f1(r, model.transportLifeSpan[y, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, res, ttech, area1, area2] for res in model.RESOURCES)
+            sum(model.distances[(area1,area2)] * (model.transportInvestCost[y, ttech] * f1(r, model.transportLifeSpan[y, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1, area2] for res in model.RESOURCES)
     model.transportEconomicalCostsCtr = Constraint(
         model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule=transportEconomicalCostsDef_rule
     )
@@ -798,22 +798,22 @@ def systemModelPedro(scenario, isAbstract=False):
     # storageCosts definition Constraint
     # EQ forall s_tech in STOCK_TECHNO
     def storageCostsDef_rule(model, y, s_tech, area):
-        return sum((model.storageEnergyCost[yi, s_tech] * model.Cmax_Pvar[yi+dy, s_tech, area] +
-                    model.storagePowerCost[yi, s_tech] * model.Pmax_Pvar[yi+dy, s_tech, area]) * f1(i, model.storageLifeSpan[yi, s_tech]) * f3(r, y-dy) for yi in yearList[yearList < y]) \
-            + model.storageOperationCost[y-dy, s_tech]*f3(
+        return sum((model.storageEnergyCost[yi, s_tech, area] * model.Cmax_Pvar[yi+dy, s_tech, area] +
+                    model.storagePowerCost[yi, s_tech, area] * model.Pmax_Pvar[yi+dy, s_tech, area]) * f1(i, model.storageLifeSpan[yi, s_tech, area]) * f3(r, y-dy) for yi in yearList[yearList < y]) \
+            + model.storageOperationCost[y-dy, s_tech, area]*f3(
                 r, y) * model.Pmax_Pvar[y, s_tech, area] == model.storageCosts_Pvar[y, s_tech, area]
     model.storageCostsCtr = Constraint(
         model.YEAR_op, model.STOCK_TECHNO, model.AREA, rule=storageCostsDef_rule)
 
     # Storage max capacity constraint
     def storageCapacity_rule(model, y, s_tech, area):  # INEQ forall s_tech
-        return model.CmaxInvest_Dvar[y, s_tech, area] <= model.c_max[y, s_tech]
+        return model.CmaxInvest_Dvar[y, s_tech, area] <= model.c_max[y, s_tech, area]
     model.storageCapacityCtr = Constraint(
         model.YEAR_invest, model.STOCK_TECHNO, model.AREA, rule=storageCapacity_rule)
 
     def storageCapacityDel_rule(model, y, stech, area):
-        if model.storageYearStart[y, stech] > 0:
-            return model.CmaxDel_Dvar[y, stech, area] == model.CmaxInvest_Dvar[model.storageYearStart[y, stech], stech, area]
+        if model.storageYearStart[y, stech, area] > 0:
+            return model.CmaxDel_Dvar[y, stech, area] == model.CmaxInvest_Dvar[model.storageYearStart[y, stech, area], stech, area]
         else:
             return model.CmaxDel_Dvar[y, stech, area] == 0
     model.storageCapacityDelCtr = Constraint(
@@ -821,13 +821,13 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Storage max power constraint
     def storagePower_rule(model, y, s_tech, area):  # INEQ forall s_tech
-        return model.PmaxInvest_Dvar[y, s_tech, area] <= model.p_max[y, s_tech]
+        return model.PmaxInvest_Dvar[y, s_tech, area] <= model.p_max[y, s_tech, area]
     model.storagePowerCtr = Constraint(
         model.YEAR_invest, model.STOCK_TECHNO, model.AREA, rule=storagePower_rule)
 
     # contraintes de stock puissance
     def StoragePowerUB_rule(model, y, t, res, s_tech, area):  # INEQ forall t
-        if res == model.storageResource[y-dy, s_tech]:
+        if res == model.storageResource[y-dy, s_tech, area]:
             return model.storageIn_Pvar[y, t, res, s_tech, area] - model.Pmax_Pvar[y, s_tech, area] <= 0
         else:
             return model.storageIn_Pvar[y, t, res, s_tech, area] == 0
@@ -835,7 +835,7 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.STOCK_TECHNO, model.AREA, rule=StoragePowerUB_rule)
 
     def StoragePowerLB_rule(model, y, t, res, s_tech, area):  # INEQ forall t
-        if res == model.storageResource[y-dy, s_tech]:
+        if res == model.storageResource[y-dy, s_tech, area]:
             return model.storageOut_Pvar[y, t, res, s_tech, area] - model.Pmax_Pvar[y, s_tech, area] <= 0
         else:
             return model.storageOut_Pvar[y, t, res, s_tech, area] == 0
@@ -843,8 +843,8 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.STOCK_TECHNO, model.AREA, rule=StoragePowerLB_rule)
 
     def storagePowerDel_rule(model, y, stech, area):
-        if model.storageYearStart[y, stech] > 0:
-            return model.PmaxDel_Dvar[y, stech, area] == model.PmaxInvest_Dvar[model.storageYearStart[y, stech], stech, area]
+        if model.storageYearStart[y, stech, area] > 0:
+            return model.PmaxDel_Dvar[y, stech, area] == model.PmaxInvest_Dvar[model.storageYearStart[y, stech, area], stech, area]
         else:
             return model.PmaxDel_Dvar[y, stech, area] == 0
     model.storagePowerDelCtr = Constraint(
@@ -852,7 +852,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # contrainte de consommation du stockage (autre que l'énergie stockée)
     def StorageConsumption_rule(model, y, t, res, s_tech, area):  # EQ forall t
-        temp = model.storageResource[y-dy, s_tech]
+        temp = model.storageResource[y-dy, s_tech, area]
         if res == temp:
             return model.storageConsumption_Pvar[y, t, res, s_tech, area] == 0
         else:
@@ -864,7 +864,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # contraintes de stock capacité
     def StockLevel_rule(model, y, t, s_tech, area):  # EQ forall t
-        res = model.storageResource[y-dy, s_tech]
+        res = model.storageResource[y-dy, s_tech, area]
         if t > 1:
             return model.stockLevel_Pvar[y, t, s_tech, area] == model.stockLevel_Pvar[y, t - 1, s_tech, area] * (
                 1 - model.storageDissipation[res, s_tech]) + model.storageIn_Pvar[y, t, res, s_tech, area] * \
@@ -955,12 +955,12 @@ def systemModelPedro(scenario, isAbstract=False):
     # Contraintes sur le transport
     # Fixer l'investissement entre ses bornes.
     def TInvest_min_rule(model, y, res, ttech, area1, area2):
-        return model.TInvest_Dvar[y, res, ttech, area1, area2] >= model.transportMinPower[y, ttech]
+        return model.TInvest_Dvar[y, ttech, area1, area2] >= model.transportMinPower[y, ttech]
     model.TInvest_min = Constraint(
         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_min_rule)
 
     def TInvest_max_rule(model, y, res, ttech, area1, area2):
-        return model.TInvest_Dvar[y, res, ttech, area1, area2] <= model.transportMaxPower[y, ttech]
+        return model.TInvest_Dvar[y, ttech, area1, area2] <= model.transportMaxPower[y, ttech]
     model.TInvest_max = Constraint(
         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_max_rule)
 
@@ -986,7 +986,7 @@ def systemModelPedro(scenario, isAbstract=False):
     # empêche un flux entre 2 fois la même ville
     def FlowTot_lim_rule(model, y, t, res, ttech, area1, area2):
         if (res == model.transportResource[y, ttech]) and (area1 != area2):
-            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] <= model.TmaxTot_Pvar[y, res, ttech, area1, area2]
+            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] <= model.TmaxTot_Pvar[y, ttech, area1, area2]
         else:
             return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] == 0
     model.FlowTot_lim = Constraint(
@@ -995,10 +995,10 @@ def systemModelPedro(scenario, isAbstract=False):
     # Définition de TmaxTot en y, en fonction de TmaxTot en y-dy
     def TmaxTot_rule(model, y, res, ttech, area1, area2):
         if y==2020:
-            return model.TmaxTot_Pvar[y, res, ttech, area1, area2]==0
+            return model.TmaxTot_Pvar[y, ttech, area1, area2]==0
         else:
-            return model.TmaxTot_Pvar[y, res, ttech, area1, area2] == model.TmaxTot_Pvar[y-dy, res, ttech, area1, area2] + \
-                model.TInvest_Dvar[y, res, ttech, area1, area2] - model.TDel_Dvar[y, res, ttech, area1, area2]
+            return model.TmaxTot_Pvar[y, ttech, area1, area2] == model.TmaxTot_Pvar[y-dy, ttech, area1, area2] + \
+                model.TInvest_Dvar[y, ttech, area1, area2] - model.TDel_Dvar[y, ttech, area1, area2]
     model.TmaxTot = Constraint(
         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TmaxTot_rule)
 
@@ -1006,9 +1006,9 @@ def systemModelPedro(scenario, isAbstract=False):
     def transportLifeSpan_rule(model,y, res, ttech, area1, area2):
         invest_date = y - model.transportLifeSpan[y, ttech]
         if invest_date in yearList:
-            return model.TDel_Dvar[y, res, ttech, area1, area2] == model.TInvest_Dvar[invest_date, res, ttech, area1, area2]
+            return model.TDel_Dvar[y, ttech, area1, area2] == model.TInvest_Dvar[invest_date, ttech, area1, area2]
         else:
-            return model.TDel_Dvar[y, res, ttech, area1, area2] == 0
+            return model.TDel_Dvar[y, ttech, area1, area2] == 0
     model.LifeSpanCtr = Constraint(
         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = transportLifeSpan_rule)
     
