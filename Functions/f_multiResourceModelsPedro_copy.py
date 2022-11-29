@@ -46,7 +46,7 @@ def loadScenario(scenario, printTables=False):
     # ajout transport
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
     TransportParameters.index.name = 'TRANS_TECHNO'
-    TransportParametersList = ['transportResource','transportPowerCost', 'transportOperationCost',
+    TransportParametersList = ['transportResource', 'transportPowerCost', 'transportOperationCost',
                                'transportInvestCost', 'transportMinPower', 'transportMaxPower', 'transportEmissionCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
@@ -736,6 +736,13 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule=transportFlow_rule
     )
 
+    # transport flow doit être positif
+    def transportFlowInSign_rule(model, y, t, res, ttech, area1, area2):
+        return model.transportFlowIn_Dvar[y, t, res, ttech, area2, area1] >= 0
+    model.transportFlowCtr = Constraint(
+        model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule=transportFlowInSign_rule
+    )
+
     def Production_rule(model, y, t, res, area):  # EQ forall t, res
         if res == 'gas':
             return sum(model.power_Dvar[y, t, tech, area] * model.conversionFactor[res, tech] for tech in model.TECHNOLOGIES) + sum(model.importation_Dvar[y, t, resource, area] for resource in gasTypes) + \
@@ -947,9 +954,14 @@ def systemModelPedro(scenario, isAbstract=False):
     model.TInvest_max = Constraint(
         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_max_rule)
    
-    # Fixer le flux inférieur à la capacité max
+    # Fixe le flux inférieur à la capacité max 
+    # impose la bonne ressource
+    # empêche un flux entre 2 fois la même ville
     def FlowTot_lim_rule(model, y, t, res, ttech, area1, area2):
-        return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] <= model.TmaxTot_Pvar[y, res, ttech, area1, area2]
+        if (res == model.transportResource[y, ttech]) and (area1 != area2):
+            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] <= model.TmaxTot_Pvar[y, res, ttech, area1, area2]
+        else:
+            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] == 0
     model.FlowTot_lim = Constraint(
         model.YEAR_invest, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = FlowTot_lim_rule)
 
