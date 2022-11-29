@@ -739,7 +739,7 @@ def systemModelPedro(scenario, isAbstract=False):
     # transport flow doit être positif
     def transportFlowInSign_rule(model, y, t, res, ttech, area1, area2):
         return model.transportFlowIn_Dvar[y, t, res, ttech, area2, area1] >= 0
-    model.transportFlowCtr = Constraint(
+    model.transportFlowInSignCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule=transportFlowInSign_rule
     )
 
@@ -959,10 +959,14 @@ def systemModelPedro(scenario, isAbstract=False):
     def TInvest_discr_rule(model, y, res, ttech, area1, area2):
         if model.transportMaxPowerFonc[y,ttech] == 0:
             # dans ce cas, on ne discrétise pas
-            return True
+            return Constraint.Skip
         else:
             # la puissance investie doit être un multiple de celle max de ttech
-            return model.TInvest_Dvar[y, res, ttech, area1, area2] %  model.transportMaxPowerFonc[y,ttech] <= 1
+            # return model.TInvest_Dvar[y, res, ttech, area1, area2] %  model.transportMaxPowerFonc[y,ttech] <= 1
+            # division euclidienne bug
+            # on fait une approximation grossière
+            return model.TInvest_Dvar[y, res, ttech, area1, area2] == model.transportMaxPowerFonc[y,ttech]
+
     model.TInvest_discrCtr = Constraint(
          model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_discr_rule
     )
