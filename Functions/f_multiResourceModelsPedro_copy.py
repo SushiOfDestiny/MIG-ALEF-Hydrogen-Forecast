@@ -47,7 +47,7 @@ def loadScenario(scenario, printTables=False):
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
     TransportParameters.index.name = 'TRANS_TECHNO'
     TransportParametersList = ['transportResource', 'transportPowerCost', 'transportOperationCost',
-                               'transportInvestCost', 'transportMinPower', 'transportMaxPower', 'transportEmissionCO2']
+                               'transportInvestCost', 'transportMinPower', 'transportMaxPower', 'transportEmissionCO2', 'transportMaxPowerFonc']
     for k in TransportParametersList:
         if k not in TransportParameters:
             TransportParameters[k] = 0
@@ -533,6 +533,8 @@ def systemModelPedro(scenario, isAbstract=False):
     i = Economics.loc['financeRate'].value
 
     def f1(r, n):  # This factor converts the investment costs into n annual repayments
+        if ((1+r)*(1-(1+r)**-n)) < 0.0001:
+            print(((1+r)*(1-(1+r)**-n)), n, r)
         return r/((1+r)*(1-(1+r)**-n))
 
     def f3(r, y):  # This factor discounts a payment to y0 values
@@ -568,6 +570,8 @@ def systemModelPedro(scenario, isAbstract=False):
 
     def transportEconomicalCostsDef_rule(model, y, ttech, area1, area2):
         """y is in YEAR_op"""
+        if model.transportLifeSpan[y, ttech] == 0:
+            print(y, ttech, area1, area2)
         return model.transportEconomicalCosts_Pvar[ y, ttech, area1, area2] == \
             sum(model.distances[(area1,area2)] * (model.transportInvestCost[y, ttech] * f1(r, model.transportLifeSpan[y, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, res, ttech, area1, area2] for res in model.RESOURCES)
     model.transportEconomicalCostsCtr = Constraint(
@@ -744,6 +748,7 @@ def systemModelPedro(scenario, isAbstract=False):
     )
 
     def Production_rule(model, y, t, res, area):  # EQ forall t, res
+        """defines model.energy_Pvar[y, t, res, area]"""
         if res == 'gas':
             return sum(model.power_Dvar[y, t, tech, area] * model.conversionFactor[res, tech] for tech in model.TECHNOLOGIES) + sum(model.importation_Dvar[y, t, resource, area] for resource in gasTypes) + \
                 sum(model.storageOut_Pvar[y, t, res, s_tech, area] - model.storageIn_Pvar[y, t, res, s_tech, area] -
@@ -953,6 +958,19 @@ def systemModelPedro(scenario, isAbstract=False):
         return model.TInvest_Dvar[y, res, ttech, area1, area2] <= model.transportMaxPower[y, ttech]
     model.TInvest_max = Constraint(
         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_max_rule)
+
+    # discrétise les puissances investies en fonction des puissances max des ttech
+    def TInvest_discr_rule(model, y, res, ttech, area1, area2):
+        if model.transportMaxPowerFonc[y,ttech] == 0:
+            # dans ce cas, on ne discrétise pas
+            return True
+        else:
+            # la puissance investie doit être un multiple de celle max de ttech
+            return model.TInvest_Dvar[y, res, ttech, area1, area2] %  model.transportMaxPowerFonc[y,ttech] <= 1
+    model.TInvest_discrCtr = Constraint(
+         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_discr_rule
+    )
+
    
     # Fixe le flux inférieur à la capacité max 
     # impose la bonne ressource
