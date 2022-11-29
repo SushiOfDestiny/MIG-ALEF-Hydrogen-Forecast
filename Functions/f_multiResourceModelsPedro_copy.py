@@ -46,7 +46,7 @@ def loadScenario(scenario, printTables=False):
     # ajout transport
     TransportParameters = scenario['transportTechs'].transpose().fillna(0)
     TransportParameters.index.name = 'TRANS_TECHNO'
-    TransportParametersList = ['transportPowerCost', 'transportOperationCost',
+    TransportParametersList = ['transportResource','transportPowerCost', 'transportOperationCost',
                                'transportInvestCost', 'transportMinPower', 'transportMaxPower', 'transportEmissionCO2']
     for k in TransportParametersList:
         if k not in TransportParameters:
