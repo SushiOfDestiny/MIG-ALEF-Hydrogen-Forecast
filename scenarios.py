@@ -18,6 +18,15 @@ areaList = ["Nice","Fos"]
 scenario = {}
 scenario['areaList'] = areaList
 
+def demande_h_area(k, yearStep, area):
+    # un facteur pour différencier Nice de Fos
+    if area == "Nice":
+        return 0.2 * 360 * (1 + .025) ** (k * yearStep) 
+    else :
+        return 360 * (1 + .025) ** (k * yearStep)
+
+
+
 scenario['resourceDemand'] =  pd.concat(
     (
         pd.DataFrame(data = { 
@@ -25,7 +34,7 @@ scenario['resourceDemand'] =  pd.concat(
           'YEAR': year, 
           'TIMESTAMP': t, # We add the TIMESTAMP so that it can be used as an index later.
           'electricity': np.zeros(nHours),
-          'hydrogen': 360 * (1 + .025) ** (k * yearStep), # Hourly constant but increasing demand
+          'hydrogen': demande_h_area(k, yearStep, area), # Hourly constant but increasing demand
           'gas': np.zeros(nHours), 
          } 
         ) for k, year in enumerate(yearList)
@@ -339,7 +348,7 @@ for k, year in enumerate(yearList):
             'transportDissipation':0.0,
             'transportMaxPowerFonc': p_max_fonc
             }
-        }
+        }  
         )
     )
 
