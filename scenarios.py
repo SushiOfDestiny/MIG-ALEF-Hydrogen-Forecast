@@ -112,44 +112,14 @@ for area in areaList:
         )
 
 
-        tech = "ElectrolysisS"
-        capex_MWel = 1e3 * tech_eco_data.electrolyser_capex_Reksten2022(tech='PEM', Pel=100, year=year)
-        scenario['conversionTechs'].append(
-            pd.DataFrame(data={tech: 
-                    {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
-                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex_MWel, 'operationCost': 0.04 * capex_MWel, 
-                    'minCapacity': 0.1,'maxCapacity': 1000, 
-                    'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
-                    'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 
-                    }, 
-                }
-             )
-        )
-
         tech = "ElectrolysisM"
-        capex_MWel = 1e3 * tech_eco_data.electrolyser_capex_Reksten2022(tech='PEM', Pel=1000, year=year)
-        scenario['conversionTechs'].append(
-            pd.DataFrame(data={tech: 
-                    {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
-                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex_MWel, 'operationCost': 0.04 * capex_MWel, 
-                    'minCapacity': 1,'maxCapacity': 1000, 
-                    'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
-                    'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 
-                    }, 
-                }
-             )
-        )
 
-        tech = "ElectrolysisL"
-        capex_MWel = 1e3 * tech_eco_data.electrolyser_capex_Reksten2022(tech='PEM', Pel=100000, year=year)
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
-                    'minCapacity': 100,'maxCapacity': 100e3, 
-                    'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
+                    'minCapacity': 0,'maxCapacity': maxcap, 
+                    'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
                     'capacityLim': 100e3, 
                     }, 
@@ -171,7 +141,7 @@ for area in areaList:
                 }
              )
         )
-
+        
         tech = "Existing SMR"
         capex, opex, LifeSpan = 0e3, 40e3, 30
         scenario['conversionTechs'].append(
@@ -240,48 +210,49 @@ for area in areaList:
 scenario['conversionTechs'] =  pd.concat(scenario['conversionTechs'], axis=1) 
 
 scenario['storageTechs'] = [] 
-for k, year in enumerate(yearList): 
-    tech = "Battery"
-    capex1, opex1, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech + ' - 1h', hyp='ref', year=year)
-    capex4, opex4, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech + ' - 4h', hyp='ref', year=year)
-    capex_per_kWh = (capex4 - capex1) / 3
-    capex_per_kW = capex1 - capex_per_kWh
+for area in areaList:
+    for k, year in enumerate(yearList): 
+        tech = "Battery"
+        capex1, opex1, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech + ' - 1h', hyp='ref', year=year)
+        capex4, opex4, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech + ' - 4h', hyp='ref', year=year)
+        capex_per_kWh = (capex4 - capex1) / 3
+        capex_per_kW = capex1 - capex_per_kWh
 
-    scenario['storageTechs'].append(
-        pd.DataFrame(data={tech: 
-                { 'YEAR': year, 'storageResource': 'electricity',  # ambiguïté du nom des paramètres ?
-                'storageLifeSpan': LifeSpan, 
-                'storagePowerCost': capex_per_kW, 
-                'storageEnergyCost': capex_per_kWh, 
-                'storageOperationCost': opex1, # TODO: according to RTE OPEX seems to vary with energy rather than power
-                'p_max': 5000, 
-                'c_max': 50000, 
-                'storageChargeFactors': {'electricity': 0.9200},
-                'storageDischargeFactors': {'electricity': 1.09},
-                'storageDissipation': 0.0085,  
-                }, 
-            }
-         )
-    )
+        scenario['storageTechs'].append(
+            pd.DataFrame(data={tech: 
+                    {'AREA': area, 'YEAR': year, 'storageResource': 'electricity',  # ambiguïté du nom des paramètres ?
+                    'storageLifeSpan': LifeSpan, 
+                    'storagePowerCost': capex_per_kW, 
+                    'storageEnergyCost': capex_per_kWh, 
+                    'storageOperationCost': opex1, # TODO: according to RTE OPEX seems to vary with energy rather than power
+                    'p_max': 5000, 
+                    'c_max': 50000, 
+                    'storageChargeFactors': {'electricity': 0.9200},
+                    'storageDischargeFactors': {'electricity': 1.09},
+                    'storageDissipation': 0.0085,  
+                    }, 
+                }
+             )
+        )
 
-    tech = "Salt cavern"
-    scenario['storageTechs'].append(
-        pd.DataFrame(data={tech: 
-                { 'YEAR': year, 
-               'storageResource': 'hydrogen', 
-               'storageLifeSpan': 40, 
-                'storagePowerCost': 0, 
-                'storageEnergyCost': 350e3, 
-                'storageOperationCost': 2e3, 
-                'p_max': 10000, 
-                'c_max': 100000, 
-                'storageChargeFactors': {'electricity': 0.0168, 'hydrogen': 1.0},
-                'storageDischargeFactors': {'hydrogen': 1.0},
-                'storageDissipation': 0,
-                }, 
-            }
-         )
-    )
+        tech = "Salt cavern"
+        scenario['storageTechs'].append(
+            pd.DataFrame(data={tech: 
+                    {'AREA': area, 'YEAR': year, 
+                   'storageResource': 'hydrogen', 
+                   'storageLifeSpan': 40, 
+                    'storagePowerCost': 0, 
+                    'storageEnergyCost': 350e3, 
+                    'storageOperationCost': 2e3, 
+                    'p_max': 10000, 
+                    'c_max': 100000, 
+                    'storageChargeFactors': {'electricity': 0.0168, 'hydrogen': 1.0},
+                    'storageDischargeFactors': {'hydrogen': 1.0},
+                    'storageDissipation': 0,
+                    }, 
+                }
+             )
+        )
 
 scenario['storageTechs'] =  pd.concat(scenario['storageTechs'], axis=1) 
 
