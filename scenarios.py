@@ -37,6 +37,7 @@ print(scenario['resourceDemand'].head())
 print(scenario['resourceDemand'].tail())
 '''
 scenario['conversionTechs'] = [] 
+
 for area in areaList: 
     for k, year in enumerate(yearList): 
         tech = "Offshore wind - floating"
@@ -53,6 +54,7 @@ for area in areaList:
                 }
              )
         )
+
 
         tech = "Onshore wind"
         maxcap = 10000
@@ -86,13 +88,44 @@ for area in areaList:
              )
         )
 
-        tech = "Electrolysis"
+
+        tech = "ElectrolysisS"
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
-                    'minCapacity': 0,'maxCapacity': 100e3, 
+                    'minCapacity': 0,'maxCapacity': 5, 
+                    'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
+                    'EnergyNbhourCap': 0, # used for hydroelectricity 
+                    'capacityLim': 5, 
+                    }, 
+                }
+             )
+        )
+
+        tech = "ElectrolysisM"
+        capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+        scenario['conversionTechs'].append(
+            pd.DataFrame(data={tech: 
+                    { 'YEAR': year, 'Category': 'Hydrogen production',
+                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                    'minCapacity': 5,'maxCapacity': 100, 
+                    'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
+                    'EnergyNbhourCap': 0, # used for hydroelectricity 
+                    'capacityLim': 100, 
+                    }, 
+                }
+             )
+        )
+
+        tech = "ElectrolysisL"
+        capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+        scenario['conversionTechs'].append(
+            pd.DataFrame(data={tech: 
+                    { 'YEAR': year, 'Category': 'Hydrogen production',
+                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                    'minCapacity': 100,'maxCapacity': 100e3, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
                     'capacityLim': 100e3, 
@@ -231,18 +264,58 @@ scenario['storageTechs'] =  pd.concat(scenario['storageTechs'], axis=1)
 
 scenario['transportTechs'] = []
 for k, year in enumerate(yearList):
-    ttech = 'Pipeline'
-    p_max = 500
-    capex, opex, LifeSpan = 10,10,10
+    ttech = 'Pipeline_S'
+    p_max = 50000
+    p_max_fonc = 100
+    capex, opex, LifeSpan = 320,250,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
-            {'YEAR' : year, 'transportResource': 'hydrogen',  # transportResource ?
+            {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 0.01},
             'transportDischargeFactors': {'hydrogen' : 0.01},
-            'transportDissipation':0.0
+            'transportDissipation':0.0,
+            'transportMaxPowerFonc': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+            }
+        }
+        )
+    )
+
+    ttech = 'Pipeline_M'
+    p_max = 50000
+    p_max_fonc = 1000
+    capex, opex, LifeSpan = 290,225,40
+    scenario['transportTechs'].append(
+        pd.DataFrame(data={ttech:
+            {'YEAR' : year, 'transportResource': 'hydrogen',
+            'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            'transportMinPower':0, 'transportMaxPower': p_max,
+            'transportEmissionCO2':0,
+            'transportChargeFactors': {'hydrogen' : 0.01},
+            'transportDischargeFactors': {'hydrogen' : 0.01},
+            'transportDissipation':0.0,
+            'transportMaxPowerFonc': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+            }
+        }
+        )
+    )
+
+    ttech = 'Pipeline_L'
+    p_max = 50000
+    p_max_fonc = 10000
+    capex, opex, LifeSpan = 261,203,40
+    scenario['transportTechs'].append(
+        pd.DataFrame(data={ttech:
+            {'YEAR' : year, 'transportResource': 'hydrogen',
+            'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            'transportMinPower':0, 'transportMaxPower': p_max,
+            'transportEmissionCO2':0,
+            'transportChargeFactors': {'hydrogen' : 0.01},
+            'transportDischargeFactors': {'hydrogen' : 0.01},
+            'transportDissipation':0.0,
+            'transportMaxPowerFonc': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
             }
         }
         )
@@ -253,16 +326,18 @@ for k, year in enumerate(yearList):
 for k, year in enumerate(yearList):
     ttech = 'truckTransportingHydrogen'
     p_max = 500  # to change
-    capex, opex, LifeSpan = 10,10,10
+    p_max_fonc = 0 # ttech n'est pas discrétisée
+    capex, opex, LifeSpan = 290,0,10
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
             'transportMinPower':0, 'transportMaxPower': p_max,
-            'transportEmissionCO2':0,
-            'transportChargeFactors': {'hydrogen' : 0.01},
+            'transportEmissionCO2':1/23,
+            'transportChargeFactors': {'hydrogen' : 0.07},
             'transportDischargeFactors': {'hydrogen' : 0.01},
-            'transportDissipation':0.0
+            'transportDissipation':0.0,
+            'transportMaxPowerFonc': p_max_fonc
             }
         }
         )
