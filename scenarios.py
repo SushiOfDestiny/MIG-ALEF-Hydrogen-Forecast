@@ -397,7 +397,6 @@ scenario['resourceImportPrices'] = pd.concat(
             'electricity': df_res_ref.loc[(year, slice(None), 'electricity'),'importCost'].values,
             'natural gas': 2 * df_res_ref.loc[(year, slice(None), 'gazNat'),'importCost'].values,
             'biogas': 150 * np.ones(nHours),
-            'uranium': 2.2 * np.ones(nHours),
             'hydrogen': 6/33 * 1000 * np.ones(nHours),
         }) for k, year in enumerate(yearList[1:])
     for area in areaList
@@ -414,7 +413,6 @@ scenario['resourceImportCO2eq'] = pd.concat(
             'gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)), # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'natural gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)), # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'biogas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1,
-            'uranium': 0 * np.ones(nHours),
             'hydrogen': max(0, 0.05  - .03 * (year - yearZero)/(2050 - yearZero)) * 11 / 33, # Taking 100 yr GWP of H2 and 5% losses due to upstream leaks. Leaks fall to 2% in 2050 See: https://www.energypolicy.columbia.edu/research/commentary/hydrogen-leakage-potential-risk-hydrogen-economy
         }) for k, year in enumerate(yearList[1:])
     for area in areaList
