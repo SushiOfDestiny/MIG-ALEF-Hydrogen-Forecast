@@ -60,6 +60,9 @@ scenario['conversionTechs'] = []
 
 for area in areaList:
     for k, year in enumerate(yearList):
+        # les coûts des tech diffèrent selon le noeud
+        # l'éolien onshore et le solaire sont plus chers à Nice   
+
         tech = "Offshore wind - floating"
         maxcap = 10000
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
