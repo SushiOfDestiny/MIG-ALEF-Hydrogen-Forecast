@@ -59,9 +59,9 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 				'ref':  interp1d(years, [25, 30, 30, 30, 30]), 
 			}
 
-	elif tech == "Electrolysis":
+	elif tech == "ElectrolysisS":
 			capex = {
-				'ref':  interp1d(years, [1313, 641, 574, 507, 440]),
+				'ref':  interp1d(years, [2244, 1024, 469, 215, 99]),
 			}
 			opex = {
 				'ref': interp1d(years, [12] * 5),
@@ -69,6 +69,29 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 			life = {
 				'ref':  interp1d(years, [20] * 5),
 			}
+
+	elif tech == "ElectrolysisM":
+			capex = {
+				'ref':  interp1d(years, [1280, 584, 267, 123, 56]),
+			}
+			opex = {
+				'ref': interp1d(years, [12] * 5),
+			}
+			life = {
+				'ref':  interp1d(years, [20] * 5),
+			}
+
+	elif tech == "ElectrolysisL":
+			capex = {
+				'ref':  interp1d(years, [876, 400, 183, 84, 38]),
+			}
+			opex = {
+				'ref': interp1d(years, [12] * 5),
+			}
+			life = {
+				'ref':  interp1d(years, [20] * 5),
+			}
+
 
 	elif tech == 'Battery - 1h': 
 			capex = {
@@ -129,4 +152,6 @@ def electrolyser_capex_Reksten2022(tech='PEM', Pel=100, year=2020):
 	elif tech=='Alkaline': 
 		alpha, beta, k0, k = 0.649, -27.33, 301.04, 11603
 
-	return (k0 + k/Pel * Pel**alpha) * (year/2020) ** beta 
+	return (k0 + k/Pel * Pel**alpha) * (year/2020) ** beta
+
+print(electrolyser_capex_Reksten2022(Pel=10000, year = np.array([2020, 2030, 2040, 2050, 2060])))

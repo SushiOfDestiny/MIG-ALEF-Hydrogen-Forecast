@@ -739,7 +739,7 @@ def systemModelPedro(scenario, isAbstract=False):
     # transport flow doit être positif
     def transportFlowInSign_rule(model, y, t, res, ttech, area1, area2):
         return model.transportFlowIn_Dvar[y, t, res, ttech, area2, area1] >= 0
-    model.transportFlowCtr = Constraint(
+    model.transportFlowInSignCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule=transportFlowInSign_rule
     )
 
