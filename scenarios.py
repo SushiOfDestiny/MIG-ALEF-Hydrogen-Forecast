@@ -98,13 +98,43 @@ for k, year in enumerate(yearList):
          )
     )
 
-    tech = "Electrolysis"
+    tech = "ElectrolysisS"
     capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
     scenario['conversionTechs'].append(
         pd.DataFrame(data={tech: 
                 { 'YEAR': year, 'Category': 'Hydrogen production',
                 'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
-                'minCapacity': 0,'maxCapacity': 100e3, 
+                'minCapacity': 0,'maxCapacity': 5, 
+                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
+                'EnergyNbhourCap': 0, # used for hydroelectricity 
+                'capacityLim': 5, 
+                }, 
+            }
+         )
+    )
+
+    tech = "ElectrolysisM"
+    capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+    scenario['conversionTechs'].append(
+        pd.DataFrame(data={tech: 
+                { 'YEAR': year, 'Category': 'Hydrogen production',
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'minCapacity': 5,'maxCapacity': 100, 
+                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
+                'EnergyNbhourCap': 0, # used for hydroelectricity 
+                'capacityLim': 100, 
+                }, 
+            }
+         )
+    )
+
+    tech = "ElectrolysisL"
+    capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+    scenario['conversionTechs'].append(
+        pd.DataFrame(data={tech: 
+                { 'YEAR': year, 'Category': 'Hydrogen production',
+                'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
+                'minCapacity': 100,'maxCapacity': 100e3, 
                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
                 'EnergyNbhourCap': 0, # used for hydroelectricity 
                 'capacityLim': 100e3, 
