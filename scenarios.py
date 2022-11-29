@@ -99,40 +99,40 @@ for area in areaList:
 
 
         tech = "ElectrolysisS"
-        capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+        capex_MWel = 1e3 * tech_eco_data.electrolyser_capex_Reksten2022(tech='PEM', Pel=100, year=year)
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
-                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
-                    'minCapacity': 0,'maxCapacity': 5, 
+                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex_MWel, 'operationCost': 0.04 * capex_MWel, 
+                    'minCapacity': 0.1,'maxCapacity': 1000, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 5, 
+                    'capacityLim': 100e3, 
                     }, 
                 }
              )
         )
 
         tech = "ElectrolysisM"
-        capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+        capex_MWel = 1e3 * tech_eco_data.electrolyser_capex_Reksten2022(tech='PEM', Pel=1000, year=year)
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
-                    { 'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
-                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
-                    'minCapacity': 5,'maxCapacity': 100, 
+                    {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
+                    'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex_MWel, 'operationCost': 0.04 * capex_MWel, 
+                    'minCapacity': 1,'maxCapacity': 1000, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100, 
+                    'capacityLim': 100e3, 
                     }, 
                 }
              )
         )
 
         tech = "ElectrolysisL"
-        capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year) 
+        capex_MWel = 1e3 * tech_eco_data.electrolyser_capex_Reksten2022(tech='PEM', Pel=100000, year=year)
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
-                    { 'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
+                    { 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
                     'minCapacity': 100,'maxCapacity': 100e3, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.65},
@@ -397,7 +397,6 @@ scenario['resourceImportPrices'] = pd.concat(
             'electricity': df_res_ref.loc[(year, slice(None), 'electricity'),'importCost'].values,
             'natural gas': 2 * df_res_ref.loc[(year, slice(None), 'gazNat'),'importCost'].values,
             'biogas': 150 * np.ones(nHours),
-            'uranium': 2.2 * np.ones(nHours),
             'hydrogen': 6/33 * 1000 * np.ones(nHours),
         }) for k, year in enumerate(yearList[1:])
     for area in areaList
@@ -414,7 +413,6 @@ scenario['resourceImportCO2eq'] = pd.concat(
             'gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)), # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'natural gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)), # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'biogas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1,
-            'uranium': 0 * np.ones(nHours),
             'hydrogen': max(0, 0.05  - .03 * (year - yearZero)/(2050 - yearZero)) * 11 / 33, # Taking 100 yr GWP of H2 and 5% losses due to upstream leaks. Leaks fall to 2% in 2050 See: https://www.energypolicy.columbia.edu/research/commentary/hydrogen-leakage-potential-risk-hydrogen-economy
         }) for k, year in enumerate(yearList[1:])
     for area in areaList
