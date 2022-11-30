@@ -20,7 +20,7 @@ t = np.arange(1,nHours + 1,timeStep)
 nHours = len(t)
 
 zones = ['PACA']
-scenar = 1
+scenar = 2
 
 yearZero = 2020
 yearFinal = 2050
@@ -94,7 +94,8 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 8} 
+                    'capacityLim': 100e3, 'techUnitPower': 8 # puissance fonctionnelle maximale d'une unité
+                    } 
                 }
              )
         )
@@ -111,7 +112,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 3
+                    'capacityLim': 100e3, 'techUnitPower': 3
                     }, 
                 }
              )
@@ -129,7 +130,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 1
+                    'capacityLim': 100e3, 'techUnitPower': 1
                     }, 
                 }
              )
@@ -145,7 +146,7 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': 5,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 5,
+                                'capacityLim': 5, 'techUnitPower' : 0.1
                                 },
                                }
                          )
@@ -161,7 +162,7 @@ for area in areaList:
                                 'minCapacity': 5, 'maxCapacity': 100,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100,
+                                'capacityLim': 100, 'techUnitPower': 1
                                 },
                                }
                          )
@@ -177,7 +178,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.69},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 1 
+                    'capacityLim': 100e3, 'techUnitPower': 10
                     }, 
                 }
              )
@@ -192,7 +193,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': 100e3, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 320
+                    'capacityLim': 100e3, 'techUnitPower': 320
                     }, 
                 }
              )
@@ -208,7 +209,7 @@ for area in areaList:
                     'minCapacity': 1 if year == yearZero else 0,'maxCapacity': 1 if year == yearZero  else 0, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 320 if year == yearZero else 0, 'unitPower': 320
+                    'capacityLim': 320 if year == yearZero else 0, 'techUnitPower': 320
                     }, 
                 }
              )
@@ -223,7 +224,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': 100e3, 
                     'EmissionCO2': -169, 'Conversion': {'electricity': -0.17, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 320
+                    'capacityLim': 100e3, 'techUnitPower': 320
                     }, 
                 }
              )
@@ -238,7 +239,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': 100e3, 
                     'EmissionCO2': -268, 'Conversion': {'electricity': -0.34, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 320 
+                    'capacityLim': 100e3, 'techUnitPower': 320 
                     }, 
                 }
              )
@@ -250,7 +251,7 @@ for area in areaList:
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Carbon capture',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 
-                    'operationCost': opex, 'capacityLim': 100e3, 'unitPower': 320}, 
+                    'operationCost': opex, 'capacityLim': 100e3, 'techUnitPower': 320}, 
                 }
              )
         )
@@ -261,7 +262,7 @@ for area in areaList:
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Carbon capture',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 
-                    'operationCost': opex, 'capacityLim': 100e3, 'unitPower': 320}, 
+                    'operationCost': opex, 'capacityLim': 100e3, 'techUnitPower': 320}, 
                 }
              )
         )
@@ -328,57 +329,57 @@ scenario['storageTechs'] = pd.concat(scenario['storageTechs'], axis=1)
 scenario['transportTechs'] = []
 for k, year in enumerate(yearList):
     ttech = 'Pipeline_S'
-    p_max = 50000
+    p_max = 50000.
     p_max_fonc = 100
     capex, opex, LifeSpan = 1583,3e-4,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 9e-5, 'transportInvestCost': capex, 'transportOperationCost':opex,
-            'transportMinPower':0, 'transportMaxPower': p_max,
+            # 'transportMinPower':1., 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 5e-3},
             'transportDischargeFactors': {'hydrogen' : 5e-3},
             'transportDissipation':2e-5,
-            'transportMaxPowerFonc': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+            'transportUnitPower': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
             }
         }
         )
     )
 
     ttech = 'Pipeline_M'
-    p_max = 50000
+    p_max = 50000.
     p_max_fonc = 1000
     capex, opex, LifeSpan = 638,1.2e-4,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 3.2e-4, 'transportInvestCost': capex, 'transportOperationCost':opex,
-            'transportMinPower':0, 'transportMaxPower': p_max,
+            # 'transportMinPower':1., 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 5e-3},
             'transportDischargeFactors': {'hydrogen' : 5e-3},
             'transportDissipation':2e-5,
-            'transportMaxPowerFonc': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+            'transportUnitPower': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
             }
         }
         )
     )
 
     ttech = 'Pipeline_L'
-    p_max = 50000
+    p_max = 50000.
     p_max_fonc = 10000
     capex, opex, LifeSpan = 294,3.4e-5,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 1.5e-3, 'transportInvestCost': capex, 'transportOperationCost':opex,
-            'transportMinPower':0, 'transportMaxPower': p_max,
+            # 'transportMinPower':1., 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 5e-3},
             'transportDischargeFactors': {'hydrogen' : 5e-3},
             'transportDissipation':2e-5,
-            'transportMaxPowerFonc': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+            'transportUnitPower': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
             }
         }
         )
@@ -395,12 +396,12 @@ for k, year in enumerate(yearList):
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
-            'transportMinPower':0, 'transportMaxPower': p_max,
+            # 'transportMinPower':1, 'transportMaxPower': p_max,
             'transportEmissionCO2':1/23,
             'transportChargeFactors': {'hydrogen' : 0.07},
             'transportDischargeFactors': {'hydrogen' : 0.01},
             'transportDissipation':0.0,
-            'transportMaxPowerFonc': p_max_fonc
+            'transportUnitPower': p_max_fonc
             }
         }  
         )

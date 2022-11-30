@@ -17,7 +17,7 @@ def loadScenario(scenario, printTables=False):
     TechParameters = scenario['conversionTechs'].transpose().fillna(0)
     TechParameters.index.name = 'TECHNOLOGIES'
     TechParametersList = ['powerCost', 'operationCost', 'investCost', 'EnergyNbhourCap', 'minCapacity', 'maxCapacity',
-                          'RampConstraintPlus', 'RampConstraintMoins', 'RampConstraintPlus2', 'RampConstraintMoins2', 'EmissionCO2', 'capacityLim', 'unitPower']
+                          'RampConstraintPlus', 'RampConstraintMoins', 'RampConstraintPlus2', 'RampConstraintMoins2', 'EmissionCO2', 'capacityLim', 'techUnitPower']
     for k in TechParametersList:
         if k not in TechParameters:
             TechParameters[k] = 0
@@ -66,7 +66,7 @@ def loadScenario(scenario, printTables=False):
     df_conv = scenario['conversionTechs'].transpose(
     ).set_index(['YEAR','AREA'], append=True)['Conversion']
     conversionFactor = pd.DataFrame(data={tech: df_conv.loc[(tech, 2020, scenario['areaList'][0])] for tech in scenario['conversionTechs'].columns}).fillna(
-        0)  # TODO: Take into account evolving conversion factors (for electrolysis improvement, for instance)
+        0)  # TODO: Take into account evolving conversion factors (for f improvement, for instance)
     conversionFactor.index.name = 'RESOURCES'
 
     conversionFactor = conversionFactor.reset_index('RESOURCES').melt(
@@ -414,7 +414,7 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Maximum transport flow from area a to b ie la puissance (en MWh/h) à travers une section du pipe/de la route 
     model.TmaxTot_Pvar = Var(
-        model.YEAR_invest,  model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+        model.YEAR_invest,  model.TRANS_TECHNO, model.AREA_AREA, domain=NonNegativeIntegers)
     # model.TransportFlowIn_Dvar[y,t,res,area1,area2] =
     # Instant resource flow (mesured in power, MWh/h) at time t in year y from area1 to area2, 
     # always >= 0 AFTER losses due to transport
@@ -437,15 +437,18 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_invest, model.YEAR_invest, model.TECHNOLOGIES, model.AREA, domain=NonNegativeIntegers)    
     # New transport flow max from area a to b created at investment time
     model.TInvest_Dvar = Var(
-        model.YEAR_invest,  model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+        model.YEAR_invest,  model.TRANS_TECHNO, model.AREA_AREA, domain=NonNegativeIntegers)
     # Deleted transport flow from area a to b at investment time, because of end of life
     model.TDel_Dvar = Var(
-        model.YEAR_invest,  model.TRANS_TECHNO, model.AREA_AREA, domain=Reals)
+        model.YEAR_invest,  model.TRANS_TECHNO, model.AREA_AREA, domain=NonNegativeIntegers)
     # Transformation of technologies 1 into technologies 2
     model.transInvest_Dvar = Var(
         model.YEAR_invest, model.TECHNOLOGIES, model.TECHNOLOGIES, model.AREA, domain=NonNegativeIntegers)
     model.capacityDem_Dvar = Var(
         model.YEAR_invest, model.YEAR_invest, model.TECHNOLOGIES, model.AREA, domain=NonNegativeIntegers)
+
+    # variables encore réelles
+    # capacité des installations d'une technologie dans une zone, en unités de puissance max
     model.capacity_Pvar = Var(
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, domain=NonNegativeIntegers, initialize=0)
     # Maximum capacity of a storage mean
@@ -560,8 +563,8 @@ def systemModelPedro(scenario, isAbstract=False):
     def capacityCostsDef_rule(model, y, tech, area):
         return sum(model.investCost[yi, tech,area]
                    * f1(i, model.LifeSpan[yi, tech, area]) * f3(r, y-dy)
-                   * (model.capacityInvest_Dvar[yi, tech, area] - model.capacityDel_Pvar[yi, y-dy, tech, area]) * model.unitPower[yi, tech, area]
-                   for yi in yearList[yearList < y]) + model.operationCost[y-dy, tech, area] * model.unitPower[y-dy, tech, area] *f3(r, y)*model.capacity_Pvar[y, tech, area] == model.capacityCosts_Pvar[y, tech, area]
+                   * (model.capacityInvest_Dvar[yi, tech, area] - model.capacityDel_Pvar[yi, y-dy, tech, area]) * model.techUnitPower[yi, tech, area]
+                   for yi in yearList[yearList < y]) + model.operationCost[y-dy, tech, area] * model.techUnitPower[y-dy, tech, area] *f3(r, y)*model.capacity_Pvar[y, tech, area] == model.capacityCosts_Pvar[y, tech, area]
     model.capacityCostsCtr = Constraint(
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, rule=capacityCostsDef_rule)
 
@@ -577,10 +580,10 @@ def systemModelPedro(scenario, isAbstract=False):
 
     def transportEconomicalCostsDef_rule(model, y, ttech, area1, area2):
         """y is in YEAR_op"""
-        if model.transportLifeSpan[y, ttech] == 0:
-            print(y, ttech, area1, area2)
+        # if model.transportLifeSpan[y, ttech] == 0:
+            # print(y, ttech, area1, area2)
         return model.transportEconomicalCosts_Pvar[ y, ttech, area1, area2] == \
-            sum(model.distances[(area1,area2)] * (model.transportInvestCost[y, ttech] * f1(r, model.transportLifeSpan[y, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1, area2] for res in model.RESOURCES)
+            model.distances[(area1,area2)] * (model.transportInvestCost[y, ttech] * f1(r, model.transportLifeSpan[y, ttech]) + model.transportOperationCost[y, ttech]*f3(r, y)) * model.TmaxTot_Pvar[y, ttech, area1, area2] * model.transportUnitPower[y,ttech] 
     model.transportEconomicalCostsCtr = Constraint(
         model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule=transportEconomicalCostsDef_rule
     )
@@ -600,7 +603,7 @@ def systemModelPedro(scenario, isAbstract=False):
     model.BiogazCtr = Constraint(
         model.YEAR_op, model.RESOURCES, rule=BiogazDef_rule)
 
-    # Carbon emission definition Constraints
+    # Carbon emission definition Constraints hors transport
     # c'est quoi model.emission ??
     def CarbonDef_rule(model, y, t, area):
         return sum((model.power_Dvar[y, t, tech, area] * model.EmissionCO2[y-dy, tech, area]) for tech in model.TECHNOLOGIES) + \
@@ -735,7 +738,7 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, rule=CapacityTot_rule)
 
     def Capacity_rule(model, y, t, tech, area):  # INEQ forall t, tech
-        return model.capacity_Pvar[y, tech, area] * model.availabilityFactor[y, t, tech]  *  model.unitPower[y-dy, tech, area] >= model.power_Dvar[y, t, tech, area]
+        return model.capacity_Pvar[y, tech, area] * model.availabilityFactor[y, t, tech]  *  model.techUnitPower[y-dy, tech, area] >= model.power_Dvar[y, t, tech, area]
     model.CapacityCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.TECHNOLOGIES, model.AREA, rule=Capacity_rule)
 
@@ -905,7 +908,7 @@ def systemModelPedro(scenario, isAbstract=False):
     if "EnergyNbhourCap" in TechParameters:
         def storage_rule(model, y, tech, area):  # INEQ forall t, tech
             if model.EnergyNbhourCap[y-dy, tech, area] > 0:
-                return model.EnergyNbhourCap[y-dy, tech, area] * model.capacity_Pvar[y, tech, area] * model.unitPower[y-dy, tech, area] >= sum(
+                return model.EnergyNbhourCap[y-dy, tech, area] * model.capacity_Pvar[y, tech, area] * model.techUnitPower[y-dy, tech, area] >= sum(
                     model.power_Dvar[y, t, tech, area] for t in model.TIMESTAMP) * timeStep
             else:
                 return Constraint.Skip
@@ -915,7 +918,7 @@ def systemModelPedro(scenario, isAbstract=False):
     if "RampConstraintPlus" in TechParameters:
         def rampCtrPlus_rule(model, y, t, tech, area):  # INEQ forall t<
             if model.RampConstraintPlus[y-dy, tech, area] > 0:
-                return model.power_Dvar[y, t + timeStep, tech, area] - model.power_Dvar[y, t, tech, area] <= model.capacity_Pvar[y, tech, area] * model.unitPower[y-dy, tech, area] * model.RampConstraintPlus[y-dy, tech, area] *  timeStep
+                return model.power_Dvar[y, t + timeStep, tech, area] - model.power_Dvar[y, t, tech, area] <= model.capacity_Pvar[y, tech, area] * model.techUnitPower[y-dy, tech, area] * model.RampConstraintPlus[y-dy, tech, area] *  timeStep
             else:
                 return Constraint.Skip
         model.rampCtrPlus = Constraint(
@@ -926,7 +929,7 @@ def systemModelPedro(scenario, isAbstract=False):
             if model.RampConstraintMoins[y-dy, tech, area] > 0:
                 var = model.power_Dvar[y, t + timeStep, tech, area] - \
                     model.power_Dvar[y, t, tech, area]
-                return var >= - model.capacity_Pvar[y, tech, area] * model.unitPower[y-dy, tech, area] * model.RampConstraintMoins[y-dy, tech, area]  *  timeStep
+                return var >= - model.capacity_Pvar[y, tech, area] * model.techUnitPower[y-dy, tech, area] * model.RampConstraintMoins[y-dy, tech, area]  *  timeStep
             else:
                 return Constraint.Skip
         model.rampCtrMoins = Constraint(
@@ -956,31 +959,31 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Contraintes sur le transport
     # Fixer l'investissement entre ses bornes.
-    def TInvest_min_rule(model, y, res, ttech, area1, area2):
-        return model.TInvest_Dvar[y, ttech, area1, area2] >= model.transportMinPower[y, ttech]
-    model.TInvest_min = Constraint(
-        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_min_rule)
+    # def TInvest_min_rule(model, y, ttech, area1, area2):
+    #     return model.TInvest_Dvar[y, ttech, area1, area2] * model.transportUnitPower[y, ttech] >= model.transportMinPower[y, ttech]
+    # model.TInvest_min = Constraint(
+    #     model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_min_rule)
 
-    def TInvest_max_rule(model, y, res, ttech, area1, area2):
-        return model.TInvest_Dvar[y, ttech, area1, area2] <= model.transportMaxPower[y, ttech]
-    model.TInvest_max = Constraint(
-        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_max_rule)
+    # def TInvest_max_rule(model, y, ttech, area1, area2):
+    #     return model.TInvest_Dvar[y, ttech, area1, area2] * model.transportUnitPower[y, ttech] <= model.transportMaxPower[y, ttech]
+    # model.TInvest_max = Constraint(
+    #     model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_max_rule)
 
     # discrétise les puissances investies en fonction des puissances max des ttech
-    def TInvest_discr_rule(model, y, res, ttech, area1, area2):
-        if model.transportMaxPowerFonc[y,ttech] == 0:
-            # dans ce cas, on ne discrétise pas
-            return Constraint.Skip
-        else:
-            # la puissance investie doit être un multiple de celle max de ttech
-            # return model.TInvest_Dvar[y, res, ttech, area1, area2] %  model.transportMaxPowerFonc[y,ttech] <= 1
-            # division euclidienne bug
-            # on fait une approximation grossière
-            return model.TInvest_Dvar[y, ttech, area1, area2] == model.transportMaxPowerFonc[y,ttech]
+    # def TInvest_discr_rule(model, y, res, ttech, area1, area2):
+    #     if model.transportMaxPowerFonc[y,ttech] == 0:
+    #         # dans ce cas, on ne discrétise pas
+    #         return Constraint.Skip
+    #     else:
+    #         # la puissance investie doit être un multiple de celle max de ttech
+    #         # return model.TInvest_Dvar[y, res, ttech, area1, area2] %  model.transportMaxPowerFonc[y,ttech] <= 1
+    #         # division euclidienne bug
+    #         # on fait une approximation grossière
+    #         return model.TInvest_Dvar[y, ttech, area1, area2] == model.transportMaxPowerFonc[y,ttech]
 
-    model.TInvest_discrCtr = Constraint(
-         model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_discr_rule
-    )
+    # model.TInvest_discrCtr = Constraint(
+    #      model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_discr_rule
+    # )
 
    
     # Fixe le flux inférieur à la capacité max 
@@ -988,30 +991,38 @@ def systemModelPedro(scenario, isAbstract=False):
     # empêche un flux entre 2 fois la même ville
     def FlowTot_lim_rule(model, y, t, res, ttech, area1, area2):
         if (res == model.transportResource[y, ttech]) and (area1 != area2):
-            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] <= model.TmaxTot_Pvar[y, ttech, area1, area2]
+            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] <= model.TmaxTot_Pvar[y, ttech, area1, area2] * model.transportUnitPower[y, ttech]
         else:
             return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] == 0
     model.FlowTot_lim = Constraint(
         model.YEAR_invest, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = FlowTot_lim_rule)
 
     # Définition de TmaxTot en y, en fonction de TmaxTot en y-dy
-    def TmaxTot_rule(model, y, res, ttech, area1, area2):
+    # encore valable avec des entiers
+    def TmaxTot_rule(model, y, ttech, area1, area2):
         if y==2020:
             return model.TmaxTot_Pvar[y, ttech, area1, area2]==0
         else:
             return model.TmaxTot_Pvar[y, ttech, area1, area2] == model.TmaxTot_Pvar[y-dy, ttech, area1, area2] + \
                 model.TInvest_Dvar[y, ttech, area1, area2] - model.TDel_Dvar[y, ttech, area1, area2]
     model.TmaxTot = Constraint(
-        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TmaxTot_rule)
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TmaxTot_rule)
 
     # Mise en place du LifeSpan
-    def transportLifeSpan_rule(model,y, res, ttech, area1, area2):
+    def transportLifeSpan_rule(model,y, ttech, area1, area2):
         invest_date = y - model.transportLifeSpan[y, ttech]
         if invest_date in yearList:
             return model.TDel_Dvar[y, ttech, area1, area2] == model.TInvest_Dvar[invest_date, ttech, area1, area2]
         else:
             return model.TDel_Dvar[y, ttech, area1, area2] == 0
     model.LifeSpanCtr = Constraint(
-        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = transportLifeSpan_rule)
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = transportLifeSpan_rule)
+    
+
+    def TInvestDoubleFlow_rule(model,y, ttech, area1, area2):
+        return model.TInvest_Dvar[y, ttech, area1, area2] == model.TInvest_Dvar[y, ttech, area2, area1]
+    model.tinvestDoubleFlowCtr = Constraint(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvestDoubleFlow_rule
+    )
     
     return model
