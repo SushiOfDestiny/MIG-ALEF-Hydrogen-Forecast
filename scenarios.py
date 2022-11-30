@@ -23,7 +23,7 @@ zones = ['PACA']
 scenar = 1
 
 yearZero = 2020
-yearFinal = 2040
+yearFinal = 2050
 yearStep = 10
 # +1 to include the final year
 yearList = [yr for yr in range(yearZero, yearFinal+yearStep, yearStep)]
