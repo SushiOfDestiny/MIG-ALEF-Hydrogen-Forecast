@@ -160,7 +160,7 @@ def print_global_elec_camembert(y, power_Dvar='out_scenario1/power_Dvar.csv'):
     plt.legend()
    
     
-def prod_H2_an(file = "out/power_Dvar.csv") :
+def prod_H2_an(file = "out_scenario1/power_Dvar.csv") :
     tech_H2= ["ElectrolysisL", "ElectrolysisM", "ElectrolysisS", "SMR + CCS1", "SMR + CCS2", "SMR"]
     colors_dict={"ElectrolysisL":'darkred', "ElectrolysisM":'firebrick', "ElectrolysisS":'lightcoral', "SMR + CCS1":"dimgray", "SMR + CCS2" : 'darkgray', "SMR" : 'silver'  }
     
