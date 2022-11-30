@@ -1,0 +1,1585 @@
+,YEAR_op,TIMESTAMP,STOCK_TECHNO,AREA,stockLevel_Pvar
+0,2040,1,Battery,Nice,0.0
+1,2040,1,Battery,Marseille,0.0
+2,2040,1,Battery,Alpin,0.0
+3,2040,1,Salt cavern,Nice,0.0
+4,2040,1,Salt cavern,Marseille,0.0
+5,2040,1,Salt cavern,Alpin,0.0
+6,2040,4101,Battery,Nice,0.0
+7,2040,4101,Battery,Marseille,0.0
+8,2040,4101,Battery,Alpin,0.0
+9,2040,4101,Salt cavern,Nice,0.0
+10,2040,4101,Salt cavern,Marseille,0.0
+11,2040,4101,Salt cavern,Alpin,0.0
+12,2040,8201,Battery,Nice,0.0
+13,2040,8201,Battery,Marseille,0.0
+14,2040,8201,Battery,Alpin,0.0
+15,2040,8201,Salt cavern,Nice,0.0
+16,2040,8201,Salt cavern,Marseille,0.0
+17,2040,8201,Salt cavern,Alpin,0.0
+18,2040,3601,Battery,Nice,0.0
+19,2040,3601,Battery,Marseille,0.0
+20,2040,3601,Battery,Alpin,0.0
+21,2040,3601,Salt cavern,Nice,0.0
+22,2040,3601,Salt cavern,Marseille,0.0
+23,2040,3601,Salt cavern,Alpin,0.0
+24,2040,7701,Battery,Nice,0.0
+25,2040,7701,Battery,Marseille,0.0
+26,2040,7701,Battery,Alpin,0.0
+27,2040,7701,Salt cavern,Nice,0.0
+28,2040,7701,Salt cavern,Marseille,0.0
+29,2040,7701,Salt cavern,Alpin,0.0
+30,2040,3101,Battery,Nice,0.0
+31,2040,3101,Battery,Marseille,0.0
+32,2040,3101,Battery,Alpin,0.0
+33,2040,3101,Salt cavern,Nice,0.0
+34,2040,3101,Salt cavern,Marseille,0.0
+35,2040,3101,Salt cavern,Alpin,0.0
+36,2040,7201,Battery,Nice,0.0
+37,2040,7201,Battery,Marseille,0.0
+38,2040,7201,Battery,Alpin,0.0
+39,2040,7201,Salt cavern,Nice,0.0
+40,2040,7201,Salt cavern,Marseille,0.0
+41,2040,7201,Salt cavern,Alpin,0.0
+42,2040,2601,Battery,Nice,0.0
+43,2040,2601,Battery,Marseille,0.0
+44,2040,2601,Battery,Alpin,0.0
+45,2040,2601,Salt cavern,Nice,0.0
+46,2040,2601,Salt cavern,Marseille,0.0
+47,2040,2601,Salt cavern,Alpin,0.0
+48,2040,6701,Battery,Nice,0.0
+49,2040,6701,Battery,Marseille,0.0
+50,2040,6701,Battery,Alpin,0.0
+51,2040,6701,Salt cavern,Nice,0.0
+52,2040,6701,Salt cavern,Marseille,0.0
+53,2040,6701,Salt cavern,Alpin,0.0
+54,2040,2101,Battery,Nice,0.0
+55,2040,2101,Battery,Marseille,0.0
+56,2040,2101,Battery,Alpin,0.0
+57,2040,2101,Salt cavern,Nice,0.0
+58,2040,2101,Salt cavern,Marseille,0.0
+59,2040,2101,Salt cavern,Alpin,0.0
+60,2040,6201,Battery,Nice,0.0
+61,2040,6201,Battery,Marseille,0.0
+62,2040,6201,Battery,Alpin,0.0
+63,2040,6201,Salt cavern,Nice,0.0
+64,2040,6201,Salt cavern,Marseille,0.0
+65,2040,6201,Salt cavern,Alpin,0.0
+66,2040,1601,Battery,Nice,0.0
+67,2040,1601,Battery,Marseille,0.0
+68,2040,1601,Battery,Alpin,0.0
+69,2040,1601,Salt cavern,Nice,0.0
+70,2040,1601,Salt cavern,Marseille,0.0
+71,2040,1601,Salt cavern,Alpin,0.0
+72,2040,5701,Battery,Nice,0.0
+73,2040,5701,Battery,Marseille,0.0
+74,2040,5701,Battery,Alpin,0.0
+75,2040,5701,Salt cavern,Nice,0.0
+76,2040,5701,Salt cavern,Marseille,0.0
+77,2040,5701,Salt cavern,Alpin,0.0
+78,2040,1101,Battery,Nice,0.0
+79,2040,1101,Battery,Marseille,0.0
+80,2040,1101,Battery,Alpin,0.0
+81,2040,1101,Salt cavern,Nice,0.0
+82,2040,1101,Salt cavern,Marseille,0.0
+83,2040,1101,Salt cavern,Alpin,0.0
+84,2040,5201,Battery,Nice,0.0
+85,2040,5201,Battery,Marseille,0.0
+86,2040,5201,Battery,Alpin,0.0
+87,2040,5201,Salt cavern,Nice,0.0
+88,2040,5201,Salt cavern,Marseille,0.0
+89,2040,5201,Salt cavern,Alpin,0.0
+90,2040,601,Battery,Nice,0.0
+91,2040,601,Battery,Marseille,0.0
+92,2040,601,Battery,Alpin,0.0
+93,2040,601,Salt cavern,Nice,0.0
+94,2040,601,Salt cavern,Marseille,0.0
+95,2040,601,Salt cavern,Alpin,0.0
+96,2040,4701,Battery,Nice,0.0
+97,2040,4701,Battery,Marseille,0.0
+98,2040,4701,Battery,Alpin,0.0
+99,2040,4701,Salt cavern,Nice,0.0
+100,2040,4701,Salt cavern,Marseille,0.0
+101,2040,4701,Salt cavern,Alpin,0.0
+102,2040,101,Battery,Nice,0.0
+103,2040,101,Battery,Marseille,0.0
+104,2040,101,Battery,Alpin,0.0
+105,2040,101,Salt cavern,Nice,0.0
+106,2040,101,Salt cavern,Marseille,0.0
+107,2040,101,Salt cavern,Alpin,0.0
+108,2040,4201,Battery,Nice,0.0
+109,2040,4201,Battery,Marseille,0.0
+110,2040,4201,Battery,Alpin,0.0
+111,2040,4201,Salt cavern,Nice,0.0
+112,2040,4201,Salt cavern,Marseille,0.0
+113,2040,4201,Salt cavern,Alpin,0.0
+114,2040,8301,Battery,Nice,0.0
+115,2040,8301,Battery,Marseille,0.0
+116,2040,8301,Battery,Alpin,0.0
+117,2040,8301,Salt cavern,Nice,0.0
+118,2040,8301,Salt cavern,Marseille,0.0
+119,2040,8301,Salt cavern,Alpin,0.0
+120,2040,3701,Battery,Nice,0.0
+121,2040,3701,Battery,Marseille,0.0
+122,2040,3701,Battery,Alpin,0.0
+123,2040,3701,Salt cavern,Nice,0.0
+124,2040,3701,Salt cavern,Marseille,0.0
+125,2040,3701,Salt cavern,Alpin,0.0
+126,2040,7801,Battery,Nice,0.0
+127,2040,7801,Battery,Marseille,0.0
+128,2040,7801,Battery,Alpin,0.0
+129,2040,7801,Salt cavern,Nice,0.0
+130,2040,7801,Salt cavern,Marseille,0.0
+131,2040,7801,Salt cavern,Alpin,0.0
+132,2040,3201,Battery,Nice,0.0
+133,2040,3201,Battery,Marseille,0.0
+134,2040,3201,Battery,Alpin,0.0
+135,2040,3201,Salt cavern,Nice,0.0
+136,2040,3201,Salt cavern,Marseille,0.0
+137,2040,3201,Salt cavern,Alpin,0.0
+138,2040,7301,Battery,Nice,0.0
+139,2040,7301,Battery,Marseille,0.0
+140,2040,7301,Battery,Alpin,0.0
+141,2040,7301,Salt cavern,Nice,0.0
+142,2040,7301,Salt cavern,Marseille,0.0
+143,2040,7301,Salt cavern,Alpin,0.0
+144,2040,2701,Battery,Nice,0.0
+145,2040,2701,Battery,Marseille,0.0
+146,2040,2701,Battery,Alpin,0.0
+147,2040,2701,Salt cavern,Nice,0.0
+148,2040,2701,Salt cavern,Marseille,0.0
+149,2040,2701,Salt cavern,Alpin,0.0
+150,2040,6801,Battery,Nice,0.0
+151,2040,6801,Battery,Marseille,0.0
+152,2040,6801,Battery,Alpin,0.0
+153,2040,6801,Salt cavern,Nice,0.0
+154,2040,6801,Salt cavern,Marseille,0.0
+155,2040,6801,Salt cavern,Alpin,0.0
+156,2040,2201,Battery,Nice,0.0
+157,2040,2201,Battery,Marseille,0.0
+158,2040,2201,Battery,Alpin,0.0
+159,2040,2201,Salt cavern,Nice,0.0
+160,2040,2201,Salt cavern,Marseille,0.0
+161,2040,2201,Salt cavern,Alpin,0.0
+162,2040,6301,Battery,Nice,0.0
+163,2040,6301,Battery,Marseille,0.0
+164,2040,6301,Battery,Alpin,0.0
+165,2040,6301,Salt cavern,Nice,0.0
+166,2040,6301,Salt cavern,Marseille,0.0
+167,2040,6301,Salt cavern,Alpin,0.0
+168,2040,1701,Battery,Nice,0.0
+169,2040,1701,Battery,Marseille,0.0
+170,2040,1701,Battery,Alpin,0.0
+171,2040,1701,Salt cavern,Nice,0.0
+172,2040,1701,Salt cavern,Marseille,0.0
+173,2040,1701,Salt cavern,Alpin,0.0
+174,2040,5801,Battery,Nice,0.0
+175,2040,5801,Battery,Marseille,0.0
+176,2040,5801,Battery,Alpin,0.0
+177,2040,5801,Salt cavern,Nice,0.0
+178,2040,5801,Salt cavern,Marseille,0.0
+179,2040,5801,Salt cavern,Alpin,0.0
+180,2040,1201,Battery,Nice,0.0
+181,2040,1201,Battery,Marseille,0.0
+182,2040,1201,Battery,Alpin,0.0
+183,2040,1201,Salt cavern,Nice,0.0
+184,2040,1201,Salt cavern,Marseille,0.0
+185,2040,1201,Salt cavern,Alpin,0.0
+186,2040,5301,Battery,Nice,0.0
+187,2040,5301,Battery,Marseille,0.0
+188,2040,5301,Battery,Alpin,0.0
+189,2040,5301,Salt cavern,Nice,0.0
+190,2040,5301,Salt cavern,Marseille,0.0
+191,2040,5301,Salt cavern,Alpin,0.0
+192,2040,701,Battery,Nice,0.0
+193,2040,701,Battery,Marseille,0.0
+194,2040,701,Battery,Alpin,0.0
+195,2040,701,Salt cavern,Nice,0.0
+196,2040,701,Salt cavern,Marseille,0.0
+197,2040,701,Salt cavern,Alpin,0.0
+198,2040,4801,Battery,Nice,0.0
+199,2040,4801,Battery,Marseille,0.0
+200,2040,4801,Battery,Alpin,0.0
+201,2040,4801,Salt cavern,Nice,0.0
+202,2040,4801,Salt cavern,Marseille,0.0
+203,2040,4801,Salt cavern,Alpin,0.0
+204,2040,201,Battery,Nice,0.0
+205,2040,201,Battery,Marseille,0.0
+206,2040,201,Battery,Alpin,0.0
+207,2040,201,Salt cavern,Nice,0.0
+208,2040,201,Salt cavern,Marseille,0.0
+209,2040,201,Salt cavern,Alpin,0.0
+210,2040,4301,Battery,Nice,0.0
+211,2040,4301,Battery,Marseille,0.0
+212,2040,4301,Battery,Alpin,0.0
+213,2040,4301,Salt cavern,Nice,0.0
+214,2040,4301,Salt cavern,Marseille,0.0
+215,2040,4301,Salt cavern,Alpin,0.0
+216,2040,8401,Battery,Nice,0.0
+217,2040,8401,Battery,Marseille,0.0
+218,2040,8401,Battery,Alpin,0.0
+219,2040,8401,Salt cavern,Nice,0.0
+220,2040,8401,Salt cavern,Marseille,0.0
+221,2040,8401,Salt cavern,Alpin,0.0
+222,2040,3801,Battery,Nice,0.0
+223,2040,3801,Battery,Marseille,0.0
+224,2040,3801,Battery,Alpin,0.0
+225,2040,3801,Salt cavern,Nice,0.0
+226,2040,3801,Salt cavern,Marseille,0.0
+227,2040,3801,Salt cavern,Alpin,0.0
+228,2040,7901,Battery,Nice,0.0
+229,2040,7901,Battery,Marseille,0.0
+230,2040,7901,Battery,Alpin,0.0
+231,2040,7901,Salt cavern,Nice,0.0
+232,2040,7901,Salt cavern,Marseille,0.0
+233,2040,7901,Salt cavern,Alpin,0.0
+234,2040,3301,Battery,Nice,0.0
+235,2040,3301,Battery,Marseille,0.0
+236,2040,3301,Battery,Alpin,0.0
+237,2040,3301,Salt cavern,Nice,0.0
+238,2040,3301,Salt cavern,Marseille,0.0
+239,2040,3301,Salt cavern,Alpin,0.0
+240,2040,7401,Battery,Nice,0.0
+241,2040,7401,Battery,Marseille,0.0
+242,2040,7401,Battery,Alpin,0.0
+243,2040,7401,Salt cavern,Nice,0.0
+244,2040,7401,Salt cavern,Marseille,0.0
+245,2040,7401,Salt cavern,Alpin,0.0
+246,2040,2801,Battery,Nice,0.0
+247,2040,2801,Battery,Marseille,0.0
+248,2040,2801,Battery,Alpin,0.0
+249,2040,2801,Salt cavern,Nice,0.0
+250,2040,2801,Salt cavern,Marseille,0.0
+251,2040,2801,Salt cavern,Alpin,0.0
+252,2040,6901,Battery,Nice,0.0
+253,2040,6901,Battery,Marseille,0.0
+254,2040,6901,Battery,Alpin,0.0
+255,2040,6901,Salt cavern,Nice,0.0
+256,2040,6901,Salt cavern,Marseille,0.0
+257,2040,6901,Salt cavern,Alpin,0.0
+258,2040,2301,Battery,Nice,0.0
+259,2040,2301,Battery,Marseille,0.0
+260,2040,2301,Battery,Alpin,0.0
+261,2040,2301,Salt cavern,Nice,0.0
+262,2040,2301,Salt cavern,Marseille,0.0
+263,2040,2301,Salt cavern,Alpin,0.0
+264,2040,6401,Battery,Nice,0.0
+265,2040,6401,Battery,Marseille,0.0
+266,2040,6401,Battery,Alpin,0.0
+267,2040,6401,Salt cavern,Nice,0.0
+268,2040,6401,Salt cavern,Marseille,0.0
+269,2040,6401,Salt cavern,Alpin,0.0
+270,2040,1801,Battery,Nice,0.0
+271,2040,1801,Battery,Marseille,0.0
+272,2040,1801,Battery,Alpin,0.0
+273,2040,1801,Salt cavern,Nice,0.0
+274,2040,1801,Salt cavern,Marseille,0.0
+275,2040,1801,Salt cavern,Alpin,0.0
+276,2040,5901,Battery,Nice,0.0
+277,2040,5901,Battery,Marseille,0.0
+278,2040,5901,Battery,Alpin,0.0
+279,2040,5901,Salt cavern,Nice,0.0
+280,2040,5901,Salt cavern,Marseille,0.0
+281,2040,5901,Salt cavern,Alpin,0.0
+282,2040,1301,Battery,Nice,0.0
+283,2040,1301,Battery,Marseille,0.0
+284,2040,1301,Battery,Alpin,0.0
+285,2040,1301,Salt cavern,Nice,0.0
+286,2040,1301,Salt cavern,Marseille,0.0
+287,2040,1301,Salt cavern,Alpin,0.0
+288,2040,5401,Battery,Nice,0.0
+289,2040,5401,Battery,Marseille,0.0
+290,2040,5401,Battery,Alpin,0.0
+291,2040,5401,Salt cavern,Nice,0.0
+292,2040,5401,Salt cavern,Marseille,0.0
+293,2040,5401,Salt cavern,Alpin,0.0
+294,2040,801,Battery,Nice,0.0
+295,2040,801,Battery,Marseille,0.0
+296,2040,801,Battery,Alpin,0.0
+297,2040,801,Salt cavern,Nice,0.0
+298,2040,801,Salt cavern,Marseille,0.0
+299,2040,801,Salt cavern,Alpin,0.0
+300,2040,4901,Battery,Nice,0.0
+301,2040,4901,Battery,Marseille,0.0
+302,2040,4901,Battery,Alpin,0.0
+303,2040,4901,Salt cavern,Nice,0.0
+304,2040,4901,Salt cavern,Marseille,0.0
+305,2040,4901,Salt cavern,Alpin,0.0
+306,2040,301,Battery,Nice,0.0
+307,2040,301,Battery,Marseille,0.0
+308,2040,301,Battery,Alpin,0.0
+309,2040,301,Salt cavern,Nice,0.0
+310,2040,301,Salt cavern,Marseille,0.0
+311,2040,301,Salt cavern,Alpin,0.0
+312,2040,4401,Battery,Nice,0.0
+313,2040,4401,Battery,Marseille,0.0
+314,2040,4401,Battery,Alpin,0.0
+315,2040,4401,Salt cavern,Nice,0.0
+316,2040,4401,Salt cavern,Marseille,0.0
+317,2040,4401,Salt cavern,Alpin,0.0
+318,2040,8501,Battery,Nice,0.0
+319,2040,8501,Battery,Marseille,0.0
+320,2040,8501,Battery,Alpin,0.0
+321,2040,8501,Salt cavern,Nice,0.0
+322,2040,8501,Salt cavern,Marseille,0.0
+323,2040,8501,Salt cavern,Alpin,0.0
+324,2040,3901,Battery,Nice,0.0
+325,2040,3901,Battery,Marseille,0.0
+326,2040,3901,Battery,Alpin,0.0
+327,2040,3901,Salt cavern,Nice,0.0
+328,2040,3901,Salt cavern,Marseille,0.0
+329,2040,3901,Salt cavern,Alpin,0.0
+330,2040,8001,Battery,Nice,0.0
+331,2040,8001,Battery,Marseille,0.0
+332,2040,8001,Battery,Alpin,0.0
+333,2040,8001,Salt cavern,Nice,0.0
+334,2040,8001,Salt cavern,Marseille,0.0
+335,2040,8001,Salt cavern,Alpin,0.0
+336,2040,3401,Battery,Nice,0.0
+337,2040,3401,Battery,Marseille,0.0
+338,2040,3401,Battery,Alpin,0.0
+339,2040,3401,Salt cavern,Nice,0.0
+340,2040,3401,Salt cavern,Marseille,0.0
+341,2040,3401,Salt cavern,Alpin,0.0
+342,2040,7501,Battery,Nice,0.0
+343,2040,7501,Battery,Marseille,0.0
+344,2040,7501,Battery,Alpin,0.0
+345,2040,7501,Salt cavern,Nice,0.0
+346,2040,7501,Salt cavern,Marseille,0.0
+347,2040,7501,Salt cavern,Alpin,0.0
+348,2040,2901,Battery,Nice,0.0
+349,2040,2901,Battery,Marseille,0.0
+350,2040,2901,Battery,Alpin,0.0
+351,2040,2901,Salt cavern,Nice,0.0
+352,2040,2901,Salt cavern,Marseille,0.0
+353,2040,2901,Salt cavern,Alpin,0.0
+354,2040,7001,Battery,Nice,0.0
+355,2040,7001,Battery,Marseille,0.0
+356,2040,7001,Battery,Alpin,0.0
+357,2040,7001,Salt cavern,Nice,0.0
+358,2040,7001,Salt cavern,Marseille,0.0
+359,2040,7001,Salt cavern,Alpin,0.0
+360,2040,2401,Battery,Nice,0.0
+361,2040,2401,Battery,Marseille,0.0
+362,2040,2401,Battery,Alpin,0.0
+363,2040,2401,Salt cavern,Nice,0.0
+364,2040,2401,Salt cavern,Marseille,0.0
+365,2040,2401,Salt cavern,Alpin,0.0
+366,2040,6501,Battery,Nice,0.0
+367,2040,6501,Battery,Marseille,0.0
+368,2040,6501,Battery,Alpin,0.0
+369,2040,6501,Salt cavern,Nice,0.0
+370,2040,6501,Salt cavern,Marseille,0.0
+371,2040,6501,Salt cavern,Alpin,0.0
+372,2040,1901,Battery,Nice,0.0
+373,2040,1901,Battery,Marseille,0.0
+374,2040,1901,Battery,Alpin,0.0
+375,2040,1901,Salt cavern,Nice,0.0
+376,2040,1901,Salt cavern,Marseille,0.0
+377,2040,1901,Salt cavern,Alpin,0.0
+378,2040,6001,Battery,Nice,0.0
+379,2040,6001,Battery,Marseille,0.0
+380,2040,6001,Battery,Alpin,0.0
+381,2040,6001,Salt cavern,Nice,0.0
+382,2040,6001,Salt cavern,Marseille,0.0
+383,2040,6001,Salt cavern,Alpin,0.0
+384,2040,1401,Battery,Nice,0.0
+385,2040,1401,Battery,Marseille,0.0
+386,2040,1401,Battery,Alpin,0.0
+387,2040,1401,Salt cavern,Nice,0.0
+388,2040,1401,Salt cavern,Marseille,0.0
+389,2040,1401,Salt cavern,Alpin,0.0
+390,2040,5501,Battery,Nice,0.0
+391,2040,5501,Battery,Marseille,0.0
+392,2040,5501,Battery,Alpin,0.0
+393,2040,5501,Salt cavern,Nice,0.0
+394,2040,5501,Salt cavern,Marseille,0.0
+395,2040,5501,Salt cavern,Alpin,0.0
+396,2040,901,Battery,Nice,0.0
+397,2040,901,Battery,Marseille,0.0
+398,2040,901,Battery,Alpin,0.0
+399,2040,901,Salt cavern,Nice,0.0
+400,2040,901,Salt cavern,Marseille,0.0
+401,2040,901,Salt cavern,Alpin,0.0
+402,2040,5001,Battery,Nice,0.0
+403,2040,5001,Battery,Marseille,0.0
+404,2040,5001,Battery,Alpin,0.0
+405,2040,5001,Salt cavern,Nice,0.0
+406,2040,5001,Salt cavern,Marseille,0.0
+407,2040,5001,Salt cavern,Alpin,0.0
+408,2040,401,Battery,Nice,0.0
+409,2040,401,Battery,Marseille,0.0
+410,2040,401,Battery,Alpin,0.0
+411,2040,401,Salt cavern,Nice,0.0
+412,2040,401,Salt cavern,Marseille,0.0
+413,2040,401,Salt cavern,Alpin,0.0
+414,2040,4501,Battery,Nice,0.0
+415,2040,4501,Battery,Marseille,0.0
+416,2040,4501,Battery,Alpin,0.0
+417,2040,4501,Salt cavern,Nice,0.0
+418,2040,4501,Salt cavern,Marseille,0.0
+419,2040,4501,Salt cavern,Alpin,0.0
+420,2040,8601,Battery,Nice,0.0
+421,2040,8601,Battery,Marseille,0.0
+422,2040,8601,Battery,Alpin,0.0
+423,2040,8601,Salt cavern,Nice,0.0
+424,2040,8601,Salt cavern,Marseille,0.0
+425,2040,8601,Salt cavern,Alpin,0.0
+426,2040,4001,Battery,Nice,0.0
+427,2040,4001,Battery,Marseille,0.0
+428,2040,4001,Battery,Alpin,0.0
+429,2040,4001,Salt cavern,Nice,0.0
+430,2040,4001,Salt cavern,Marseille,0.0
+431,2040,4001,Salt cavern,Alpin,0.0
+432,2040,8101,Battery,Nice,0.0
+433,2040,8101,Battery,Marseille,0.0
+434,2040,8101,Battery,Alpin,0.0
+435,2040,8101,Salt cavern,Nice,0.0
+436,2040,8101,Salt cavern,Marseille,0.0
+437,2040,8101,Salt cavern,Alpin,0.0
+438,2040,3501,Battery,Nice,0.0
+439,2040,3501,Battery,Marseille,0.0
+440,2040,3501,Battery,Alpin,0.0
+441,2040,3501,Salt cavern,Nice,0.0
+442,2040,3501,Salt cavern,Marseille,0.0
+443,2040,3501,Salt cavern,Alpin,0.0
+444,2040,7601,Battery,Nice,0.0
+445,2040,7601,Battery,Marseille,0.0
+446,2040,7601,Battery,Alpin,0.0
+447,2040,7601,Salt cavern,Nice,0.0
+448,2040,7601,Salt cavern,Marseille,0.0
+449,2040,7601,Salt cavern,Alpin,0.0
+450,2040,3001,Battery,Nice,0.0
+451,2040,3001,Battery,Marseille,0.0
+452,2040,3001,Battery,Alpin,0.0
+453,2040,3001,Salt cavern,Nice,0.0
+454,2040,3001,Salt cavern,Marseille,0.0
+455,2040,3001,Salt cavern,Alpin,0.0
+456,2040,7101,Battery,Nice,0.0
+457,2040,7101,Battery,Marseille,0.0
+458,2040,7101,Battery,Alpin,0.0
+459,2040,7101,Salt cavern,Nice,0.0
+460,2040,7101,Salt cavern,Marseille,0.0
+461,2040,7101,Salt cavern,Alpin,0.0
+462,2040,2501,Battery,Nice,0.0
+463,2040,2501,Battery,Marseille,0.0
+464,2040,2501,Battery,Alpin,0.0
+465,2040,2501,Salt cavern,Nice,0.0
+466,2040,2501,Salt cavern,Marseille,0.0
+467,2040,2501,Salt cavern,Alpin,0.0
+468,2040,6601,Battery,Nice,0.0
+469,2040,6601,Battery,Marseille,0.0
+470,2040,6601,Battery,Alpin,0.0
+471,2040,6601,Salt cavern,Nice,0.0
+472,2040,6601,Salt cavern,Marseille,0.0
+473,2040,6601,Salt cavern,Alpin,0.0
+474,2040,2001,Battery,Nice,0.0
+475,2040,2001,Battery,Marseille,0.0
+476,2040,2001,Battery,Alpin,0.0
+477,2040,2001,Salt cavern,Nice,0.0
+478,2040,2001,Salt cavern,Marseille,0.0
+479,2040,2001,Salt cavern,Alpin,0.0
+480,2040,6101,Battery,Nice,0.0
+481,2040,6101,Battery,Marseille,0.0
+482,2040,6101,Battery,Alpin,0.0
+483,2040,6101,Salt cavern,Nice,0.0
+484,2040,6101,Salt cavern,Marseille,0.0
+485,2040,6101,Salt cavern,Alpin,0.0
+486,2040,1501,Battery,Nice,0.0
+487,2040,1501,Battery,Marseille,0.0
+488,2040,1501,Battery,Alpin,0.0
+489,2040,1501,Salt cavern,Nice,0.0
+490,2040,1501,Salt cavern,Marseille,0.0
+491,2040,1501,Salt cavern,Alpin,0.0
+492,2040,5601,Battery,Nice,0.0
+493,2040,5601,Battery,Marseille,0.0
+494,2040,5601,Battery,Alpin,0.0
+495,2040,5601,Salt cavern,Nice,0.0
+496,2040,5601,Salt cavern,Marseille,0.0
+497,2040,5601,Salt cavern,Alpin,0.0
+498,2040,1001,Battery,Nice,0.0
+499,2040,1001,Battery,Marseille,0.0
+500,2040,1001,Battery,Alpin,0.0
+501,2040,1001,Salt cavern,Nice,0.0
+502,2040,1001,Salt cavern,Marseille,0.0
+503,2040,1001,Salt cavern,Alpin,0.0
+504,2040,5101,Battery,Nice,0.0
+505,2040,5101,Battery,Marseille,0.0
+506,2040,5101,Battery,Alpin,0.0
+507,2040,5101,Salt cavern,Nice,0.0
+508,2040,5101,Salt cavern,Marseille,0.0
+509,2040,5101,Salt cavern,Alpin,0.0
+510,2040,501,Battery,Nice,0.0
+511,2040,501,Battery,Marseille,0.0
+512,2040,501,Battery,Alpin,0.0
+513,2040,501,Salt cavern,Nice,0.0
+514,2040,501,Salt cavern,Marseille,0.0
+515,2040,501,Salt cavern,Alpin,0.0
+516,2040,4601,Battery,Nice,0.0
+517,2040,4601,Battery,Marseille,0.0
+518,2040,4601,Battery,Alpin,0.0
+519,2040,4601,Salt cavern,Nice,0.0
+520,2040,4601,Salt cavern,Marseille,0.0
+521,2040,4601,Salt cavern,Alpin,0.0
+522,2040,8701,Battery,Nice,0.0
+523,2040,8701,Battery,Marseille,0.0
+524,2040,8701,Battery,Alpin,0.0
+525,2040,8701,Salt cavern,Nice,0.0
+526,2040,8701,Salt cavern,Marseille,0.0
+527,2040,8701,Salt cavern,Alpin,0.0
+528,2050,1,Battery,Nice,0.0
+529,2050,1,Battery,Marseille,0.0
+530,2050,1,Battery,Alpin,0.0
+531,2050,1,Salt cavern,Nice,0.0
+532,2050,1,Salt cavern,Marseille,0.0
+533,2050,1,Salt cavern,Alpin,0.0
+534,2050,4101,Battery,Nice,0.0
+535,2050,4101,Battery,Marseille,0.0
+536,2050,4101,Battery,Alpin,0.0
+537,2050,4101,Salt cavern,Nice,0.0
+538,2050,4101,Salt cavern,Marseille,0.0
+539,2050,4101,Salt cavern,Alpin,0.0
+540,2050,8201,Battery,Nice,0.0
+541,2050,8201,Battery,Marseille,0.0
+542,2050,8201,Battery,Alpin,0.0
+543,2050,8201,Salt cavern,Nice,0.0
+544,2050,8201,Salt cavern,Marseille,0.0
+545,2050,8201,Salt cavern,Alpin,0.0
+546,2050,3601,Battery,Nice,0.0
+547,2050,3601,Battery,Marseille,0.0
+548,2050,3601,Battery,Alpin,0.0
+549,2050,3601,Salt cavern,Nice,0.0
+550,2050,3601,Salt cavern,Marseille,0.0
+551,2050,3601,Salt cavern,Alpin,0.0
+552,2050,7701,Battery,Nice,0.0
+553,2050,7701,Battery,Marseille,0.0
+554,2050,7701,Battery,Alpin,0.0
+555,2050,7701,Salt cavern,Nice,0.0
+556,2050,7701,Salt cavern,Marseille,0.0
+557,2050,7701,Salt cavern,Alpin,0.0
+558,2050,3101,Battery,Nice,0.0
+559,2050,3101,Battery,Marseille,0.0
+560,2050,3101,Battery,Alpin,0.0
+561,2050,3101,Salt cavern,Nice,0.0
+562,2050,3101,Salt cavern,Marseille,0.0
+563,2050,3101,Salt cavern,Alpin,0.0
+564,2050,7201,Battery,Nice,0.0
+565,2050,7201,Battery,Marseille,0.0
+566,2050,7201,Battery,Alpin,0.0
+567,2050,7201,Salt cavern,Nice,0.0
+568,2050,7201,Salt cavern,Marseille,0.0
+569,2050,7201,Salt cavern,Alpin,0.0
+570,2050,2601,Battery,Nice,0.0
+571,2050,2601,Battery,Marseille,0.0
+572,2050,2601,Battery,Alpin,0.0
+573,2050,2601,Salt cavern,Nice,0.0
+574,2050,2601,Salt cavern,Marseille,0.0
+575,2050,2601,Salt cavern,Alpin,0.0
+576,2050,6701,Battery,Nice,0.0
+577,2050,6701,Battery,Marseille,0.0
+578,2050,6701,Battery,Alpin,0.0
+579,2050,6701,Salt cavern,Nice,0.0
+580,2050,6701,Salt cavern,Marseille,0.0
+581,2050,6701,Salt cavern,Alpin,0.0
+582,2050,2101,Battery,Nice,0.0
+583,2050,2101,Battery,Marseille,0.0
+584,2050,2101,Battery,Alpin,0.0
+585,2050,2101,Salt cavern,Nice,0.0
+586,2050,2101,Salt cavern,Marseille,0.0
+587,2050,2101,Salt cavern,Alpin,0.0
+588,2050,6201,Battery,Nice,0.0
+589,2050,6201,Battery,Marseille,0.0
+590,2050,6201,Battery,Alpin,0.0
+591,2050,6201,Salt cavern,Nice,0.0
+592,2050,6201,Salt cavern,Marseille,0.0
+593,2050,6201,Salt cavern,Alpin,0.0
+594,2050,1601,Battery,Nice,0.0
+595,2050,1601,Battery,Marseille,0.0
+596,2050,1601,Battery,Alpin,0.0
+597,2050,1601,Salt cavern,Nice,0.0
+598,2050,1601,Salt cavern,Marseille,0.0
+599,2050,1601,Salt cavern,Alpin,0.0
+600,2050,5701,Battery,Nice,0.0
+601,2050,5701,Battery,Marseille,0.0
+602,2050,5701,Battery,Alpin,0.0
+603,2050,5701,Salt cavern,Nice,0.0
+604,2050,5701,Salt cavern,Marseille,0.0
+605,2050,5701,Salt cavern,Alpin,0.0
+606,2050,1101,Battery,Nice,0.0
+607,2050,1101,Battery,Marseille,0.0
+608,2050,1101,Battery,Alpin,0.0
+609,2050,1101,Salt cavern,Nice,0.0
+610,2050,1101,Salt cavern,Marseille,0.0
+611,2050,1101,Salt cavern,Alpin,0.0
+612,2050,5201,Battery,Nice,0.0
+613,2050,5201,Battery,Marseille,0.0
+614,2050,5201,Battery,Alpin,0.0
+615,2050,5201,Salt cavern,Nice,0.0
+616,2050,5201,Salt cavern,Marseille,0.0
+617,2050,5201,Salt cavern,Alpin,0.0
+618,2050,601,Battery,Nice,0.0
+619,2050,601,Battery,Marseille,0.0
+620,2050,601,Battery,Alpin,0.0
+621,2050,601,Salt cavern,Nice,0.0
+622,2050,601,Salt cavern,Marseille,0.0
+623,2050,601,Salt cavern,Alpin,0.0
+624,2050,4701,Battery,Nice,0.0
+625,2050,4701,Battery,Marseille,0.0
+626,2050,4701,Battery,Alpin,0.0
+627,2050,4701,Salt cavern,Nice,0.0
+628,2050,4701,Salt cavern,Marseille,0.0
+629,2050,4701,Salt cavern,Alpin,0.0
+630,2050,101,Battery,Nice,0.0
+631,2050,101,Battery,Marseille,0.0
+632,2050,101,Battery,Alpin,0.0
+633,2050,101,Salt cavern,Nice,0.0
+634,2050,101,Salt cavern,Marseille,0.0
+635,2050,101,Salt cavern,Alpin,0.0
+636,2050,4201,Battery,Nice,0.0
+637,2050,4201,Battery,Marseille,0.0
+638,2050,4201,Battery,Alpin,0.0
+639,2050,4201,Salt cavern,Nice,0.0
+640,2050,4201,Salt cavern,Marseille,0.0
+641,2050,4201,Salt cavern,Alpin,0.0
+642,2050,8301,Battery,Nice,0.0
+643,2050,8301,Battery,Marseille,0.0
+644,2050,8301,Battery,Alpin,0.0
+645,2050,8301,Salt cavern,Nice,0.0
+646,2050,8301,Salt cavern,Marseille,0.0
+647,2050,8301,Salt cavern,Alpin,0.0
+648,2050,3701,Battery,Nice,0.0
+649,2050,3701,Battery,Marseille,0.0
+650,2050,3701,Battery,Alpin,0.0
+651,2050,3701,Salt cavern,Nice,0.0
+652,2050,3701,Salt cavern,Marseille,0.0
+653,2050,3701,Salt cavern,Alpin,0.0
+654,2050,7801,Battery,Nice,0.0
+655,2050,7801,Battery,Marseille,0.0
+656,2050,7801,Battery,Alpin,0.0
+657,2050,7801,Salt cavern,Nice,0.0
+658,2050,7801,Salt cavern,Marseille,0.0
+659,2050,7801,Salt cavern,Alpin,0.0
+660,2050,3201,Battery,Nice,0.0
+661,2050,3201,Battery,Marseille,0.0
+662,2050,3201,Battery,Alpin,0.0
+663,2050,3201,Salt cavern,Nice,0.0
+664,2050,3201,Salt cavern,Marseille,0.0
+665,2050,3201,Salt cavern,Alpin,0.0
+666,2050,7301,Battery,Nice,0.0
+667,2050,7301,Battery,Marseille,0.0
+668,2050,7301,Battery,Alpin,0.0
+669,2050,7301,Salt cavern,Nice,0.0
+670,2050,7301,Salt cavern,Marseille,0.0
+671,2050,7301,Salt cavern,Alpin,0.0
+672,2050,2701,Battery,Nice,0.0
+673,2050,2701,Battery,Marseille,0.0
+674,2050,2701,Battery,Alpin,0.0
+675,2050,2701,Salt cavern,Nice,0.0
+676,2050,2701,Salt cavern,Marseille,0.0
+677,2050,2701,Salt cavern,Alpin,0.0
+678,2050,6801,Battery,Nice,0.0
+679,2050,6801,Battery,Marseille,0.0
+680,2050,6801,Battery,Alpin,0.0
+681,2050,6801,Salt cavern,Nice,0.0
+682,2050,6801,Salt cavern,Marseille,0.0
+683,2050,6801,Salt cavern,Alpin,0.0
+684,2050,2201,Battery,Nice,0.0
+685,2050,2201,Battery,Marseille,0.0
+686,2050,2201,Battery,Alpin,0.0
+687,2050,2201,Salt cavern,Nice,0.0
+688,2050,2201,Salt cavern,Marseille,0.0
+689,2050,2201,Salt cavern,Alpin,0.0
+690,2050,6301,Battery,Nice,0.0
+691,2050,6301,Battery,Marseille,0.0
+692,2050,6301,Battery,Alpin,0.0
+693,2050,6301,Salt cavern,Nice,0.0
+694,2050,6301,Salt cavern,Marseille,0.0
+695,2050,6301,Salt cavern,Alpin,0.0
+696,2050,1701,Battery,Nice,0.0
+697,2050,1701,Battery,Marseille,0.0
+698,2050,1701,Battery,Alpin,0.0
+699,2050,1701,Salt cavern,Nice,0.0
+700,2050,1701,Salt cavern,Marseille,0.0
+701,2050,1701,Salt cavern,Alpin,0.0
+702,2050,5801,Battery,Nice,0.0
+703,2050,5801,Battery,Marseille,0.0
+704,2050,5801,Battery,Alpin,0.0
+705,2050,5801,Salt cavern,Nice,0.0
+706,2050,5801,Salt cavern,Marseille,0.0
+707,2050,5801,Salt cavern,Alpin,0.0
+708,2050,1201,Battery,Nice,0.0
+709,2050,1201,Battery,Marseille,0.0
+710,2050,1201,Battery,Alpin,0.0
+711,2050,1201,Salt cavern,Nice,0.0
+712,2050,1201,Salt cavern,Marseille,0.0
+713,2050,1201,Salt cavern,Alpin,0.0
+714,2050,5301,Battery,Nice,0.0
+715,2050,5301,Battery,Marseille,0.0
+716,2050,5301,Battery,Alpin,0.0
+717,2050,5301,Salt cavern,Nice,0.0
+718,2050,5301,Salt cavern,Marseille,0.0
+719,2050,5301,Salt cavern,Alpin,0.0
+720,2050,701,Battery,Nice,0.0
+721,2050,701,Battery,Marseille,0.0
+722,2050,701,Battery,Alpin,0.0
+723,2050,701,Salt cavern,Nice,0.0
+724,2050,701,Salt cavern,Marseille,0.0
+725,2050,701,Salt cavern,Alpin,0.0
+726,2050,4801,Battery,Nice,0.0
+727,2050,4801,Battery,Marseille,0.0
+728,2050,4801,Battery,Alpin,0.0
+729,2050,4801,Salt cavern,Nice,0.0
+730,2050,4801,Salt cavern,Marseille,0.0
+731,2050,4801,Salt cavern,Alpin,0.0
+732,2050,201,Battery,Nice,0.0
+733,2050,201,Battery,Marseille,0.0
+734,2050,201,Battery,Alpin,0.0
+735,2050,201,Salt cavern,Nice,0.0
+736,2050,201,Salt cavern,Marseille,0.0
+737,2050,201,Salt cavern,Alpin,0.0
+738,2050,4301,Battery,Nice,0.0
+739,2050,4301,Battery,Marseille,0.0
+740,2050,4301,Battery,Alpin,0.0
+741,2050,4301,Salt cavern,Nice,0.0
+742,2050,4301,Salt cavern,Marseille,0.0
+743,2050,4301,Salt cavern,Alpin,0.0
+744,2050,8401,Battery,Nice,0.0
+745,2050,8401,Battery,Marseille,0.0
+746,2050,8401,Battery,Alpin,0.0
+747,2050,8401,Salt cavern,Nice,0.0
+748,2050,8401,Salt cavern,Marseille,0.0
+749,2050,8401,Salt cavern,Alpin,0.0
+750,2050,3801,Battery,Nice,0.0
+751,2050,3801,Battery,Marseille,0.0
+752,2050,3801,Battery,Alpin,0.0
+753,2050,3801,Salt cavern,Nice,0.0
+754,2050,3801,Salt cavern,Marseille,0.0
+755,2050,3801,Salt cavern,Alpin,0.0
+756,2050,7901,Battery,Nice,0.0
+757,2050,7901,Battery,Marseille,0.0
+758,2050,7901,Battery,Alpin,0.0
+759,2050,7901,Salt cavern,Nice,0.0
+760,2050,7901,Salt cavern,Marseille,0.0
+761,2050,7901,Salt cavern,Alpin,0.0
+762,2050,3301,Battery,Nice,0.0
+763,2050,3301,Battery,Marseille,0.0
+764,2050,3301,Battery,Alpin,0.0
+765,2050,3301,Salt cavern,Nice,0.0
+766,2050,3301,Salt cavern,Marseille,0.0
+767,2050,3301,Salt cavern,Alpin,0.0
+768,2050,7401,Battery,Nice,0.0
+769,2050,7401,Battery,Marseille,0.0
+770,2050,7401,Battery,Alpin,0.0
+771,2050,7401,Salt cavern,Nice,0.0
+772,2050,7401,Salt cavern,Marseille,0.0
+773,2050,7401,Salt cavern,Alpin,0.0
+774,2050,2801,Battery,Nice,0.0
+775,2050,2801,Battery,Marseille,0.0
+776,2050,2801,Battery,Alpin,0.0
+777,2050,2801,Salt cavern,Nice,0.0
+778,2050,2801,Salt cavern,Marseille,0.0
+779,2050,2801,Salt cavern,Alpin,0.0
+780,2050,6901,Battery,Nice,0.0
+781,2050,6901,Battery,Marseille,0.0
+782,2050,6901,Battery,Alpin,0.0
+783,2050,6901,Salt cavern,Nice,0.0
+784,2050,6901,Salt cavern,Marseille,0.0
+785,2050,6901,Salt cavern,Alpin,0.0
+786,2050,2301,Battery,Nice,0.0
+787,2050,2301,Battery,Marseille,0.0
+788,2050,2301,Battery,Alpin,0.0
+789,2050,2301,Salt cavern,Nice,0.0
+790,2050,2301,Salt cavern,Marseille,0.0
+791,2050,2301,Salt cavern,Alpin,0.0
+792,2050,6401,Battery,Nice,0.0
+793,2050,6401,Battery,Marseille,0.0
+794,2050,6401,Battery,Alpin,0.0
+795,2050,6401,Salt cavern,Nice,0.0
+796,2050,6401,Salt cavern,Marseille,0.0
+797,2050,6401,Salt cavern,Alpin,0.0
+798,2050,1801,Battery,Nice,0.0
+799,2050,1801,Battery,Marseille,0.0
+800,2050,1801,Battery,Alpin,0.0
+801,2050,1801,Salt cavern,Nice,0.0
+802,2050,1801,Salt cavern,Marseille,0.0
+803,2050,1801,Salt cavern,Alpin,0.0
+804,2050,5901,Battery,Nice,0.0
+805,2050,5901,Battery,Marseille,0.0
+806,2050,5901,Battery,Alpin,0.0
+807,2050,5901,Salt cavern,Nice,0.0
+808,2050,5901,Salt cavern,Marseille,0.0
+809,2050,5901,Salt cavern,Alpin,0.0
+810,2050,1301,Battery,Nice,0.0
+811,2050,1301,Battery,Marseille,0.0
+812,2050,1301,Battery,Alpin,0.0
+813,2050,1301,Salt cavern,Nice,0.0
+814,2050,1301,Salt cavern,Marseille,0.0
+815,2050,1301,Salt cavern,Alpin,0.0
+816,2050,5401,Battery,Nice,0.0
+817,2050,5401,Battery,Marseille,0.0
+818,2050,5401,Battery,Alpin,0.0
+819,2050,5401,Salt cavern,Nice,0.0
+820,2050,5401,Salt cavern,Marseille,0.0
+821,2050,5401,Salt cavern,Alpin,0.0
+822,2050,801,Battery,Nice,0.0
+823,2050,801,Battery,Marseille,0.0
+824,2050,801,Battery,Alpin,0.0
+825,2050,801,Salt cavern,Nice,0.0
+826,2050,801,Salt cavern,Marseille,0.0
+827,2050,801,Salt cavern,Alpin,0.0
+828,2050,4901,Battery,Nice,0.0
+829,2050,4901,Battery,Marseille,0.0
+830,2050,4901,Battery,Alpin,0.0
+831,2050,4901,Salt cavern,Nice,0.0
+832,2050,4901,Salt cavern,Marseille,0.0
+833,2050,4901,Salt cavern,Alpin,0.0
+834,2050,301,Battery,Nice,0.0
+835,2050,301,Battery,Marseille,0.0
+836,2050,301,Battery,Alpin,0.0
+837,2050,301,Salt cavern,Nice,0.0
+838,2050,301,Salt cavern,Marseille,0.0
+839,2050,301,Salt cavern,Alpin,0.0
+840,2050,4401,Battery,Nice,0.0
+841,2050,4401,Battery,Marseille,0.0
+842,2050,4401,Battery,Alpin,0.0
+843,2050,4401,Salt cavern,Nice,0.0
+844,2050,4401,Salt cavern,Marseille,0.0
+845,2050,4401,Salt cavern,Alpin,0.0
+846,2050,8501,Battery,Nice,0.0
+847,2050,8501,Battery,Marseille,0.0
+848,2050,8501,Battery,Alpin,0.0
+849,2050,8501,Salt cavern,Nice,0.0
+850,2050,8501,Salt cavern,Marseille,0.0
+851,2050,8501,Salt cavern,Alpin,0.0
+852,2050,3901,Battery,Nice,0.0
+853,2050,3901,Battery,Marseille,0.0
+854,2050,3901,Battery,Alpin,0.0
+855,2050,3901,Salt cavern,Nice,0.0
+856,2050,3901,Salt cavern,Marseille,0.0
+857,2050,3901,Salt cavern,Alpin,0.0
+858,2050,8001,Battery,Nice,0.0
+859,2050,8001,Battery,Marseille,0.0
+860,2050,8001,Battery,Alpin,0.0
+861,2050,8001,Salt cavern,Nice,0.0
+862,2050,8001,Salt cavern,Marseille,0.0
+863,2050,8001,Salt cavern,Alpin,0.0
+864,2050,3401,Battery,Nice,0.0
+865,2050,3401,Battery,Marseille,0.0
+866,2050,3401,Battery,Alpin,0.0
+867,2050,3401,Salt cavern,Nice,0.0
+868,2050,3401,Salt cavern,Marseille,0.0
+869,2050,3401,Salt cavern,Alpin,0.0
+870,2050,7501,Battery,Nice,0.0
+871,2050,7501,Battery,Marseille,0.0
+872,2050,7501,Battery,Alpin,0.0
+873,2050,7501,Salt cavern,Nice,0.0
+874,2050,7501,Salt cavern,Marseille,0.0
+875,2050,7501,Salt cavern,Alpin,0.0
+876,2050,2901,Battery,Nice,0.0
+877,2050,2901,Battery,Marseille,0.0
+878,2050,2901,Battery,Alpin,0.0
+879,2050,2901,Salt cavern,Nice,0.0
+880,2050,2901,Salt cavern,Marseille,0.0
+881,2050,2901,Salt cavern,Alpin,0.0
+882,2050,7001,Battery,Nice,0.0
+883,2050,7001,Battery,Marseille,0.0
+884,2050,7001,Battery,Alpin,0.0
+885,2050,7001,Salt cavern,Nice,0.0
+886,2050,7001,Salt cavern,Marseille,0.0
+887,2050,7001,Salt cavern,Alpin,0.0
+888,2050,2401,Battery,Nice,0.0
+889,2050,2401,Battery,Marseille,0.0
+890,2050,2401,Battery,Alpin,0.0
+891,2050,2401,Salt cavern,Nice,0.0
+892,2050,2401,Salt cavern,Marseille,0.0
+893,2050,2401,Salt cavern,Alpin,0.0
+894,2050,6501,Battery,Nice,0.0
+895,2050,6501,Battery,Marseille,0.0
+896,2050,6501,Battery,Alpin,0.0
+897,2050,6501,Salt cavern,Nice,0.0
+898,2050,6501,Salt cavern,Marseille,0.0
+899,2050,6501,Salt cavern,Alpin,0.0
+900,2050,1901,Battery,Nice,0.0
+901,2050,1901,Battery,Marseille,0.0
+902,2050,1901,Battery,Alpin,0.0
+903,2050,1901,Salt cavern,Nice,0.0
+904,2050,1901,Salt cavern,Marseille,0.0
+905,2050,1901,Salt cavern,Alpin,0.0
+906,2050,6001,Battery,Nice,0.0
+907,2050,6001,Battery,Marseille,0.0
+908,2050,6001,Battery,Alpin,0.0
+909,2050,6001,Salt cavern,Nice,0.0
+910,2050,6001,Salt cavern,Marseille,0.0
+911,2050,6001,Salt cavern,Alpin,0.0
+912,2050,1401,Battery,Nice,0.0
+913,2050,1401,Battery,Marseille,0.0
+914,2050,1401,Battery,Alpin,0.0
+915,2050,1401,Salt cavern,Nice,0.0
+916,2050,1401,Salt cavern,Marseille,0.0
+917,2050,1401,Salt cavern,Alpin,0.0
+918,2050,5501,Battery,Nice,0.0
+919,2050,5501,Battery,Marseille,0.0
+920,2050,5501,Battery,Alpin,0.0
+921,2050,5501,Salt cavern,Nice,0.0
+922,2050,5501,Salt cavern,Marseille,0.0
+923,2050,5501,Salt cavern,Alpin,0.0
+924,2050,901,Battery,Nice,0.0
+925,2050,901,Battery,Marseille,0.0
+926,2050,901,Battery,Alpin,0.0
+927,2050,901,Salt cavern,Nice,0.0
+928,2050,901,Salt cavern,Marseille,0.0
+929,2050,901,Salt cavern,Alpin,0.0
+930,2050,5001,Battery,Nice,0.0
+931,2050,5001,Battery,Marseille,0.0
+932,2050,5001,Battery,Alpin,0.0
+933,2050,5001,Salt cavern,Nice,0.0
+934,2050,5001,Salt cavern,Marseille,0.0
+935,2050,5001,Salt cavern,Alpin,0.0
+936,2050,401,Battery,Nice,0.0
+937,2050,401,Battery,Marseille,0.0
+938,2050,401,Battery,Alpin,0.0
+939,2050,401,Salt cavern,Nice,0.0
+940,2050,401,Salt cavern,Marseille,0.0
+941,2050,401,Salt cavern,Alpin,0.0
+942,2050,4501,Battery,Nice,0.0
+943,2050,4501,Battery,Marseille,-6.462348535570529e-27
+944,2050,4501,Battery,Alpin,1.0440574080600091e-27
+945,2050,4501,Salt cavern,Nice,0.0
+946,2050,4501,Salt cavern,Marseille,0.0
+947,2050,4501,Salt cavern,Alpin,0.0
+948,2050,8601,Battery,Nice,0.0
+949,2050,8601,Battery,Marseille,0.0
+950,2050,8601,Battery,Alpin,0.0
+951,2050,8601,Salt cavern,Nice,0.0
+952,2050,8601,Salt cavern,Marseille,0.0
+953,2050,8601,Salt cavern,Alpin,0.0
+954,2050,4001,Battery,Nice,0.0
+955,2050,4001,Battery,Marseille,0.0
+956,2050,4001,Battery,Alpin,0.0
+957,2050,4001,Salt cavern,Nice,0.0
+958,2050,4001,Salt cavern,Marseille,0.0
+959,2050,4001,Salt cavern,Alpin,0.0
+960,2050,8101,Battery,Nice,0.0
+961,2050,8101,Battery,Marseille,0.0
+962,2050,8101,Battery,Alpin,0.0
+963,2050,8101,Salt cavern,Nice,0.0
+964,2050,8101,Salt cavern,Marseille,0.0
+965,2050,8101,Salt cavern,Alpin,0.0
+966,2050,3501,Battery,Nice,0.0
+967,2050,3501,Battery,Marseille,0.0
+968,2050,3501,Battery,Alpin,0.0
+969,2050,3501,Salt cavern,Nice,0.0
+970,2050,3501,Salt cavern,Marseille,0.0
+971,2050,3501,Salt cavern,Alpin,0.0
+972,2050,7601,Battery,Nice,0.0
+973,2050,7601,Battery,Marseille,0.0
+974,2050,7601,Battery,Alpin,0.0
+975,2050,7601,Salt cavern,Nice,0.0
+976,2050,7601,Salt cavern,Marseille,0.0
+977,2050,7601,Salt cavern,Alpin,0.0
+978,2050,3001,Battery,Nice,0.0
+979,2050,3001,Battery,Marseille,0.0
+980,2050,3001,Battery,Alpin,0.0
+981,2050,3001,Salt cavern,Nice,0.0
+982,2050,3001,Salt cavern,Marseille,0.0
+983,2050,3001,Salt cavern,Alpin,0.0
+984,2050,7101,Battery,Nice,0.0
+985,2050,7101,Battery,Marseille,0.0
+986,2050,7101,Battery,Alpin,0.0
+987,2050,7101,Salt cavern,Nice,0.0
+988,2050,7101,Salt cavern,Marseille,0.0
+989,2050,7101,Salt cavern,Alpin,0.0
+990,2050,2501,Battery,Nice,0.0
+991,2050,2501,Battery,Marseille,0.0
+992,2050,2501,Battery,Alpin,0.0
+993,2050,2501,Salt cavern,Nice,0.0
+994,2050,2501,Salt cavern,Marseille,0.0
+995,2050,2501,Salt cavern,Alpin,0.0
+996,2050,6601,Battery,Nice,0.0
+997,2050,6601,Battery,Marseille,0.0
+998,2050,6601,Battery,Alpin,0.0
+999,2050,6601,Salt cavern,Nice,0.0
+1000,2050,6601,Salt cavern,Marseille,0.0
+1001,2050,6601,Salt cavern,Alpin,0.0
+1002,2050,2001,Battery,Nice,0.0
+1003,2050,2001,Battery,Marseille,0.0
+1004,2050,2001,Battery,Alpin,0.0
+1005,2050,2001,Salt cavern,Nice,0.0
+1006,2050,2001,Salt cavern,Marseille,0.0
+1007,2050,2001,Salt cavern,Alpin,0.0
+1008,2050,6101,Battery,Nice,0.0
+1009,2050,6101,Battery,Marseille,0.0
+1010,2050,6101,Battery,Alpin,0.0
+1011,2050,6101,Salt cavern,Nice,0.0
+1012,2050,6101,Salt cavern,Marseille,0.0
+1013,2050,6101,Salt cavern,Alpin,0.0
+1014,2050,1501,Battery,Nice,0.0
+1015,2050,1501,Battery,Marseille,0.0
+1016,2050,1501,Battery,Alpin,0.0
+1017,2050,1501,Salt cavern,Nice,0.0
+1018,2050,1501,Salt cavern,Marseille,0.0
+1019,2050,1501,Salt cavern,Alpin,0.0
+1020,2050,5601,Battery,Nice,0.0
+1021,2050,5601,Battery,Marseille,0.0
+1022,2050,5601,Battery,Alpin,0.0
+1023,2050,5601,Salt cavern,Nice,0.0
+1024,2050,5601,Salt cavern,Marseille,0.0
+1025,2050,5601,Salt cavern,Alpin,0.0
+1026,2050,1001,Battery,Nice,0.0
+1027,2050,1001,Battery,Marseille,0.0
+1028,2050,1001,Battery,Alpin,0.0
+1029,2050,1001,Salt cavern,Nice,0.0
+1030,2050,1001,Salt cavern,Marseille,0.0
+1031,2050,1001,Salt cavern,Alpin,0.0
+1032,2050,5101,Battery,Nice,0.0
+1033,2050,5101,Battery,Marseille,0.0
+1034,2050,5101,Battery,Alpin,0.0
+1035,2050,5101,Salt cavern,Nice,0.0
+1036,2050,5101,Salt cavern,Marseille,0.0
+1037,2050,5101,Salt cavern,Alpin,0.0
+1038,2050,501,Battery,Nice,0.0
+1039,2050,501,Battery,Marseille,0.0
+1040,2050,501,Battery,Alpin,0.0
+1041,2050,501,Salt cavern,Nice,0.0
+1042,2050,501,Salt cavern,Marseille,0.0
+1043,2050,501,Salt cavern,Alpin,0.0
+1044,2050,4601,Battery,Nice,0.0
+1045,2050,4601,Battery,Marseille,0.0
+1046,2050,4601,Battery,Alpin,0.0
+1047,2050,4601,Salt cavern,Nice,0.0
+1048,2050,4601,Salt cavern,Marseille,0.0
+1049,2050,4601,Salt cavern,Alpin,0.0
+1050,2050,8701,Battery,Nice,0.0
+1051,2050,8701,Battery,Marseille,0.0
+1052,2050,8701,Battery,Alpin,0.0
+1053,2050,8701,Salt cavern,Nice,0.0
+1054,2050,8701,Salt cavern,Marseille,0.0
+1055,2050,8701,Salt cavern,Alpin,0.0
+1056,2030,1,Battery,Nice,0.0
+1057,2030,1,Battery,Marseille,0.0
+1058,2030,1,Battery,Alpin,0.0
+1059,2030,1,Salt cavern,Nice,0.0
+1060,2030,1,Salt cavern,Marseille,0.0
+1061,2030,1,Salt cavern,Alpin,0.0
+1062,2030,4101,Battery,Nice,0.0
+1063,2030,4101,Battery,Marseille,0.0
+1064,2030,4101,Battery,Alpin,0.0
+1065,2030,4101,Salt cavern,Nice,0.0
+1066,2030,4101,Salt cavern,Marseille,0.0
+1067,2030,4101,Salt cavern,Alpin,0.0
+1068,2030,8201,Battery,Nice,0.0
+1069,2030,8201,Battery,Marseille,0.0
+1070,2030,8201,Battery,Alpin,0.0
+1071,2030,8201,Salt cavern,Nice,0.0
+1072,2030,8201,Salt cavern,Marseille,0.0
+1073,2030,8201,Salt cavern,Alpin,0.0
+1074,2030,3601,Battery,Nice,0.0
+1075,2030,3601,Battery,Marseille,0.0
+1076,2030,3601,Battery,Alpin,0.0
+1077,2030,3601,Salt cavern,Nice,0.0
+1078,2030,3601,Salt cavern,Marseille,0.0
+1079,2030,3601,Salt cavern,Alpin,0.0
+1080,2030,7701,Battery,Nice,0.0
+1081,2030,7701,Battery,Marseille,0.0
+1082,2030,7701,Battery,Alpin,0.0
+1083,2030,7701,Salt cavern,Nice,0.0
+1084,2030,7701,Salt cavern,Marseille,0.0
+1085,2030,7701,Salt cavern,Alpin,0.0
+1086,2030,3101,Battery,Nice,0.0
+1087,2030,3101,Battery,Marseille,0.0
+1088,2030,3101,Battery,Alpin,0.0
+1089,2030,3101,Salt cavern,Nice,0.0
+1090,2030,3101,Salt cavern,Marseille,0.0
+1091,2030,3101,Salt cavern,Alpin,0.0
+1092,2030,7201,Battery,Nice,0.0
+1093,2030,7201,Battery,Marseille,0.0
+1094,2030,7201,Battery,Alpin,0.0
+1095,2030,7201,Salt cavern,Nice,0.0
+1096,2030,7201,Salt cavern,Marseille,0.0
+1097,2030,7201,Salt cavern,Alpin,0.0
+1098,2030,2601,Battery,Nice,0.0
+1099,2030,2601,Battery,Marseille,0.0
+1100,2030,2601,Battery,Alpin,0.0
+1101,2030,2601,Salt cavern,Nice,0.0
+1102,2030,2601,Salt cavern,Marseille,0.0
+1103,2030,2601,Salt cavern,Alpin,0.0
+1104,2030,6701,Battery,Nice,0.0
+1105,2030,6701,Battery,Marseille,0.0
+1106,2030,6701,Battery,Alpin,0.0
+1107,2030,6701,Salt cavern,Nice,0.0
+1108,2030,6701,Salt cavern,Marseille,0.0
+1109,2030,6701,Salt cavern,Alpin,0.0
+1110,2030,2101,Battery,Nice,0.0
+1111,2030,2101,Battery,Marseille,0.0
+1112,2030,2101,Battery,Alpin,0.0
+1113,2030,2101,Salt cavern,Nice,0.0
+1114,2030,2101,Salt cavern,Marseille,0.0
+1115,2030,2101,Salt cavern,Alpin,0.0
+1116,2030,6201,Battery,Nice,0.0
+1117,2030,6201,Battery,Marseille,0.0
+1118,2030,6201,Battery,Alpin,0.0
+1119,2030,6201,Salt cavern,Nice,0.0
+1120,2030,6201,Salt cavern,Marseille,0.0
+1121,2030,6201,Salt cavern,Alpin,0.0
+1122,2030,1601,Battery,Nice,0.0
+1123,2030,1601,Battery,Marseille,0.0
+1124,2030,1601,Battery,Alpin,0.0
+1125,2030,1601,Salt cavern,Nice,0.0
+1126,2030,1601,Salt cavern,Marseille,0.0
+1127,2030,1601,Salt cavern,Alpin,0.0
+1128,2030,5701,Battery,Nice,0.0
+1129,2030,5701,Battery,Marseille,0.0
+1130,2030,5701,Battery,Alpin,0.0
+1131,2030,5701,Salt cavern,Nice,0.0
+1132,2030,5701,Salt cavern,Marseille,0.0
+1133,2030,5701,Salt cavern,Alpin,0.0
+1134,2030,1101,Battery,Nice,0.0
+1135,2030,1101,Battery,Marseille,0.0
+1136,2030,1101,Battery,Alpin,0.0
+1137,2030,1101,Salt cavern,Nice,0.0
+1138,2030,1101,Salt cavern,Marseille,0.0
+1139,2030,1101,Salt cavern,Alpin,0.0
+1140,2030,5201,Battery,Nice,0.0
+1141,2030,5201,Battery,Marseille,0.0
+1142,2030,5201,Battery,Alpin,0.0
+1143,2030,5201,Salt cavern,Nice,0.0
+1144,2030,5201,Salt cavern,Marseille,0.0
+1145,2030,5201,Salt cavern,Alpin,0.0
+1146,2030,601,Battery,Nice,0.0
+1147,2030,601,Battery,Marseille,0.0
+1148,2030,601,Battery,Alpin,0.0
+1149,2030,601,Salt cavern,Nice,0.0
+1150,2030,601,Salt cavern,Marseille,0.0
+1151,2030,601,Salt cavern,Alpin,0.0
+1152,2030,4701,Battery,Nice,0.0
+1153,2030,4701,Battery,Marseille,0.0
+1154,2030,4701,Battery,Alpin,0.0
+1155,2030,4701,Salt cavern,Nice,0.0
+1156,2030,4701,Salt cavern,Marseille,0.0
+1157,2030,4701,Salt cavern,Alpin,0.0
+1158,2030,101,Battery,Nice,0.0
+1159,2030,101,Battery,Marseille,0.0
+1160,2030,101,Battery,Alpin,0.0
+1161,2030,101,Salt cavern,Nice,0.0
+1162,2030,101,Salt cavern,Marseille,0.0
+1163,2030,101,Salt cavern,Alpin,0.0
+1164,2030,4201,Battery,Nice,0.0
+1165,2030,4201,Battery,Marseille,0.0
+1166,2030,4201,Battery,Alpin,0.0
+1167,2030,4201,Salt cavern,Nice,0.0
+1168,2030,4201,Salt cavern,Marseille,0.0
+1169,2030,4201,Salt cavern,Alpin,0.0
+1170,2030,8301,Battery,Nice,0.0
+1171,2030,8301,Battery,Marseille,0.0
+1172,2030,8301,Battery,Alpin,0.0
+1173,2030,8301,Salt cavern,Nice,0.0
+1174,2030,8301,Salt cavern,Marseille,0.0
+1175,2030,8301,Salt cavern,Alpin,0.0
+1176,2030,3701,Battery,Nice,0.0
+1177,2030,3701,Battery,Marseille,0.0
+1178,2030,3701,Battery,Alpin,0.0
+1179,2030,3701,Salt cavern,Nice,0.0
+1180,2030,3701,Salt cavern,Marseille,0.0
+1181,2030,3701,Salt cavern,Alpin,0.0
+1182,2030,7801,Battery,Nice,0.0
+1183,2030,7801,Battery,Marseille,0.0
+1184,2030,7801,Battery,Alpin,0.0
+1185,2030,7801,Salt cavern,Nice,0.0
+1186,2030,7801,Salt cavern,Marseille,0.0
+1187,2030,7801,Salt cavern,Alpin,0.0
+1188,2030,3201,Battery,Nice,0.0
+1189,2030,3201,Battery,Marseille,0.0
+1190,2030,3201,Battery,Alpin,0.0
+1191,2030,3201,Salt cavern,Nice,0.0
+1192,2030,3201,Salt cavern,Marseille,0.0
+1193,2030,3201,Salt cavern,Alpin,0.0
+1194,2030,7301,Battery,Nice,0.0
+1195,2030,7301,Battery,Marseille,0.0
+1196,2030,7301,Battery,Alpin,0.0
+1197,2030,7301,Salt cavern,Nice,0.0
+1198,2030,7301,Salt cavern,Marseille,0.0
+1199,2030,7301,Salt cavern,Alpin,0.0
+1200,2030,2701,Battery,Nice,0.0
+1201,2030,2701,Battery,Marseille,0.0
+1202,2030,2701,Battery,Alpin,0.0
+1203,2030,2701,Salt cavern,Nice,0.0
+1204,2030,2701,Salt cavern,Marseille,0.0
+1205,2030,2701,Salt cavern,Alpin,0.0
+1206,2030,6801,Battery,Nice,0.0
+1207,2030,6801,Battery,Marseille,0.0
+1208,2030,6801,Battery,Alpin,0.0
+1209,2030,6801,Salt cavern,Nice,0.0
+1210,2030,6801,Salt cavern,Marseille,0.0
+1211,2030,6801,Salt cavern,Alpin,0.0
+1212,2030,2201,Battery,Nice,0.0
+1213,2030,2201,Battery,Marseille,0.0
+1214,2030,2201,Battery,Alpin,0.0
+1215,2030,2201,Salt cavern,Nice,0.0
+1216,2030,2201,Salt cavern,Marseille,0.0
+1217,2030,2201,Salt cavern,Alpin,0.0
+1218,2030,6301,Battery,Nice,0.0
+1219,2030,6301,Battery,Marseille,0.0
+1220,2030,6301,Battery,Alpin,0.0
+1221,2030,6301,Salt cavern,Nice,0.0
+1222,2030,6301,Salt cavern,Marseille,0.0
+1223,2030,6301,Salt cavern,Alpin,0.0
+1224,2030,1701,Battery,Nice,0.0
+1225,2030,1701,Battery,Marseille,0.0
+1226,2030,1701,Battery,Alpin,0.0
+1227,2030,1701,Salt cavern,Nice,0.0
+1228,2030,1701,Salt cavern,Marseille,0.0
+1229,2030,1701,Salt cavern,Alpin,0.0
+1230,2030,5801,Battery,Nice,0.0
+1231,2030,5801,Battery,Marseille,0.0
+1232,2030,5801,Battery,Alpin,0.0
+1233,2030,5801,Salt cavern,Nice,0.0
+1234,2030,5801,Salt cavern,Marseille,0.0
+1235,2030,5801,Salt cavern,Alpin,0.0
+1236,2030,1201,Battery,Nice,0.0
+1237,2030,1201,Battery,Marseille,0.0
+1238,2030,1201,Battery,Alpin,0.0
+1239,2030,1201,Salt cavern,Nice,0.0
+1240,2030,1201,Salt cavern,Marseille,0.0
+1241,2030,1201,Salt cavern,Alpin,0.0
+1242,2030,5301,Battery,Nice,0.0
+1243,2030,5301,Battery,Marseille,0.0
+1244,2030,5301,Battery,Alpin,0.0
+1245,2030,5301,Salt cavern,Nice,0.0
+1246,2030,5301,Salt cavern,Marseille,0.0
+1247,2030,5301,Salt cavern,Alpin,0.0
+1248,2030,701,Battery,Nice,0.0
+1249,2030,701,Battery,Marseille,0.0
+1250,2030,701,Battery,Alpin,0.0
+1251,2030,701,Salt cavern,Nice,0.0
+1252,2030,701,Salt cavern,Marseille,0.0
+1253,2030,701,Salt cavern,Alpin,0.0
+1254,2030,4801,Battery,Nice,0.0
+1255,2030,4801,Battery,Marseille,0.0
+1256,2030,4801,Battery,Alpin,0.0
+1257,2030,4801,Salt cavern,Nice,0.0
+1258,2030,4801,Salt cavern,Marseille,0.0
+1259,2030,4801,Salt cavern,Alpin,0.0
+1260,2030,201,Battery,Nice,0.0
+1261,2030,201,Battery,Marseille,0.0
+1262,2030,201,Battery,Alpin,0.0
+1263,2030,201,Salt cavern,Nice,0.0
+1264,2030,201,Salt cavern,Marseille,0.0
+1265,2030,201,Salt cavern,Alpin,0.0
+1266,2030,4301,Battery,Nice,0.0
+1267,2030,4301,Battery,Marseille,0.0
+1268,2030,4301,Battery,Alpin,0.0
+1269,2030,4301,Salt cavern,Nice,0.0
+1270,2030,4301,Salt cavern,Marseille,0.0
+1271,2030,4301,Salt cavern,Alpin,0.0
+1272,2030,8401,Battery,Nice,0.0
+1273,2030,8401,Battery,Marseille,0.0
+1274,2030,8401,Battery,Alpin,0.0
+1275,2030,8401,Salt cavern,Nice,0.0
+1276,2030,8401,Salt cavern,Marseille,0.0
+1277,2030,8401,Salt cavern,Alpin,0.0
+1278,2030,3801,Battery,Nice,0.0
+1279,2030,3801,Battery,Marseille,0.0
+1280,2030,3801,Battery,Alpin,0.0
+1281,2030,3801,Salt cavern,Nice,0.0
+1282,2030,3801,Salt cavern,Marseille,0.0
+1283,2030,3801,Salt cavern,Alpin,0.0
+1284,2030,7901,Battery,Nice,0.0
+1285,2030,7901,Battery,Marseille,0.0
+1286,2030,7901,Battery,Alpin,0.0
+1287,2030,7901,Salt cavern,Nice,0.0
+1288,2030,7901,Salt cavern,Marseille,0.0
+1289,2030,7901,Salt cavern,Alpin,0.0
+1290,2030,3301,Battery,Nice,0.0
+1291,2030,3301,Battery,Marseille,0.0
+1292,2030,3301,Battery,Alpin,0.0
+1293,2030,3301,Salt cavern,Nice,0.0
+1294,2030,3301,Salt cavern,Marseille,0.0
+1295,2030,3301,Salt cavern,Alpin,0.0
+1296,2030,7401,Battery,Nice,0.0
+1297,2030,7401,Battery,Marseille,0.0
+1298,2030,7401,Battery,Alpin,0.0
+1299,2030,7401,Salt cavern,Nice,0.0
+1300,2030,7401,Salt cavern,Marseille,0.0
+1301,2030,7401,Salt cavern,Alpin,0.0
+1302,2030,2801,Battery,Nice,0.0
+1303,2030,2801,Battery,Marseille,0.0
+1304,2030,2801,Battery,Alpin,0.0
+1305,2030,2801,Salt cavern,Nice,0.0
+1306,2030,2801,Salt cavern,Marseille,0.0
+1307,2030,2801,Salt cavern,Alpin,0.0
+1308,2030,6901,Battery,Nice,0.0
+1309,2030,6901,Battery,Marseille,0.0
+1310,2030,6901,Battery,Alpin,0.0
+1311,2030,6901,Salt cavern,Nice,0.0
+1312,2030,6901,Salt cavern,Marseille,0.0
+1313,2030,6901,Salt cavern,Alpin,0.0
+1314,2030,2301,Battery,Nice,0.0
+1315,2030,2301,Battery,Marseille,0.0
+1316,2030,2301,Battery,Alpin,0.0
+1317,2030,2301,Salt cavern,Nice,0.0
+1318,2030,2301,Salt cavern,Marseille,0.0
+1319,2030,2301,Salt cavern,Alpin,0.0
+1320,2030,6401,Battery,Nice,0.0
+1321,2030,6401,Battery,Marseille,0.0
+1322,2030,6401,Battery,Alpin,0.0
+1323,2030,6401,Salt cavern,Nice,0.0
+1324,2030,6401,Salt cavern,Marseille,0.0
+1325,2030,6401,Salt cavern,Alpin,0.0
+1326,2030,1801,Battery,Nice,0.0
+1327,2030,1801,Battery,Marseille,0.0
+1328,2030,1801,Battery,Alpin,0.0
+1329,2030,1801,Salt cavern,Nice,0.0
+1330,2030,1801,Salt cavern,Marseille,0.0
+1331,2030,1801,Salt cavern,Alpin,0.0
+1332,2030,5901,Battery,Nice,0.0
+1333,2030,5901,Battery,Marseille,0.0
+1334,2030,5901,Battery,Alpin,0.0
+1335,2030,5901,Salt cavern,Nice,0.0
+1336,2030,5901,Salt cavern,Marseille,0.0
+1337,2030,5901,Salt cavern,Alpin,0.0
+1338,2030,1301,Battery,Nice,0.0
+1339,2030,1301,Battery,Marseille,0.0
+1340,2030,1301,Battery,Alpin,0.0
+1341,2030,1301,Salt cavern,Nice,0.0
+1342,2030,1301,Salt cavern,Marseille,0.0
+1343,2030,1301,Salt cavern,Alpin,0.0
+1344,2030,5401,Battery,Nice,0.0
+1345,2030,5401,Battery,Marseille,0.0
+1346,2030,5401,Battery,Alpin,0.0
+1347,2030,5401,Salt cavern,Nice,0.0
+1348,2030,5401,Salt cavern,Marseille,0.0
+1349,2030,5401,Salt cavern,Alpin,0.0
+1350,2030,801,Battery,Nice,0.0
+1351,2030,801,Battery,Marseille,0.0
+1352,2030,801,Battery,Alpin,0.0
+1353,2030,801,Salt cavern,Nice,0.0
+1354,2030,801,Salt cavern,Marseille,0.0
+1355,2030,801,Salt cavern,Alpin,0.0
+1356,2030,4901,Battery,Nice,0.0
+1357,2030,4901,Battery,Marseille,0.0
+1358,2030,4901,Battery,Alpin,0.0
+1359,2030,4901,Salt cavern,Nice,0.0
+1360,2030,4901,Salt cavern,Marseille,0.0
+1361,2030,4901,Salt cavern,Alpin,0.0
+1362,2030,301,Battery,Nice,0.0
+1363,2030,301,Battery,Marseille,0.0
+1364,2030,301,Battery,Alpin,0.0
+1365,2030,301,Salt cavern,Nice,0.0
+1366,2030,301,Salt cavern,Marseille,0.0
+1367,2030,301,Salt cavern,Alpin,0.0
+1368,2030,4401,Battery,Nice,0.0
+1369,2030,4401,Battery,Marseille,0.0
+1370,2030,4401,Battery,Alpin,0.0
+1371,2030,4401,Salt cavern,Nice,0.0
+1372,2030,4401,Salt cavern,Marseille,0.0
+1373,2030,4401,Salt cavern,Alpin,0.0
+1374,2030,8501,Battery,Nice,0.0
+1375,2030,8501,Battery,Marseille,0.0
+1376,2030,8501,Battery,Alpin,0.0
+1377,2030,8501,Salt cavern,Nice,0.0
+1378,2030,8501,Salt cavern,Marseille,0.0
+1379,2030,8501,Salt cavern,Alpin,0.0
+1380,2030,3901,Battery,Nice,0.0
+1381,2030,3901,Battery,Marseille,0.0
+1382,2030,3901,Battery,Alpin,0.0
+1383,2030,3901,Salt cavern,Nice,0.0
+1384,2030,3901,Salt cavern,Marseille,0.0
+1385,2030,3901,Salt cavern,Alpin,0.0
+1386,2030,8001,Battery,Nice,0.0
+1387,2030,8001,Battery,Marseille,0.0
+1388,2030,8001,Battery,Alpin,0.0
+1389,2030,8001,Salt cavern,Nice,0.0
+1390,2030,8001,Salt cavern,Marseille,0.0
+1391,2030,8001,Salt cavern,Alpin,0.0
+1392,2030,3401,Battery,Nice,0.0
+1393,2030,3401,Battery,Marseille,0.0
+1394,2030,3401,Battery,Alpin,0.0
+1395,2030,3401,Salt cavern,Nice,0.0
+1396,2030,3401,Salt cavern,Marseille,0.0
+1397,2030,3401,Salt cavern,Alpin,0.0
+1398,2030,7501,Battery,Nice,0.0
+1399,2030,7501,Battery,Marseille,0.0
+1400,2030,7501,Battery,Alpin,0.0
+1401,2030,7501,Salt cavern,Nice,0.0
+1402,2030,7501,Salt cavern,Marseille,0.0
+1403,2030,7501,Salt cavern,Alpin,0.0
+1404,2030,2901,Battery,Nice,0.0
+1405,2030,2901,Battery,Marseille,0.0
+1406,2030,2901,Battery,Alpin,0.0
+1407,2030,2901,Salt cavern,Nice,0.0
+1408,2030,2901,Salt cavern,Marseille,0.0
+1409,2030,2901,Salt cavern,Alpin,0.0
+1410,2030,7001,Battery,Nice,0.0
+1411,2030,7001,Battery,Marseille,0.0
+1412,2030,7001,Battery,Alpin,0.0
+1413,2030,7001,Salt cavern,Nice,0.0
+1414,2030,7001,Salt cavern,Marseille,0.0
+1415,2030,7001,Salt cavern,Alpin,0.0
+1416,2030,2401,Battery,Nice,0.0
+1417,2030,2401,Battery,Marseille,0.0
+1418,2030,2401,Battery,Alpin,0.0
+1419,2030,2401,Salt cavern,Nice,0.0
+1420,2030,2401,Salt cavern,Marseille,0.0
+1421,2030,2401,Salt cavern,Alpin,0.0
+1422,2030,6501,Battery,Nice,0.0
+1423,2030,6501,Battery,Marseille,0.0
+1424,2030,6501,Battery,Alpin,0.0
+1425,2030,6501,Salt cavern,Nice,0.0
+1426,2030,6501,Salt cavern,Marseille,0.0
+1427,2030,6501,Salt cavern,Alpin,0.0
+1428,2030,1901,Battery,Nice,0.0
+1429,2030,1901,Battery,Marseille,0.0
+1430,2030,1901,Battery,Alpin,0.0
+1431,2030,1901,Salt cavern,Nice,0.0
+1432,2030,1901,Salt cavern,Marseille,0.0
+1433,2030,1901,Salt cavern,Alpin,0.0
+1434,2030,6001,Battery,Nice,0.0
+1435,2030,6001,Battery,Marseille,0.0
+1436,2030,6001,Battery,Alpin,0.0
+1437,2030,6001,Salt cavern,Nice,0.0
+1438,2030,6001,Salt cavern,Marseille,0.0
+1439,2030,6001,Salt cavern,Alpin,0.0
+1440,2030,1401,Battery,Nice,0.0
+1441,2030,1401,Battery,Marseille,0.0
+1442,2030,1401,Battery,Alpin,0.0
+1443,2030,1401,Salt cavern,Nice,0.0
+1444,2030,1401,Salt cavern,Marseille,0.0
+1445,2030,1401,Salt cavern,Alpin,0.0
+1446,2030,5501,Battery,Nice,0.0
+1447,2030,5501,Battery,Marseille,0.0
+1448,2030,5501,Battery,Alpin,0.0
+1449,2030,5501,Salt cavern,Nice,0.0
+1450,2030,5501,Salt cavern,Marseille,0.0
+1451,2030,5501,Salt cavern,Alpin,0.0
+1452,2030,901,Battery,Nice,0.0
+1453,2030,901,Battery,Marseille,0.0
+1454,2030,901,Battery,Alpin,0.0
+1455,2030,901,Salt cavern,Nice,0.0
+1456,2030,901,Salt cavern,Marseille,0.0
+1457,2030,901,Salt cavern,Alpin,0.0
+1458,2030,5001,Battery,Nice,0.0
+1459,2030,5001,Battery,Marseille,0.0
+1460,2030,5001,Battery,Alpin,0.0
+1461,2030,5001,Salt cavern,Nice,0.0
+1462,2030,5001,Salt cavern,Marseille,0.0
+1463,2030,5001,Salt cavern,Alpin,0.0
+1464,2030,401,Battery,Nice,0.0
+1465,2030,401,Battery,Marseille,0.0
+1466,2030,401,Battery,Alpin,0.0
+1467,2030,401,Salt cavern,Nice,0.0
+1468,2030,401,Salt cavern,Marseille,0.0
+1469,2030,401,Salt cavern,Alpin,0.0
+1470,2030,4501,Battery,Nice,0.0
+1471,2030,4501,Battery,Marseille,0.0
+1472,2030,4501,Battery,Alpin,0.0
+1473,2030,4501,Salt cavern,Nice,0.0
+1474,2030,4501,Salt cavern,Marseille,0.0
+1475,2030,4501,Salt cavern,Alpin,0.0
+1476,2030,8601,Battery,Nice,0.0
+1477,2030,8601,Battery,Marseille,0.0
+1478,2030,8601,Battery,Alpin,0.0
+1479,2030,8601,Salt cavern,Nice,0.0
+1480,2030,8601,Salt cavern,Marseille,0.0
+1481,2030,8601,Salt cavern,Alpin,0.0
+1482,2030,4001,Battery,Nice,0.0
+1483,2030,4001,Battery,Marseille,0.0
+1484,2030,4001,Battery,Alpin,0.0
+1485,2030,4001,Salt cavern,Nice,0.0
+1486,2030,4001,Salt cavern,Marseille,0.0
+1487,2030,4001,Salt cavern,Alpin,0.0
+1488,2030,8101,Battery,Nice,0.0
+1489,2030,8101,Battery,Marseille,0.0
+1490,2030,8101,Battery,Alpin,0.0
+1491,2030,8101,Salt cavern,Nice,0.0
+1492,2030,8101,Salt cavern,Marseille,0.0
+1493,2030,8101,Salt cavern,Alpin,0.0
+1494,2030,3501,Battery,Nice,0.0
+1495,2030,3501,Battery,Marseille,0.0
+1496,2030,3501,Battery,Alpin,0.0
+1497,2030,3501,Salt cavern,Nice,0.0
+1498,2030,3501,Salt cavern,Marseille,0.0
+1499,2030,3501,Salt cavern,Alpin,0.0
+1500,2030,7601,Battery,Nice,0.0
+1501,2030,7601,Battery,Marseille,0.0
+1502,2030,7601,Battery,Alpin,0.0
+1503,2030,7601,Salt cavern,Nice,0.0
+1504,2030,7601,Salt cavern,Marseille,0.0
+1505,2030,7601,Salt cavern,Alpin,0.0
+1506,2030,3001,Battery,Nice,0.0
+1507,2030,3001,Battery,Marseille,0.0
+1508,2030,3001,Battery,Alpin,0.0
+1509,2030,3001,Salt cavern,Nice,0.0
+1510,2030,3001,Salt cavern,Marseille,0.0
+1511,2030,3001,Salt cavern,Alpin,0.0
+1512,2030,7101,Battery,Nice,0.0
+1513,2030,7101,Battery,Marseille,0.0
+1514,2030,7101,Battery,Alpin,0.0
+1515,2030,7101,Salt cavern,Nice,0.0
+1516,2030,7101,Salt cavern,Marseille,0.0
+1517,2030,7101,Salt cavern,Alpin,0.0
+1518,2030,2501,Battery,Nice,0.0
+1519,2030,2501,Battery,Marseille,0.0
+1520,2030,2501,Battery,Alpin,0.0
+1521,2030,2501,Salt cavern,Nice,0.0
+1522,2030,2501,Salt cavern,Marseille,0.0
+1523,2030,2501,Salt cavern,Alpin,0.0
+1524,2030,6601,Battery,Nice,0.0
+1525,2030,6601,Battery,Marseille,0.0
+1526,2030,6601,Battery,Alpin,0.0
+1527,2030,6601,Salt cavern,Nice,0.0
+1528,2030,6601,Salt cavern,Marseille,0.0
+1529,2030,6601,Salt cavern,Alpin,0.0
+1530,2030,2001,Battery,Nice,0.0
+1531,2030,2001,Battery,Marseille,0.0
+1532,2030,2001,Battery,Alpin,0.0
+1533,2030,2001,Salt cavern,Nice,0.0
+1534,2030,2001,Salt cavern,Marseille,0.0
+1535,2030,2001,Salt cavern,Alpin,0.0
+1536,2030,6101,Battery,Nice,0.0
+1537,2030,6101,Battery,Marseille,0.0
+1538,2030,6101,Battery,Alpin,0.0
+1539,2030,6101,Salt cavern,Nice,0.0
+1540,2030,6101,Salt cavern,Marseille,0.0
+1541,2030,6101,Salt cavern,Alpin,0.0
+1542,2030,1501,Battery,Nice,0.0
+1543,2030,1501,Battery,Marseille,0.0
+1544,2030,1501,Battery,Alpin,0.0
+1545,2030,1501,Salt cavern,Nice,0.0
+1546,2030,1501,Salt cavern,Marseille,0.0
+1547,2030,1501,Salt cavern,Alpin,0.0
+1548,2030,5601,Battery,Nice,0.0
+1549,2030,5601,Battery,Marseille,0.0
+1550,2030,5601,Battery,Alpin,0.0
+1551,2030,5601,Salt cavern,Nice,0.0
+1552,2030,5601,Salt cavern,Marseille,0.0
+1553,2030,5601,Salt cavern,Alpin,0.0
+1554,2030,1001,Battery,Nice,0.0
+1555,2030,1001,Battery,Marseille,0.0
+1556,2030,1001,Battery,Alpin,0.0
+1557,2030,1001,Salt cavern,Nice,0.0
+1558,2030,1001,Salt cavern,Marseille,0.0
+1559,2030,1001,Salt cavern,Alpin,0.0
+1560,2030,5101,Battery,Nice,0.0
+1561,2030,5101,Battery,Marseille,0.0
+1562,2030,5101,Battery,Alpin,0.0
+1563,2030,5101,Salt cavern,Nice,0.0
+1564,2030,5101,Salt cavern,Marseille,0.0
+1565,2030,5101,Salt cavern,Alpin,0.0
+1566,2030,501,Battery,Nice,0.0
+1567,2030,501,Battery,Marseille,0.0
+1568,2030,501,Battery,Alpin,0.0
+1569,2030,501,Salt cavern,Nice,0.0
+1570,2030,501,Salt cavern,Marseille,0.0
+1571,2030,501,Salt cavern,Alpin,0.0
+1572,2030,4601,Battery,Nice,0.0
+1573,2030,4601,Battery,Marseille,0.0
+1574,2030,4601,Battery,Alpin,0.0
+1575,2030,4601,Salt cavern,Nice,0.0
+1576,2030,4601,Salt cavern,Marseille,0.0
+1577,2030,4601,Salt cavern,Alpin,0.0
+1578,2030,8701,Battery,Nice,0.0
+1579,2030,8701,Battery,Marseille,0.0
+1580,2030,8701,Battery,Alpin,0.0
+1581,2030,8701,Salt cavern,Nice,0.0
+1582,2030,8701,Salt cavern,Marseille,0.0
+1583,2030,8701,Salt cavern,Alpin,0.0

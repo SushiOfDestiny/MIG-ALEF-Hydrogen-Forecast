@@ -1,0 +1,46 @@
+,YEAR_op,RESOURCES,AREA,turpeCosts_Pvar
+0,2040,biogas,Nice,0.0
+1,2040,biogas,Marseille,0.0
+2,2040,biogas,Alpin,0.0
+3,2040,gas,Nice,0.0
+4,2040,gas,Marseille,0.0
+5,2040,gas,Alpin,0.0
+6,2040,electricity,Nice,0.0
+7,2040,electricity,Marseille,42945562.7980096
+8,2040,electricity,Alpin,13190247.699200759
+9,2040,hydrogen,Nice,0.0
+10,2040,hydrogen,Marseille,0.0
+11,2040,hydrogen,Alpin,0.0
+12,2040,natural gas,Nice,0.0
+13,2040,natural gas,Marseille,0.0
+14,2040,natural gas,Alpin,0.0
+15,2050,biogas,Nice,0.0
+16,2050,biogas,Marseille,0.0
+17,2050,biogas,Alpin,0.0
+18,2050,gas,Nice,0.0
+19,2050,gas,Marseille,0.0
+20,2050,gas,Alpin,0.0
+21,2050,electricity,Nice,-3.082090727410029e-26
+22,2050,electricity,Marseille,38869943.5336805
+23,2050,electricity,Alpin,13792953.386527408
+24,2050,hydrogen,Nice,0.0
+25,2050,hydrogen,Marseille,0.0
+26,2050,hydrogen,Alpin,0.0
+27,2050,natural gas,Nice,0.0
+28,2050,natural gas,Marseille,0.0
+29,2050,natural gas,Alpin,0.0
+30,2030,biogas,Nice,0.0
+31,2030,biogas,Marseille,0.0
+32,2030,biogas,Alpin,0.0
+33,2030,gas,Nice,0.0
+34,2030,gas,Marseille,0.0
+35,2030,gas,Alpin,0.0
+36,2030,electricity,Nice,0.0
+37,2030,electricity,Marseille,49582406.87419922
+38,2030,electricity,Alpin,7611139.14076909
+39,2030,hydrogen,Nice,0.0
+40,2030,hydrogen,Marseille,0.0
+41,2030,hydrogen,Alpin,0.0
+42,2030,natural gas,Nice,0.0
+43,2030,natural gas,Marseille,0.0
+44,2030,natural gas,Alpin,0.0

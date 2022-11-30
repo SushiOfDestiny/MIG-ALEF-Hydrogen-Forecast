@@ -50,7 +50,9 @@ scenario['distances'] = pd.concat(
     )
 )
 scenario['distances'] = scenario['distances'].reset_index().drop_duplicates(subset=['area1','area2']).set_index(['area1','area2']).drop(columns ='index')
-print(scenario['distances'])
+
+# donne la liste des couples de noeuds
+couples_noeuds = list(scenario['distances'].index)
 
 def demande_h_area(scenar, area, k):
     # un facteur pour différencier Nice de Fos
@@ -71,7 +73,6 @@ def demande_h_area(scenar, area, k):
     elif area == "Alpin" : 
         return (0.1 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
     else :
-        print( demande_t_an[k])
         return (0.7 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
 
 
@@ -229,10 +230,10 @@ for area in areaList:
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
-                    'minCapacity': 1 if year == yearZero else 0,'maxCapacity': 1 if year == yearZero  else 0, 
+                    'minCapacity': 1 if (year == yearZero and area == 'Marseille') else 0,'maxCapacity': 1 if (year == yearZero and area == 'Marseille')  else 0, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 320 if year == yearZero else 0, 'techUnitPower': 320
+                    'capacityLim': 320 if (year == yearZero and area == 'Marseille') else 0, 'techUnitPower': 320
                     }, 
                 }
              )
@@ -392,7 +393,7 @@ for k, year in enumerate(yearList):
     ttech = 'Pipeline_L'
     p_max = 50000.
     p_max_fonc = 10000
-    capex, opex, LifeSpan = 294,3.4e-5,40
+    capex, opex, LifeSpan = 253,3.4e-5,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
@@ -414,15 +415,15 @@ for k, year in enumerate(yearList):
     ttech = 'truckTransportingHydrogen'
     p_max = 50000  # to change
     p_max_fonc = 0 # ttech n'est pas discrétisée
-    capex, opex, LifeSpan = 316,7e-3,10
+    capex, opex, LifeSpan = 296,7e-3,10
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
-            'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            'transportLifeSpan':LifeSpan, 'transportPowerCost': 4.2e-2, 'transportInvestCost': capex, 'transportOperationCost':opex,
             # 'transportMinPower':1, 'transportMaxPower': p_max,
             'transportEmissionCO2':1/23,
-            'transportChargeFactors': {'hydrogen' : 0.07},
-            'transportDischargeFactors': {'hydrogen' : 0.01},
+            'transportChargeFactors': {'hydrogen' : 0.1},
+            'transportDischargeFactors': {'hydrogen' : 0.001},
             'transportDissipation':0.0,
             'transportUnitPower': p_max_fonc
             }
