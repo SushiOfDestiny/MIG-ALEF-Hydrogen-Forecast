@@ -50,7 +50,6 @@ scenario['distances'] = pd.concat(
     )
 )
 scenario['distances'] = scenario['distances'].reset_index().drop_duplicates(subset=['area1','area2']).set_index(['area1','area2']).drop(columns ='index')
-print(scenario['distances'])
 
 # donne la liste des couples de noeuds
 couples_noeuds = list(scenario['distances'].index)
@@ -74,7 +73,6 @@ def demande_h_area(scenar, area, k):
     elif area == "Alpin" : 
         return (0.1 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
     else :
-        print( demande_t_an[k])
         return (0.7 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
 
 
@@ -232,10 +230,10 @@ for area in areaList:
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
-                    'minCapacity': 1 if year == yearZero else 0,'maxCapacity': 1 if year == yearZero  else 0, 
+                    'minCapacity': 1 if (year == yearZero and area == 'Marseille') else 0,'maxCapacity': 1 if (year == yearZero and area == 'Marseille')  else 0, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 320 if year == yearZero else 0, 'techUnitPower': 320
+                    'capacityLim': 320 if (year == yearZero and area == 'Marseille') else 0, 'techUnitPower': 320
                     }, 
                 }
              )
