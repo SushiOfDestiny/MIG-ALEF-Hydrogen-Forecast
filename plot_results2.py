@@ -5,8 +5,12 @@ import numpy as np
 
 from scenarios import *
 
+# façon la plus simple pour afficher une dataframe
+
+
 vlist = ['capacityInvest_Dvar', 'transInvest_Dvar', 'capacity_Pvar', 'capacityDel_Pvar', 'capacityDem_Dvar', 'energy_Pvar', 'power_Dvar', 'storageConsumption_Pvar', 'storageIn_Pvar', 'storageOut_Pvar',
-         'stockLevel_Pvar', 'importation_Dvar', 'Cmax_Pvar', 'carbon_Pvar', 'powerCosts_Pvar', 'capacityCosts_Pvar', 'importCosts_Pvar', 'storageCosts_Pvar', 'turpeCosts_Pvar', 'Pmax_Pvar', 'max_PS_Dvar', 'carbonCosts_Pvar']
+         'stockLevel_Pvar', 'importation_Dvar', 'Cmax_Pvar', 'carbon_Pvar', 'powerCosts_Pvar', 'capacityCosts_Pvar', 'importCosts_Pvar', 'storageCosts_Pvar', 'turpeCosts_Pvar', 'Pmax_Pvar', 'max_PS_Dvar', 'carbonCosts_Pvar',
+         'Tmaxtot_Pvar']
 
 outputFolder = 'out_scenario1'
 
@@ -59,6 +63,7 @@ def show_import_Dvar():
                 1), columns=['importation_Dvar'])['importation_Dvar']
 
         # affichage
+        # return df5
         df5.plot(kind='bar')
         plt.ylabel('MWh')
         plt.legend()
@@ -86,6 +91,24 @@ def show_storageConsumption_Pvar():
     plt.legend()
     df_year.plot(kind='bar')
     plt.title('storageConsumption_Pvar')
+
+
+# def show_Tmax_tot():
+
+#     unitPower=scenario['transportTechs'].loc['transportUnitPower',:]
+#     df = res['Tmaxtot_Pvar']
+
+#     df2=pd.pivot_table(
+#         data=df,
+#         index=['YEAR_invest','AREA','AREA.1'],
+#         columns=['TRANS_TECHNO','TmaxTot_Pvar'])
+#     # data=res['Tmaxtot_Pvar'][res['Tmaxtot_Pvar']['YEAR_invest']
+
+#     for y in yearList:
+#         for a,a1 in couples_noeuds:
+
+
+
 
 show_power_Dvar()
 show_import_Dvar()
