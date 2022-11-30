@@ -1,3 +1,13 @@
+##########
+# RESUME #
+##########
+# algo doit optimiser avec effet d'échelles (NON LINEAIRE, MILP)
+# 3 tailles d'électrolyseurs 
+# 3 tailles de pipeline
+
+
+
+
 import numpy as np
 import pandas as pd
 import tech_eco_data
