@@ -20,10 +20,10 @@ t = np.arange(1,nHours + 1,timeStep)
 nHours = len(t)
 
 zones = ['PACA']
-scenar = 1
+scenar = 2
 
 yearZero = 2020
-yearFinal = 2040
+yearFinal = 2050
 yearStep = 10
 # +1 to include the final year
 yearList = [yr for yr in range(yearZero, yearFinal+yearStep, yearStep)]
@@ -145,7 +145,7 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': 5,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 5,
+                                'capacityLim': 5, 'unitPower' : 0.1
                                 },
                                }
                          )
@@ -161,7 +161,7 @@ for area in areaList:
                                 'minCapacity': 5, 'maxCapacity': 100,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100,
+                                'capacityLim': 100, 'unitPower' : 1
                                 },
                                }
                          )
@@ -177,7 +177,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.69},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 1 
+                    'capacityLim': 100e3, 'unitPower': 10 
                     }, 
                 }
              )
