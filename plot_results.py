@@ -30,7 +30,7 @@ from scenarios import scenario
 
 # plt.show() 
 
-def print_global_H2_bar(power_Dvar='out/power_Dvar.csv'):
+def print_global_H2_bar(power_Dvar='out_scenario1/power_Dvar.csv'):
     YEAR = [2030, 2040, 2050]
     df = pd.read_csv(power_Dvar)
 
@@ -145,7 +145,7 @@ def print_global_H2_camembert(y, power_Dvar='out/power_Dvar.csv'):
     plt.legend()
 
 
-def print_global_elec_camembert(y, power_Dvar='out/power_Dvar.csv'):
+def print_global_elec_camembert(y, power_Dvar='out_scenario1/power_Dvar.csv'):
     df = pd.read_csv(power_Dvar)
     by_techno = df.groupby(by='TECHNOLOGIES')
     global_dict = {}
@@ -160,15 +160,26 @@ def print_global_elec_camembert(y, power_Dvar='out/power_Dvar.csv'):
     plt.legend()
    
     
+def prod_H2_an(file = "out/power_Dvar.csv") :
+    tech_H2= ["ElectrolysisL", "ElectrolysisM", "ElectrolysisS", "SMR + CCS1", "SMR + CCS2", "SMR"]
+    colors_dict={"ElectrolysisL":'darkred', "ElectrolysisM":'firebrick', "ElectrolysisS":'lightcoral', "SMR + CCS1":"dimgray", "SMR + CCS2" : 'darkgray', "SMR" : 'silver'  }
+    
+    df = pd.read_csv(file)
+    by_techno = df.pivot_table(index='YEAR_op',
+    columns='TECHNOLOGIES',
+    values='power_Dvar',
+    aggfunc = 'sum')
+    by_techno.reset_index(inplace=True)
+    plt.figure()
+    by_techno.plot(
+        x = 'YEAR_op',
+        label = tech_H2,
+        kind = 'bar',
+        stacked=False
+    )
+ 
 
-
-
-
-
-
-
-
-print_global_elec_camembert(2030)
+prod_H2_an()
 
 plt.show()
 
