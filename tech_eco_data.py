@@ -61,7 +61,7 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 
 	elif tech == "ElectrolysisS":
 			capex = {
-				'ref':  interp1d(years, [2244, 1024, 469, 215, 99]),
+				'ref':  interp1d(years, electrolyser_capex_Reksten2022(tech='PEM', Pel=1, year=np.array(years))),
 			}
 			opex = {
 				'ref': interp1d(years, [12] * 5),
@@ -72,7 +72,7 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 
 	elif tech == "ElectrolysisM":
 			capex = {
-				'ref':  interp1d(years, [1280, 584, 267, 123, 56]),
+				'ref':  interp1d(years, electrolyser_capex_Reksten2022(tech='PEM', Pel=10, year=np.array(years))),
 			}
 			opex = {
 				'ref': interp1d(years, [12] * 5),
@@ -83,7 +83,7 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 
 	elif tech == "ElectrolysisL":
 			capex = {
-				'ref':  interp1d(years, [876, 400, 183, 84, 38]),
+				'ref':  interp1d(years, electrolyser_capex_Reksten2022(tech='PEM', Pel=100, year=np.array(years))),
 			}
 			opex = {
 				'ref': interp1d(years, [12] * 5),

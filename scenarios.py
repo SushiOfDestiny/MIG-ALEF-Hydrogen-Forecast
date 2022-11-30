@@ -107,6 +107,8 @@ for area in areaList:
     for k, year in enumerate(yearList):
         tech = "Offshore wind - floating"
         maxcap = 10000
+        if area == "Alpin" :
+            maxcap = 0
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(tech, hyp='ref', year=year)
         scenario['conversionTechs'].append(
             pd.DataFrame(data={tech: 
@@ -164,10 +166,10 @@ for area in areaList:
             pd.DataFrame(data={tech:
                                {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                                 'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
-                                'minCapacity': 0, 'maxCapacity': 5,
+                                'minCapacity': 0, 'maxCapacity': 10000,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 5, 'techUnitPower' : 0.1
+                                'capacityLim': 100e3, 'techUnitPower' : 1
                                 },
                                }
                          )
@@ -180,10 +182,10 @@ for area in areaList:
             pd.DataFrame(data={tech:
                                {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                                 'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
-                                'minCapacity': 5, 'maxCapacity': 100,
+                                'minCapacity': 0, 'maxCapacity': 10000,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100, 'techUnitPower': 1
+                                'capacityLim': 100e3, 'techUnitPower': 10
                                 },
                                }
                          )
@@ -196,10 +198,10 @@ for area in areaList:
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex, 
-                    'minCapacity': 0,'maxCapacity': maxcap, 
+                    'minCapacity': 0,'maxCapacity': 10000, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.69},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'techUnitPower': 10
+                    'capacityLim': 100e3, 'techUnitPower': 100
                     }, 
                 }
              )
