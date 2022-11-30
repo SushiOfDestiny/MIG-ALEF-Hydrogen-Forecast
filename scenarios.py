@@ -94,7 +94,8 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 8} 
+                    'capacityLim': 100e3, 'techUnitPower': 8 # puissance fonctionnelle maximale d'une unité
+                    } 
                 }
              )
         )
@@ -111,7 +112,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 3
+                    'capacityLim': 100e3, 'techUnitPower': 3
                     }, 
                 }
              )
@@ -129,7 +130,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 1, 'hydrogen':0},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 1
+                    'capacityLim': 100e3, 'techUnitPower': 1
                     }, 
                 }
              )
@@ -145,7 +146,7 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': 5,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 5, 'unitPower' : 0.1
+                                'capacityLim': 5, 'techUnitPower' : 0.1
                                 },
                                }
                          )
@@ -161,7 +162,7 @@ for area in areaList:
                                 'minCapacity': 5, 'maxCapacity': 100,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': 0.65},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100, 'unitPower' : 1
+                                'capacityLim': 100, 'techUnitPower': 1
                                 },
                                }
                          )
@@ -177,7 +178,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': maxcap, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen':0.69},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 10 
+                    'capacityLim': 100e3, 'techUnitPower': 10
                     }, 
                 }
              )
@@ -192,7 +193,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': 100e3, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 320
+                    'capacityLim': 100e3, 'techUnitPower': 320
                     }, 
                 }
              )
@@ -208,7 +209,7 @@ for area in areaList:
                     'minCapacity': 1 if year == yearZero else 0,'maxCapacity': 1 if year == yearZero  else 0, 
                     'EmissionCO2': 0, 'Conversion': {'electricity': 0, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 320 if year == yearZero else 0, 'unitPower': 320
+                    'capacityLim': 320 if year == yearZero else 0, 'techUnitPower': 320
                     }, 
                 }
              )
@@ -223,7 +224,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': 100e3, 
                     'EmissionCO2': -169, 'Conversion': {'electricity': -0.17, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 320
+                    'capacityLim': 100e3, 'techUnitPower': 320
                     }, 
                 }
              )
@@ -238,7 +239,7 @@ for area in areaList:
                     'minCapacity': 0,'maxCapacity': 100e3, 
                     'EmissionCO2': -268, 'Conversion': {'electricity': -0.34, 'hydrogen': 1, 'gas': -1.43},
                     'EnergyNbhourCap': 0, # used for hydroelectricity 
-                    'capacityLim': 100e3, 'unitPower': 320 
+                    'capacityLim': 100e3, 'techUnitPower': 320 
                     }, 
                 }
              )
@@ -250,7 +251,7 @@ for area in areaList:
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Carbon capture',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 
-                    'operationCost': opex, 'capacityLim': 100e3, 'unitPower': 320}, 
+                    'operationCost': opex, 'capacityLim': 100e3, 'techUnitPower': 320}, 
                 }
              )
         )
@@ -261,7 +262,7 @@ for area in areaList:
             pd.DataFrame(data={tech: 
                     {'AREA': area, 'YEAR': year, 'Category': 'Carbon capture',
                     'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 
-                    'operationCost': opex, 'capacityLim': 100e3, 'unitPower': 320}, 
+                    'operationCost': opex, 'capacityLim': 100e3, 'techUnitPower': 320}, 
                 }
              )
         )
@@ -340,7 +341,7 @@ for k, year in enumerate(yearList):
             'transportChargeFactors': {'hydrogen' : 5e-3},
             'transportDischargeFactors': {'hydrogen' : 5e-3},
             'transportDissipation':2e-5,
-            'transportMaxPowerFonc': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+            'transportUnitPower': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
             }
         }
         )
@@ -359,7 +360,7 @@ for k, year in enumerate(yearList):
             'transportChargeFactors': {'hydrogen' : 5e-3},
             'transportDischargeFactors': {'hydrogen' : 5e-3},
             'transportDissipation':2e-5,
-            'transportMaxPowerFonc': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+            'transportUnitPower': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
             }
         }
         )
@@ -378,7 +379,7 @@ for k, year in enumerate(yearList):
             'transportChargeFactors': {'hydrogen' : 5e-3},
             'transportDischargeFactors': {'hydrogen' : 5e-3},
             'transportDissipation':2e-5,
-            'transportMaxPowerFonc': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+            'transportUnitPower': p_max_fonc  # puissance maximale de fonctionnement du pipeline (=débit max), fixée
             }
         }
         )
@@ -400,7 +401,7 @@ for k, year in enumerate(yearList):
             'transportChargeFactors': {'hydrogen' : 0.07},
             'transportDischargeFactors': {'hydrogen' : 0.01},
             'transportDissipation':0.0,
-            'transportMaxPowerFonc': p_max_fonc
+            'transportUnitPower': p_max_fonc
             }
         }  
         )

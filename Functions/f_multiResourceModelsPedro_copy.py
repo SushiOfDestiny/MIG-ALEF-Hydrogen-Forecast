@@ -17,7 +17,7 @@ def loadScenario(scenario, printTables=False):
     TechParameters = scenario['conversionTechs'].transpose().fillna(0)
     TechParameters.index.name = 'TECHNOLOGIES'
     TechParametersList = ['powerCost', 'operationCost', 'investCost', 'EnergyNbhourCap', 'minCapacity', 'maxCapacity',
-                          'RampConstraintPlus', 'RampConstraintMoins', 'RampConstraintPlus2', 'RampConstraintMoins2', 'EmissionCO2', 'capacityLim', 'unitPower']
+                          'RampConstraintPlus', 'RampConstraintMoins', 'RampConstraintPlus2', 'RampConstraintMoins2', 'EmissionCO2', 'capacityLim', 'techUnitPower']
     for k in TechParametersList:
         if k not in TechParameters:
             TechParameters[k] = 0
@@ -66,7 +66,7 @@ def loadScenario(scenario, printTables=False):
     df_conv = scenario['conversionTechs'].transpose(
     ).set_index(['YEAR','AREA'], append=True)['Conversion']
     conversionFactor = pd.DataFrame(data={tech: df_conv.loc[(tech, 2020, scenario['areaList'][0])] for tech in scenario['conversionTechs'].columns}).fillna(
-        0)  # TODO: Take into account evolving conversion factors (for electrolysis improvement, for instance)
+        0)  # TODO: Take into account evolving conversion factors (for f improvement, for instance)
     conversionFactor.index.name = 'RESOURCES'
 
     conversionFactor = conversionFactor.reset_index('RESOURCES').melt(
@@ -446,6 +446,7 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_invest, model.TECHNOLOGIES, model.TECHNOLOGIES, model.AREA, domain=NonNegativeIntegers)
     model.capacityDem_Dvar = Var(
         model.YEAR_invest, model.YEAR_invest, model.TECHNOLOGIES, model.AREA, domain=NonNegativeIntegers)
+    # capacité des installations d'une technologie dans une zone, en unités de puissance max
     model.capacity_Pvar = Var(
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, domain=NonNegativeIntegers, initialize=0)
     # Maximum capacity of a storage mean
@@ -560,8 +561,8 @@ def systemModelPedro(scenario, isAbstract=False):
     def capacityCostsDef_rule(model, y, tech, area):
         return sum(model.investCost[yi, tech,area]
                    * f1(i, model.LifeSpan[yi, tech, area]) * f3(r, y-dy)
-                   * (model.capacityInvest_Dvar[yi, tech, area] - model.capacityDel_Pvar[yi, y-dy, tech, area]) * model.unitPower[yi, tech, area]
-                   for yi in yearList[yearList < y]) + model.operationCost[y-dy, tech, area] * model.unitPower[y-dy, tech, area] *f3(r, y)*model.capacity_Pvar[y, tech, area] == model.capacityCosts_Pvar[y, tech, area]
+                   * (model.capacityInvest_Dvar[yi, tech, area] - model.capacityDel_Pvar[yi, y-dy, tech, area]) * model.techUnitPower[yi, tech, area]
+                   for yi in yearList[yearList < y]) + model.operationCost[y-dy, tech, area] * model.techUnitPower[y-dy, tech, area] *f3(r, y)*model.capacity_Pvar[y, tech, area] == model.capacityCosts_Pvar[y, tech, area]
     model.capacityCostsCtr = Constraint(
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, rule=capacityCostsDef_rule)
 
@@ -735,7 +736,7 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, rule=CapacityTot_rule)
 
     def Capacity_rule(model, y, t, tech, area):  # INEQ forall t, tech
-        return model.capacity_Pvar[y, tech, area] * model.availabilityFactor[y, t, tech]  *  model.unitPower[y-dy, tech, area] >= model.power_Dvar[y, t, tech, area]
+        return model.capacity_Pvar[y, tech, area] * model.availabilityFactor[y, t, tech]  *  model.techUnitPower[y-dy, tech, area] >= model.power_Dvar[y, t, tech, area]
     model.CapacityCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.TECHNOLOGIES, model.AREA, rule=Capacity_rule)
 
@@ -905,7 +906,7 @@ def systemModelPedro(scenario, isAbstract=False):
     if "EnergyNbhourCap" in TechParameters:
         def storage_rule(model, y, tech, area):  # INEQ forall t, tech
             if model.EnergyNbhourCap[y-dy, tech, area] > 0:
-                return model.EnergyNbhourCap[y-dy, tech, area] * model.capacity_Pvar[y, tech, area] * model.unitPower[y-dy, tech, area] >= sum(
+                return model.EnergyNbhourCap[y-dy, tech, area] * model.capacity_Pvar[y, tech, area] * model.techUnitPower[y-dy, tech, area] >= sum(
                     model.power_Dvar[y, t, tech, area] for t in model.TIMESTAMP) * timeStep
             else:
                 return Constraint.Skip
@@ -915,7 +916,7 @@ def systemModelPedro(scenario, isAbstract=False):
     if "RampConstraintPlus" in TechParameters:
         def rampCtrPlus_rule(model, y, t, tech, area):  # INEQ forall t<
             if model.RampConstraintPlus[y-dy, tech, area] > 0:
-                return model.power_Dvar[y, t + timeStep, tech, area] - model.power_Dvar[y, t, tech, area] <= model.capacity_Pvar[y, tech, area] * model.unitPower[y-dy, tech, area] * model.RampConstraintPlus[y-dy, tech, area] *  timeStep
+                return model.power_Dvar[y, t + timeStep, tech, area] - model.power_Dvar[y, t, tech, area] <= model.capacity_Pvar[y, tech, area] * model.techUnitPower[y-dy, tech, area] * model.RampConstraintPlus[y-dy, tech, area] *  timeStep
             else:
                 return Constraint.Skip
         model.rampCtrPlus = Constraint(
@@ -926,7 +927,7 @@ def systemModelPedro(scenario, isAbstract=False):
             if model.RampConstraintMoins[y-dy, tech, area] > 0:
                 var = model.power_Dvar[y, t + timeStep, tech, area] - \
                     model.power_Dvar[y, t, tech, area]
-                return var >= - model.capacity_Pvar[y, tech, area] * model.unitPower[y-dy, tech, area] * model.RampConstraintMoins[y-dy, tech, area]  *  timeStep
+                return var >= - model.capacity_Pvar[y, tech, area] * model.techUnitPower[y-dy, tech, area] * model.RampConstraintMoins[y-dy, tech, area]  *  timeStep
             else:
                 return Constraint.Skip
         model.rampCtrMoins = Constraint(
