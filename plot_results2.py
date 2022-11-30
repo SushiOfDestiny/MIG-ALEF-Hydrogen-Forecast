@@ -118,9 +118,35 @@ def show_storageConsumption_Pvar(outputFolder = 'out_scenario1'):
 #     for y in yearList:
 #         for a,a1 in couples_noeuds:
 
+def show_capacityCosts(outputFolder = 'out_scenario1'):
+    """shows capacityCosts_Pvar (capex and opex) by year by ressource by area for all stech"""
+    res = {v: pd.read_csv(outputFolder + '/' + v +
+                      '.csv').drop(columns='Unnamed: 0') for v in vlist}
+    df = res['capacityCosts_Pvar'].set_index(['YEAR_op', 'TECHNOLOGIES', 'AREA'])
+    df.dropna(inplace=True)
 
+    df_year = df.groupby(['YEAR_op']).sum() #.rename({'capacityCosts_Pvar':'total'})
+    df2 = df.groupby(['YEAR_op', 'AREA']).sum()    
 
+    
+    dic = {}
+    for ville in areaList:
+        dic[ville] = df2.loc[(slice(None), ville), :]
+        df_year[ville] = pd.DataFrame(dic[ville].values, index=dic[ville].index.droplevel(
+            1), columns=['capacityCosts_Pvar'])['capacityCosts_Pvar']
+
+    # affichage
+    # return df_year
+    df_year /= 1e3
+    df_year.plot(kind='bar')
+    plt.ylabel('GWh')
+    plt.legend()
+    plt.title(f'coût annuel des installations avec {outputFolder}')
+    plt.savefig(f'show_capacityCosts_Pvar_{outputFolder}')
+
+# TRACE GRAPHES
 for i in range(1,3):
-    show_power_Dvar(f'out_scenario{i}')
-    show_import_Dvar(f'out_scenario{i}')
+    # show_power_Dvar(f'out_scenario{i}')
+    # show_import_Dvar(f'out_scenario{i}')
+    show_capacityCosts(f'out_scenario{i}')
 plt.show()
