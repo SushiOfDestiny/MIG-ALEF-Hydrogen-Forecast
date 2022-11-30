@@ -1,14 +1,3 @@
-##########
-# RESUME #
-##########
-# algo doit optimiser sans effet d'échelles
-# 1 taille d'électrolyseur (M)
-# 1 capex de pipeline
-# différents capex d'une techno selon la ville
-
-
-
-
 import numpy as np
 import pandas as pd
 import tech_eco_data
