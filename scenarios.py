@@ -28,16 +28,35 @@ yearStep = 10
 # +1 to include the final year
 yearList = [yr for yr in range(yearZero, yearFinal+yearStep, yearStep)]
 nYears = len(yearList)
-areaList = ["Nice", "Fos"]
+areaList = ["Nice", "Marseille","Alpin"]
+
+
 
 scenario = {}
 scenario['areaList'] = areaList
 scenario['timeStep'] = timeStep 
 scenario['lastTime'] = t[-1]
 
+dist  = {"Nice" : {"Marseille" : 200, "Alpin" : 200, "Nice" : 0}, "Marseille" : {"Nice" : 200, "Alpin" : 200, "Marseille" : 0}, "Alpin" : {"Nice" : 200, "Marseille" : 200, "Alpin" : 0}}
+scenario['distances'] = pd.concat(
+    (
+        pd.DataFrame(data = {
+         'area1' : area1,
+         'area2'  : area2,
+         'distances'  : dist[area1][area2]
+         }, index = (area1, area2)
+        ) for area1 in areaList
+        for area2 in areaList
+    )
+)
+scenario['distances'] = scenario['distances'].reset_index().drop_duplicates(subset=['area1','area2']).set_index(['area1','area2']).drop(columns ='index')
+print(scenario['distances'])
+
 def demande_h_area(scenar, area, k):
     # un facteur pour différencier Nice de Fos
     # différent scénarios
+
+
     if scenar == 0 :
         demande_t_an = [100, 150, 175, 200]
     elif scenar == 1 :
@@ -48,10 +67,12 @@ def demande_h_area(scenar, area, k):
         demande_t_an = [100, 248, 239, 236] 
 
     if area == "Nice" :
-        return (0.05 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
+        return (0.2 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
+    elif area == "Alpin" : 
+        return (0.1 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
     else :
         print( demande_t_an[k])
-        return (33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
+        return (0.7 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
 
 
 def stockage_h_area(area):
@@ -75,8 +96,8 @@ scenario['resourceDemand'] =  pd.concat(
         for area in areaList
     )
 )
-print(scenario['resourceDemand'])
 '''
+print(scenario['resourceDemand'])
 print(scenario['resourceDemand'].head())
 print(scenario['resourceDemand'].tail())
 '''
@@ -430,12 +451,6 @@ scenario['economicParameters'] = pd.DataFrame({
     'discountRate': [0.04],
     'financeRate': [0.04]
 }
-)
-
-scenario['distances'] = pd.DataFrame(
-    data=[0, 200, 200, 0],
-    index=[("Fos", "Fos"), ("Fos", "Nice"), ("Nice", "Fos"), ("Nice", "Nice")],
-    columns=["distances"]
 )
 
 
