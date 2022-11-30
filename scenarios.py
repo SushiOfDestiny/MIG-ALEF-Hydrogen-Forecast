@@ -392,7 +392,7 @@ for k, year in enumerate(yearList):
     ttech = 'Pipeline_L'
     p_max = 50000.
     p_max_fonc = 10000
-    capex, opex, LifeSpan = 294,3.4e-5,40
+    capex, opex, LifeSpan = 253,3.4e-5,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
@@ -414,15 +414,15 @@ for k, year in enumerate(yearList):
     ttech = 'truckTransportingHydrogen'
     p_max = 50000  # to change
     p_max_fonc = 0 # ttech n'est pas discrétisée
-    capex, opex, LifeSpan = 316,7e-3,10
+    capex, opex, LifeSpan = 296,7e-3,10
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
-            'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
+            'transportLifeSpan':LifeSpan, 'transportPowerCost': 4.2e-2, 'transportInvestCost': capex, 'transportOperationCost':opex,
             # 'transportMinPower':1, 'transportMaxPower': p_max,
             'transportEmissionCO2':1/23,
-            'transportChargeFactors': {'hydrogen' : 0.07},
-            'transportDischargeFactors': {'hydrogen' : 0.01},
+            'transportChargeFactors': {'hydrogen' : 0.1},
+            'transportDischargeFactors': {'hydrogen' : 0.001},
             'transportDissipation':0.0,
             'transportUnitPower': p_max_fonc
             }
