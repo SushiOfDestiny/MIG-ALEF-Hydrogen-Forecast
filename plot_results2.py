@@ -104,19 +104,32 @@ def show_storageConsumption_Pvar(outputFolder = 'out_scenario1'):
     plt.savefig(f'storageConsumption_Pvar_{outputFolder}')
 
 
-# def show_Tmax_tot():
+def show_Tmax_tot(outputFolder = 'out_scenario1'):
+    """show max transport flow by year and ttech from all transport axes"""
+    res = {v: pd.read_csv(outputFolder + '/' + v +
+                      '.csv').drop(columns='Unnamed: 0') for v in vlist}
+    df = res['Tmaxtot_Pvar'].set_index(['YEAR_invest', 'TRANS_TECHNO', 'AREA','AREA.1'])
+    df.dropna(inplace=True)
 
-#     unitPower=scenario['transportTechs'].loc['transportUnitPower',:]
-#     df = res['Tmaxtot_Pvar']
+    df_year = df.groupby(['YEAR_invest']).sum()
+    df2 = df.groupby(['YEAR_invest', 'TRANS_TECHNO']).sum()
 
-#     df2=pd.pivot_table(
-#         data=df,
-#         index=['YEAR_invest','AREA','AREA.1'],
-#         columns=['TRANS_TECHNO','TmaxTot_Pvar'])
-#     # data=res['Tmaxtot_Pvar'][res['Tmaxtot_Pvar']['YEAR_invest']
+    dic = {}
+    for ttech in ttechs_list:
+        dic[ttech] = df2.loc[(slice(None), ttech), :]
+        df_year[ttech] = pd.DataFrame(dic[ttech].values, index=dic[ttech].index.droplevel(
+            1), columns=['capacityCosts_Pvar'])['capacityCosts_Pvar']
 
-#     for y in yearList:
-#         for a,a1 in couples_noeuds:
+    # affichage
+    # return df_year
+    # df_year /= 1e3
+    df_year.plot(kind='bar')
+    plt.ylabel('MW')
+    plt.legend()
+    plt.title(f'puissance maximale annuelle des transports avec {outputFolder}')
+    plt.savefig(f'show_Tmax_tot_Pvar_{outputFolder}')
+
+
 
 def show_capacityCosts(outputFolder = 'out_scenario1'):
     """shows capacityCosts_Pvar (capex and opex) by year by ressource by area for all stech"""
@@ -148,5 +161,6 @@ def show_capacityCosts(outputFolder = 'out_scenario1'):
 for i in range(1,3):
     # show_power_Dvar(f'out_scenario{i}')
     # show_import_Dvar(f'out_scenario{i}')
-    show_capacityCosts(f'out_scenario{i}')
+    # show_capacityCosts(f'out_scenario{i}')
+    show_Tmax_tot(f'out_scenario{i}')
 plt.show()

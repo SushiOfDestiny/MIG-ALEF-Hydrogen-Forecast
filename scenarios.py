@@ -503,7 +503,7 @@ scenario['availability'] = availabilityFactor.loc[(
     slice(None), slice(None), itechs)]
 
 # availability pour transport ?
-
+ttechs_list = list(scenario['transportTechs'].columns.unique())
 
 scenario["yearList"] = yearList
 scenario["areaList"] = areaList
