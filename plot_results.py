@@ -189,5 +189,6 @@ def prod_H2_an(file = "out_scenario1/power_Dvar.csv") :
  
 
 prod_H2_an()
+plt.show()
 
 
