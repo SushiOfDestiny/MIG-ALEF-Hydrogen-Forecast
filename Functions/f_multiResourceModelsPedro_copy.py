@@ -999,23 +999,30 @@ def systemModelPedro(scenario, isAbstract=False):
 
     # Définition de TmaxTot en y, en fonction de TmaxTot en y-dy
     # encore valable avec des entiers
-    def TmaxTot_rule(model, y, res, ttech, area1, area2):
+    def TmaxTot_rule(model, y, ttech, area1, area2):
         if y==2020:
             return model.TmaxTot_Pvar[y, ttech, area1, area2]==0
         else:
             return model.TmaxTot_Pvar[y, ttech, area1, area2] == model.TmaxTot_Pvar[y-dy, ttech, area1, area2] + \
                 model.TInvest_Dvar[y, ttech, area1, area2] - model.TDel_Dvar[y, ttech, area1, area2]
     model.TmaxTot = Constraint(
-        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TmaxTot_rule)
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TmaxTot_rule)
 
     # Mise en place du LifeSpan
-    def transportLifeSpan_rule(model,y, res, ttech, area1, area2):
+    def transportLifeSpan_rule(model,y, ttech, area1, area2):
         invest_date = y - model.transportLifeSpan[y, ttech]
         if invest_date in yearList:
             return model.TDel_Dvar[y, ttech, area1, area2] == model.TInvest_Dvar[invest_date, ttech, area1, area2]
         else:
             return model.TDel_Dvar[y, ttech, area1, area2] == 0
     model.LifeSpanCtr = Constraint(
-        model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = transportLifeSpan_rule)
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = transportLifeSpan_rule)
+    
+
+    def TInvestDoubleFlow_rule(model,y, ttech, area1, area2):
+        return model.TInvest_Dvar[y, ttech, area1, area2] == model.TInvest_Dvar[y, ttech, area2, area1]
+    model.tinvestDoubleFlowCtr = Constraint(
+        model.YEAR_invest, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvestDoubleFlow_rule
+    )
     
     return model
