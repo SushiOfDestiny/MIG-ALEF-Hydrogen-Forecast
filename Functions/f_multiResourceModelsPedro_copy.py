@@ -973,7 +973,10 @@ def systemModelPedro(scenario, isAbstract=False):
             return Constraint.Skip
         else:
             # la puissance investie doit être un multiple de celle max de ttech
-            return model.TInvest_Dvar[y, ttech, area1, area2] ==  model.transportMaxPowerFonc[y,ttech]
+            # return model.TInvest_Dvar[y, res, ttech, area1, area2] %  model.transportMaxPowerFonc[y,ttech] <= 1
+            # division euclidienne bug
+            # on fait une approximation grossière
+            return model.TInvest_Dvar[y, res, ttech, area1, area2] == model.transportMaxPowerFonc[y,ttech]
 
     model.TInvest_discrCtr = Constraint(
          model.YEAR_invest, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule = TInvest_discr_rule
