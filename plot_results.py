@@ -1,10 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np 
+import numpy as np
 
 
 from scenarios import *
 
+# CODE ANAELLE
 # vlist = ['capacityInvest_Dvar','transInvest_Dvar','capacity_Pvar','capacityDel_Pvar','capacityDem_Dvar', 'energy_Pvar', 'power_Dvar', 'storageConsumption_Pvar', 'storageIn_Pvar', 'storageOut_Pvar',
 #          'stockLevel_Pvar', 'importation_Dvar', 'Cmax_Pvar','carbon_Pvar','powerCosts_Pvar','capacityCosts_Pvar','importCosts_Pvar','storageCosts_Pvar','turpeCosts_Pvar','Pmax_Pvar','max_PS_Dvar','carbonCosts_Pvar', ]
 
@@ -28,33 +29,37 @@ from scenarios import *
 # plt.xticks(yrs)
 # plt.legend()
 
-# plt.show() 
+# plt.show()
+
 
 def print_global_H2_bar(power_Dvar='out/power_Dvar.csv'):
     YEAR = [2030, 2040, 2050]
     df = pd.read_csv(power_Dvar)
 
-    # la production de H2 
-    tech_H2= ["ElectrolysisL", "ElectrolysisM", "ElectrolysisS", "SMR + CCS1", "SMR + CCS2", "SMR"]
-    colors_dict={"ElectrolysisL":'darkred', "ElectrolysisM":'firebrick', "ElectrolysisS":'lightcoral', "SMR + CCS1":"dimgray", "SMR + CCS2" : 'darkgray', "SMR" : 'silver'  }
+    # la production de H2
+    tech_H2 = ["ElectrolysisL", "ElectrolysisM",
+               "ElectrolysisS", "SMR + CCS1", "SMR + CCS2", "SMR"]
+    colors_dict = {"ElectrolysisL": 'darkred', "ElectrolysisM": 'firebrick',
+                   "ElectrolysisS": 'lightcoral', "SMR + CCS1": "dimgray", "SMR + CCS2": 'darkgray', "SMR": 'silver'}
     by_techno = df.groupby(by='TECHNOLOGIES')
     global_dict = {}
     for techno in tech_H2:
         global_dict[techno] = []
         for y in YEAR:
-            global_dict[techno].append(by_techno.get_group(techno)[by_techno.get_group(techno)['YEAR_op']==y]['power_Dvar'].sum())
-    # # Les subplots 
+            global_dict[techno].append(by_techno.get_group(
+                techno)[by_techno.get_group(techno)['YEAR_op'] == y]['power_Dvar'].sum())
+    # # Les subplots
     # fig, axis = plt.subplots(2,2)
 
     # On print la production de H2
     for techno in tech_H2:
-        plt.bar(YEAR, global_dict[techno], color = colors_dict[techno], label=techno )
+        plt.bar(YEAR, global_dict[techno],
+                color=colors_dict[techno], label=techno)
     plt.legend()
     plt.xticks(YEAR)
     plt.xlabel('Year')
     plt.ylabel('H2 production (MWh)')
     plt.title('Global H2 production')
-
 
     # # la production d'éléctricité
     # tech_elec= ["Ground PV", "Offshore wind - floating", "Onshore wind"]
@@ -71,9 +76,6 @@ def print_global_H2_bar(power_Dvar='out/power_Dvar.csv'):
     # plt.legend()
     # plt.xticks(YEAR)
     # plt.title("Production d'éléctricité globale")
-        
-        
-
 
 
 def print_global_elec_hugo(power_Dvar='out/power_Dvar.csv'):
@@ -81,25 +83,28 @@ def print_global_elec_hugo(power_Dvar='out/power_Dvar.csv'):
     YEAR = [2030, 2040, 2050]
     df = pd.read_csv(power_Dvar)
 
-    # la production de H2 
-    tech_H2= ["ElectrolysisL", "ElectrolysisM", "ElectrolysisS", "SMR + CCS1", "SMR + CCS2", "SMR"]
-    colors_dict={"ElectrolysisL":'darkred', "ElectrolysisM":'firebrick', "ElectrolysisS":'lightcoral', "SMR + CCS1":"dimgray", "SMR + CCS2" : 'darkgray', "SMR" : 'silver'  }
+    # la production de H2
+    tech_H2 = ["ElectrolysisL", "ElectrolysisM",
+               "ElectrolysisS", "SMR + CCS1", "SMR + CCS2", "SMR"]
+    colors_dict = {"ElectrolysisL": 'darkred', "ElectrolysisM": 'firebrick',
+                   "ElectrolysisS": 'lightcoral', "SMR + CCS1": "dimgray", "SMR + CCS2": 'darkgray', "SMR": 'silver'}
     by_techno = df.groupby(by='TECHNOLOGIES')
     global_dict = {}
     for techno in tech_H2:
         global_dict[techno] = []
         for y in YEAR:
-            global_dict[techno].append(by_techno.get_group(techno)[by_techno.get_group(techno)['YEAR_op']==y]['power_Dvar'].sum())
-    # # Les subplots 
+            global_dict[techno].append(by_techno.get_group(
+                techno)[by_techno.get_group(techno)['YEAR_op'] == y]['power_Dvar'].sum())
+    # # Les subplots
     # fig, axis = plt.subplots(2,2)
 
     # On print la production de H2
     for techno in tech_H2:
-        plt.bar(YEAR, global_dict[techno], color = colors_dict[techno], label=techno )
+        plt.bar(YEAR, global_dict[techno],
+                color=colors_dict[techno], label=techno)
     plt.legend()
     plt.xticks(YEAR)
     plt.title('Production de H2 globale')
-
 
     # # la production d'éléctricité
     # tech_elec= ["Ground PV", "Offshore wind - floating", "Onshore wind"]
@@ -118,29 +123,31 @@ def print_global_elec_hugo(power_Dvar='out/power_Dvar.csv'):
     # plt.title("Production d'éléctricité globale")
 
 
-
-
 def print_global_H2_camembert(y, power_Dvar='out/power_Dvar.csv'):
     df = pd.read_csv(power_Dvar)
 
-    # la production de H2 
-    tech_H2= ["ElectrolysisL", "ElectrolysisM", "ElectrolysisS", "SMR + CCS1", "SMR + CCS2", "SMR"]
-    colors_dict={"ElectrolysisL":'darkred', "ElectrolysisM":'firebrick', "ElectrolysisS":'lightcoral', "SMR + CCS1":"dimgray", "SMR + CCS2" : 'darkgray', "SMR" : 'silver'  }
+    # la production de H2
+    tech_H2 = ["ElectrolysisL", "ElectrolysisM",
+               "ElectrolysisS", "SMR + CCS1", "SMR + CCS2", "SMR"]
+    colors_dict = {"ElectrolysisL": 'darkred', "ElectrolysisM": 'firebrick',
+                   "ElectrolysisS": 'lightcoral', "SMR + CCS1": "dimgray", "SMR + CCS2": 'darkgray', "SMR": 'silver'}
     by_techno = df.groupby(by='TECHNOLOGIES')
     global_dict = {}
-    for techno in tech_H2:  
-        global_dict[techno]=(by_techno.get_group(techno)[by_techno.get_group(techno)['YEAR_op']==y]['power_Dvar'].sum())
+    for techno in tech_H2:
+        global_dict[techno] = (by_techno.get_group(
+            techno)[by_techno.get_group(techno)['YEAR_op'] == y]['power_Dvar'].sum())
     # on normalise
     total_power = 0
     for techno in tech_H2:
         total_power += global_dict[techno]
-    if total_power ==0:
+    if total_power == 0:
         return f"Il n'y a pas de production de H2 pour l'année {y}"
     for techno in global_dict:
         global_dict[techno] = global_dict[techno]/total_power
     # On print la production de H2
-    
-    plt.pie([global_dict[techno] for techno in tech_H2], colors = [colors_dict[techno] for techno in tech_H2], labels=tech_H2, labeldistance = None )
+
+    plt.pie([global_dict[techno] for techno in tech_H2], colors=[
+            colors_dict[techno] for techno in tech_H2], labels=tech_H2, labeldistance=None)
     plt.title(f"Part de la production de H2 sur l'année {y}")
     plt.legend()
 
@@ -149,101 +156,20 @@ def print_global_elec_camembert(y, power_Dvar='out/power_Dvar.csv'):
     df = pd.read_csv(power_Dvar)
     by_techno = df.groupby(by='TECHNOLOGIES')
     global_dict = {}
-        # la production d'éléctricité
-    tech_elec= ["Ground PV", "Offshore wind - floating", "Onshore wind"]
-    colors_dict={"Ground PV":"lime", "Offshore wind - floating":"mediumturquoise", "Onshore wind":"royalblue"}
+    # la production d'éléctricité
+    tech_elec = ["Ground PV", "Offshore wind - floating", "Onshore wind"]
+    colors_dict = {"Ground PV": "lime",
+                   "Offshore wind - floating": "mediumturquoise", "Onshore wind": "royalblue"}
 
     for techno in tech_elec:
-        global_dict[techno] = (by_techno.get_group(techno)[by_techno.get_group(techno)['YEAR_op']==y]['power_Dvar'].sum())
-    plt.pie([global_dict[techno] for techno in   tech_elec], colors = [colors_dict[techno] for techno in   tech_elec], labels=  tech_elec, labeldistance = None )
+        global_dict[techno] = (by_techno.get_group(
+            techno)[by_techno.get_group(techno)['YEAR_op'] == y]['power_Dvar'].sum())
+    plt.pie([global_dict[techno] for techno in tech_elec], colors=[
+            colors_dict[techno] for techno in tech_elec], labels=tech_elec, labeldistance=None)
     plt.title(f"Part de la production d'éléctricité sur l'année {y}")
     plt.legend()
-   
-    
-
-
 
 
 print_global_elec_camembert(2030)
 
-# plt.show()
 
-
-vlist = ['capacityInvest_Dvar', 'transInvest_Dvar', 'capacity_Pvar', 'capacityDel_Pvar', 'capacityDem_Dvar', 'energy_Pvar', 'power_Dvar', 'storageConsumption_Pvar', 'storageIn_Pvar', 'storageOut_Pvar',
-         'stockLevel_Pvar', 'importation_Dvar', 'Cmax_Pvar', 'carbon_Pvar', 'powerCosts_Pvar', 'capacityCosts_Pvar', 'importCosts_Pvar', 'storageCosts_Pvar', 'turpeCosts_Pvar', 'Pmax_Pvar', 'max_PS_Dvar', 'carbonCosts_Pvar']
-
-outputFolder = 'out'
-
-res = {v: pd.read_csv(outputFolder + '/' + v +
-                      '.csv').drop(columns='Unnamed: 0') for v in vlist}
-
-
-# shows the 'power_Dvar' by year and area from all tech
-df = res['power_Dvar'].set_index(
-    ['YEAR_op', 'TIMESTAMP', 'TECHNOLOGIES', 'AREA'])
-df.dropna(inplace=True)
-
-df_year = df.groupby(['YEAR_op']).sum()
-df_year_area = df.groupby(['YEAR_op', 'AREA']).sum()
-
-df_year_fos = df_year_area.loc[(slice(None), 'Fos'), :]
-df_year['power_Dvar_fos'] = pd.DataFrame(
-    df_year_fos.values, index=df_year_fos.index.droplevel(1), columns=['power_Dvar'])['power_Dvar']
-df_year_nice = df_year_area.loc[(slice(None), 'Nice'), :]
-df_year['power_Dvar_nice'] = pd.DataFrame(
-    df_year_nice.values, index=df_year_nice.index.droplevel(1), columns=['power_Dvar'])['power_Dvar']
-
-df_year.plot(kind='bar')
-plt.title('power_Dvar')
-
-# shows storageConsumption_Pvar by year by ressource for all stech
-df = res['storageConsumption_Pvar'].set_index(
-    ['YEAR_op', 'TIMESTAMP', 'STOCK_TECHNO', 'AREA'])
-df.dropna(inplace=True)
-df_year = df.groupby(['YEAR_op']).sum()
-df_year_area = df.groupby(['YEAR_op', 'AREA']).sum()
-
-df_year_fos = df_year_area.loc[(slice(None), 'Fos'), :]
-df_year['storageConsumption_Pvar_fos'] = pd.DataFrame(df_year_fos.values, index=df_year_fos.index.droplevel(
-    1), columns=['storageConsumption_Pvar'])['storageConsumption_Pvar']
-df_year_nice = df_year_area.loc[(slice(None), 'Nice'), :]
-df_year['storageConsumption_Pvar_nice'] = pd.DataFrame(df_year_nice.values, index=df_year_nice.index.droplevel(
-    1), columns=['storageConsumption_Pvar'])['storageConsumption_Pvar']
-
-df_year.plot(kind='bar')
-plt.title('storageConsumption_Pvar')
-
-# shows import
-df = res['importation_Dvar'].set_index(
-    ['YEAR_op', 'TIMESTAMP', 'RESOURCES', 'AREA'])
-df.dropna(inplace=True)
-df_year_res_area = df.groupby(['YEAR_op', 'RESOURCES', 'AREA']).sum()
-
-# for electricity and hydrogen by year and area
-for variable in ['electricity', 'hydrogen']:
-    dff = df_year_res_area.loc[(slice(None), variable, slice(None)), :]
-    df = pd.DataFrame(dff.values,
-                      index=dff.index.droplevel(1),
-                      columns=['importation_Dvar']
-                      )
-
-    df_year_fos = df.loc[(slice(None), 'Fos'), :]
-    df_year = pd.DataFrame()
-    df_year['importation_Dvar_fos'] = pd.DataFrame(df_year_fos.values, index=df_year_fos.index.droplevel(
-        1), columns=['importation_Dvar'])['importation_Dvar']
-    df_year_nice = df.loc[(slice(None), 'Nice'), :]
-    df_year['importation_Dvar_nice'] = pd.DataFrame(df_year_nice.values, index=df_year_nice.index.droplevel(
-        1), columns=['importation_Dvar'])['importation_Dvar']
-
-    df_year.plot(kind='bar')
-    plt.title(f'importation_Dvar {variable}')
-
-
-# AFFICHAGE
-# def affichage():
-# plt.xlabel('Year')
-# plt.ylabel('Annual production (TWh)')
-# plt.xticks(yrs)
-# plt.legend()
-
-plt.show()
