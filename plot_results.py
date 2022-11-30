@@ -143,6 +143,22 @@ def print_global_H2_camembert(y, power_Dvar='out/power_Dvar.csv'):
     plt.pie([global_dict[techno] for techno in tech_H2], colors = [colors_dict[techno] for techno in tech_H2], labels=tech_H2, labeldistance = None )
     plt.title(f"Part de la production de H2 sur l'année {y}")
     plt.legend()
+
+
+def print_global_elec_camembert(y, power_Dvar='out/power_Dvar.csv'):
+    df = pd.read_csv(power_Dvar)
+    by_techno = df.groupby(by='TECHNOLOGIES')
+    global_dict = {}
+        # la production d'éléctricité
+    tech_elec= ["Ground PV", "Offshore wind - floating", "Onshore wind"]
+    colors_dict={"Ground PV":"lime", "Offshore wind - floating":"mediumturquoise", "Onshore wind":"royalblue"}
+
+    for techno in tech_elec:
+        global_dict[techno] = (by_techno.get_group(techno)[by_techno.get_group(techno)['YEAR_op']==y]['power_Dvar'].sum())
+    plt.pie([global_dict[techno] for techno in   tech_elec], colors = [colors_dict[techno] for techno in   tech_elec], labels=  tech_elec, labeldistance = None )
+    plt.title(f"Part de la production d'éléctricité sur l'année {y}")
+    plt.legend()
+   
     
 
 
@@ -152,7 +168,7 @@ def print_global_H2_camembert(y, power_Dvar='out/power_Dvar.csv'):
 
 
 
-print_global_H2_camembert(2030)
+print_global_elec_camembert(2030)
 
 plt.show()
 
