@@ -5,8 +5,8 @@ import tech_eco_data
 
 nHours = 8760
 
-timeStep = 10
-t = np.arange(1,nHours + 1)[::timeStep]
+timeStep = 100 # For now only integers work
+t = np.arange(1,nHours + 1,timeStep)
 nHours = len(t)
 
 zones = ['PACA']
@@ -430,15 +430,15 @@ scenario['distances'] = pd.DataFrame(
 
 df_res_ref = pd.read_csv('./Data/Raw/set2020-2050_horaire_TIMExRESxYEAR.csv',
                          sep=',', decimal='.', skiprows=0, comment="#").set_index(["YEAR", "TIMESTAMP", 'RESOURCES'])
-
+t8760 = df_res_ref.index.get_level_values('TIMESTAMP').unique().values
 scenario['resourceImportPrices'] = pd.concat(
     (
         pd.DataFrame(data={
             'AREA': area,
             'YEAR': year, 
             'TIMESTAMP': t, 
-            'electricity': df_res_ref.loc[(year, slice(None), 'electricity'),'importCost'].values[::timeStep],
-            'natural gas': 2 * df_res_ref.loc[(year, slice(None), 'gazNat'),'importCost'].values[::timeStep],
+            'electricity': np.interp(t, t8760, df_res_ref.loc[(year, slice(None), 'electricity'),'importCost'].values),
+            'natural gas': 2 * np.interp(t, t8760, df_res_ref.loc[(year, slice(None), 'gazNat'),'importCost'].values),
             'biogas': 150 * np.ones(nHours),
             'hydrogen': 60/33 * 1000 * np.ones(nHours),
         }) for k, year in enumerate(yearList[1:])
@@ -452,13 +452,12 @@ scenario['resourceImportCO2eq'] = pd.concat(
             'AREA': area,
             'YEAR': year, 
             'TIMESTAMP': t, 
-            'electricity': df_res_ref.loc[(year, slice(None), 'electricity'),'emission'].values[::timeStep],
+            'electricity': np.interp(t, t8760, df_res_ref.loc[(year, slice(None), 'electricity'),'emission'].values),
              # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)),
             # Taking 100 yr GWP of methane and 3% losses due to upstream leaks. Losses drop to zero in 2050. 
             'natural gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5  * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)), 
             'biogas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1,
-            'uranium': 0 * np.ones(nHours),
             # Taking 100 yr GWP of H2 and 5% losses due to upstream leaks. Leaks fall to 2% in 2050 See: https://www.energypolicy.columbia.edu/research/commentary/hydrogen-leakage-potential-risk-hydrogen-economy
             'hydrogen': max(0, 0.05 - .03 * (year - yearZero)/(2050 - yearZero)) * 11 / 33,
         }) for k, year in enumerate(yearList[1:])
