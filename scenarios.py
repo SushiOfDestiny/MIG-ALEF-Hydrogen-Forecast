@@ -23,7 +23,7 @@ zones = ['PACA']
 scenar = 1
 
 yearZero = 2020
-yearFinal = 2040
+yearFinal = 2050
 yearStep = 10
 # +1 to include the final year
 yearList = [yr for yr in range(yearZero, yearFinal+yearStep, yearStep)]
@@ -329,14 +329,14 @@ scenario['storageTechs'] = pd.concat(scenario['storageTechs'], axis=1)
 scenario['transportTechs'] = []
 for k, year in enumerate(yearList):
     ttech = 'Pipeline_S'
-    p_max = 50000
+    p_max = 50000.
     p_max_fonc = 100
     capex, opex, LifeSpan = 1583,3e-4,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 9e-5, 'transportInvestCost': capex, 'transportOperationCost':opex,
-            'transportMinPower':0, 'transportMaxPower': p_max,
+            # 'transportMinPower':1., 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 5e-3},
             'transportDischargeFactors': {'hydrogen' : 5e-3},
@@ -348,14 +348,14 @@ for k, year in enumerate(yearList):
     )
 
     ttech = 'Pipeline_M'
-    p_max = 50000
+    p_max = 50000.
     p_max_fonc = 1000
     capex, opex, LifeSpan = 638,1.2e-4,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 3.2e-4, 'transportInvestCost': capex, 'transportOperationCost':opex,
-            'transportMinPower':0, 'transportMaxPower': p_max,
+            # 'transportMinPower':1., 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 5e-3},
             'transportDischargeFactors': {'hydrogen' : 5e-3},
@@ -367,14 +367,14 @@ for k, year in enumerate(yearList):
     )
 
     ttech = 'Pipeline_L'
-    p_max = 50000
+    p_max = 50000.
     p_max_fonc = 10000
     capex, opex, LifeSpan = 294,3.4e-5,40
     scenario['transportTechs'].append(
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 1.5e-3, 'transportInvestCost': capex, 'transportOperationCost':opex,
-            'transportMinPower':0, 'transportMaxPower': p_max,
+            # 'transportMinPower':1., 'transportMaxPower': p_max,
             'transportEmissionCO2':0,
             'transportChargeFactors': {'hydrogen' : 5e-3},
             'transportDischargeFactors': {'hydrogen' : 5e-3},
@@ -396,7 +396,7 @@ for k, year in enumerate(yearList):
         pd.DataFrame(data={ttech:
             {'YEAR' : year, 'transportResource': 'hydrogen',
             'transportLifeSpan':LifeSpan, 'transportPowerCost': 0, 'transportInvestCost': capex, 'transportOperationCost':opex,
-            'transportMinPower':0, 'transportMaxPower': p_max,
+            # 'transportMinPower':1, 'transportMaxPower': p_max,
             'transportEmissionCO2':1/23,
             'transportChargeFactors': {'hydrogen' : 0.07},
             'transportDischargeFactors': {'hydrogen' : 0.01},
