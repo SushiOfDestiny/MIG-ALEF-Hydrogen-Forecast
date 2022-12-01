@@ -36,7 +36,8 @@ def show_power_Dvar(outputFolder='out_scenario1'):
     df.dropna(inplace=True)
 
     df_year = pd.DataFrame()
-    df_year_area = df.groupby(['YEAR_op', 'AREA']).sum()
+    # multiplication by timeStep because variable power_Dvar has an hourly resolution
+    df_year_area = df.groupby(['YEAR_op', 'AREA']).sum() * timeStep 
 
     # dic = {}
     # for ville in areaList:
@@ -46,9 +47,9 @@ def show_power_Dvar(outputFolder='out_scenario1'):
     
     split_df('power_Dvar',df_year_area,areaList,df_year)
 
-    df_year /= 1e3
+    df_year /= 1e6
     df_year.plot(kind='bar')
-    plt.ylabel('GWh')
+    plt.ylabel('TWh')
     plt.legend()
     plt.title(
         f'énergie annuelle de fonctionnement des technologies avec scénario {outputFolder[-1]}')
@@ -63,7 +64,7 @@ def show_import_Dvar(outputFolder='out_scenario1'):
         ['YEAR_op', 'TIMESTAMP', 'RESOURCES', 'AREA'])
     df.dropna(inplace=True)
 
-    df2 = df.groupby(['YEAR_op', 'RESOURCES', 'AREA']).sum()
+    df2 = df.groupby(['YEAR_op', 'RESOURCES', 'AREA']).sum() * timeStep
 
     # for electricity and hydrogen by year and area
     for resource in ['electricity', 'hydrogen']:
@@ -84,9 +85,9 @@ def show_import_Dvar(outputFolder='out_scenario1'):
 
         # affichage
         # return df_year
-        df_year /= 1e3
+        df_year /= 1e6
         df_year.plot(kind='bar')
-        plt.ylabel('GWh')
+        plt.ylabel('TWh')
         plt.legend()
         # juste pour présentation
         plt.title(
@@ -102,8 +103,8 @@ def show_storageConsumption_Pvar(outputFolder='out_scenario1'):
     df = res['storageConsumption_Pvar'].set_index(
         ['YEAR_op', 'TIMESTAMP', 'STOCK_TECHNO', 'AREA'])
     df.dropna(inplace=True)
-    df_year = df.groupby(['YEAR_op']).sum()
-    df_year_area = df.groupby(['YEAR_op', 'AREA']).sum()
+    df_year = df.groupby(['YEAR_op']).sum() * timeStep
+    df_year_area = df.groupby(['YEAR_op', 'AREA']).sum() * timeStep
 
     df_year_fos = df_year_area.loc[(slice(None), 'Fos'), :]
     df_year['storageConsumption_Pvar_fos'] = pd.DataFrame(df_year_fos.values, index=df_year_fos.index.droplevel(
@@ -113,9 +114,9 @@ def show_storageConsumption_Pvar(outputFolder='out_scenario1'):
         1), columns=['storageConsumption_Pvar'])['storageConsumption_Pvar']
 
     # affichage
-    df_year /= 1e3
+    df_year /= 1e6
     df_year.plot(kind='bar')
-    plt.ylabel('GWh')
+    plt.ylabel('TWh')
     plt.legend()
     plt.title(
         f'consommation annuelle des installations de stockage avec scénario {outputFolder[-1]}')
@@ -147,6 +148,7 @@ def show_Tmax_tot(outputFolder='out_scenario1'):
     # affichage
     # return df_year
 
+    # un axe (area1,area2) est aussi compté (area2,area1)
     df_year /= 2
     df_year.plot(kind='bar')
     plt.ylabel('nombre')
@@ -165,9 +167,9 @@ def show_capacityCosts(outputFolder='out_scenario1'):
     df.dropna(inplace=True)
 
     # .rename({'capacityCosts_Pvar':'total'})
-    df_year = df.groupby(['YEAR_op']).sum()
+    df_year = df.groupby(['YEAR_op']).sum() * timeStep
     df_year.columns = ['Total']
-    df2 = df.groupby(['YEAR_op', 'AREA']).sum()
+    df2 = df.groupby(['YEAR_op', 'AREA']).sum() * timeStep
 
     dic = {}
     for ville in areaList:
@@ -177,9 +179,9 @@ def show_capacityCosts(outputFolder='out_scenario1'):
 
     # affichage
     # return df_year
-    df_year /= 1e6
+    df_year /= 1e9
     df_year.plot(kind='bar')
-    plt.ylabel('M€')
+    plt.ylabel('Mrds €')
     plt.legend()
     plt.title(
         f'coût annuel des installations avec scénario {outputFolder[-1]}')
