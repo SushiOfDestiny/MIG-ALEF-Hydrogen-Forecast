@@ -181,6 +181,10 @@ def print_global_transport_camembert_instant(y, power_Dvar='out/transportFlowOut
     except :
         return f"Il n'y a pas de transport sur l'année {y}"
    
+<<<<<<< HEAD
+    
+def prod_H2_an(y, file = "out/power_Dvar.csv", tot = False) :
+=======
 
 def print_global_H2_bar_install(power_Dvar='out/capacity_Pvar.csv'):
     YEAR = [2030, 2040, 2050]
@@ -300,25 +304,42 @@ def print_global_H2_bar_install_capex(power_Dvar='out/capacityCosts_Pvar.csv'):
     plt.title('Global H2 Cost')
   
 def prod_H2_an(file = "out_scenario1/power_Dvar.csv") :
+>>>>>>> df3e48396deec17842061beff77a35c3a30c1fdd
     tech_H2= ["ElectrolysisL", "ElectrolysisM", "ElectrolysisS", "SMR + CCS1", "SMR + CCS2", "SMR"]
     colors_dict={"ElectrolysisL":'darkred', "ElectrolysisM":'firebrick', "ElectrolysisS":'lightcoral', "SMR + CCS1":"dimgray", "SMR + CCS2" : 'darkgray', "SMR" : 'silver'  }
     
     df = pd.read_csv(file)
-    by_techno = df.pivot_table(index='YEAR_op',
+    if not tot :
+        df = df[df['YEAR_op'] == y]
+    by_techno = df.pivot_table(index='AREA',
     columns='TECHNOLOGIES',
     values='power_Dvar',
     aggfunc = 'sum')
-    by_techno.reset_index(inplace=True)
+    print(by_techno)
     plt.figure()
-    by_techno.plot(
-        x = 'YEAR_op',
-        label = tech_H2,
+    by_techno[tech_H2].reset_index().plot(
+        x = 'AREA',
         kind = 'bar',
-        stacked=False
+        stacked=True,
+        title="Puissance instantanée par moyen de transformation par année"
     )
  
+<<<<<<< HEAD
+def energy_H2(file = "out_scenario1bis/energy_Pvar.csv") :
+    df = pd.read_csv(file)
+    print(df.pivot_table(
+        index = 'RESOURCES',
+        columns = 'YEAR_op',
+        values = 'energy_Pvar',
+        aggfunc = 'sum'
+    ))
+
+
+prod_H2_an(2050, tot=False)
+=======
 
 print_global_H2_bar_install_capex()
+>>>>>>> df3e48396deec17842061beff77a35c3a30c1fdd
 plt.show()
 
 
