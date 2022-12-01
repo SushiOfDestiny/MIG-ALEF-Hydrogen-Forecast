@@ -69,11 +69,11 @@ def demande_h_area(scenar, area, k):
         demande_t_an = [100, 248, 239, 236] 
 
     if area == "Nice" :
-        return (0.2 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)  # 20% de la demande à Fos
+        return (0.2 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)  # 20% de la demande
     elif area == "Alpin" : 
-        return (0.1 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)  # 10% de la demande à Fos
+        return (0.1 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)  # 10% de la demande
     else :
-        return (0.7 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
+        return (0.7 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)  # 70% de la demande
 
 
 def stockage_h_area(area):
