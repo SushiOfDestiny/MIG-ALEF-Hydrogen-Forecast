@@ -38,8 +38,8 @@ def show_power_Dvar(outputFolder = 'out_scenario1'):
     df_year.plot(kind='bar')
     plt.ylabel('GWh')
     plt.legend()
-    plt.title(f'puissance de fonctionnement des technologies avec {outputFolder}')
-    plt.savefig(f'show_power_Dvar_{outputFolder}')
+    plt.title(f'puissance de fonctionnement des technologies avec le scénario {i}')
+    plt.savefig(f'show_power_Dvar_le scénario {i}')
 
 
 def show_import_Dvar(outputFolder = 'out_scenario1'):
@@ -74,8 +74,8 @@ def show_import_Dvar(outputFolder = 'out_scenario1'):
         df_year.plot(kind='bar')
         plt.ylabel('GWh')
         plt.legend()
-        plt.title(f'importation annuelle de {variable} avec {outputFolder}')
-        plt.savefig(f'show_import_Dvar_{variable}_{outputFolder}')
+        plt.title(f'importation annuelle de {variable} avec le scénario {i}')
+        plt.savefig(f'show_import_Dvar_{variable}_le scénario {i}')
 
 
 def show_storageConsumption_Pvar(outputFolder = 'out_scenario1'):
@@ -100,8 +100,8 @@ def show_storageConsumption_Pvar(outputFolder = 'out_scenario1'):
     df_year.plot(kind='bar')
     plt.ylabel('GWh')
     plt.legend()
-    plt.title(f'storageConsumption_Pvar_{outputFolder}')
-    plt.savefig(f'storageConsumption_Pvar_{outputFolder}')
+    plt.title(f'storageConsumption_Pvar_le scénario {i}')
+    plt.savefig(f'storageConsumption_Pvar_le scénario {i}')
 
 
 def show_Tmax_tot(outputFolder = 'out_scenario1'):
@@ -126,8 +126,8 @@ def show_Tmax_tot(outputFolder = 'out_scenario1'):
     df_year.plot(kind='bar')
     plt.ylabel('MW')
     plt.legend()
-    plt.title(f'puissance maximale annuelle des transports avec {outputFolder}')
-    plt.savefig(f'show_Tmax_tot_Pvar_{outputFolder}')
+    plt.title(f'puissance maximale annuelle des transports avec le scénario {i}')
+    plt.savefig(f'show_Tmax_tot_Pvar_le scénario {i}')
 
 
 
@@ -154,8 +154,8 @@ def show_capacityCosts(outputFolder = 'out_scenario1'):
     df_year.plot(kind='bar')
     plt.ylabel('GWh')
     plt.legend()
-    plt.title(f'coût annuel des installations avec {outputFolder}')
-    plt.savefig(f'show_capacityCosts_Pvar_{outputFolder}')
+    plt.title(f'coût annuel des installations avec le scénario {i}')
+    plt.savefig(f'show_capacityCosts_Pvar_le scénario {i}')
 
 # TRACE GRAPHES
 for i in range(1,3):
