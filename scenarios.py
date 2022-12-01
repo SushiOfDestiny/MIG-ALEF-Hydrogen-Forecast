@@ -51,6 +51,9 @@ scenario['distances'] = pd.concat(
 )
 scenario['distances'] = scenario['distances'].reset_index().drop_duplicates(subset=['area1','area2']).set_index(['area1','area2']).drop(columns ='index')
 
+# donne la liste des couples de noeuds
+couples_noeuds = list(scenario['distances'].index)
+
 def demande_h_area(scenar, area, k):
     # un facteur pour différencier Nice de Fos
     # différent scénarios
@@ -500,7 +503,7 @@ scenario['availability'] = availabilityFactor.loc[(
     slice(None), slice(None), itechs)]
 
 # availability pour transport ?
-
+ttechs_list = list(scenario['transportTechs'].columns.unique())
 
 scenario["yearList"] = yearList
 scenario["areaList"] = areaList
