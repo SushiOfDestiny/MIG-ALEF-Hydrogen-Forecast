@@ -62,16 +62,16 @@ def demande_h_area(scenar, area, k):
     if scenar == 0 :
         demande_t_an = [100, 150, 175, 200]
     elif scenar == 1 :
-        demande_t_an = [100, 296, 381, 571]
+        demande_t_an = [100, 296, 381, 571]  # croissant
     elif scenar == 2 :
-        demande_t_an = [100, 248, 239, 236] 
+        demande_t_an = [100, 248, 239, 236]  # pic en 2030
     elif scenar == 3 :
         demande_t_an = [100, 248, 239, 236] 
 
     if area == "Nice" :
-        return (0.2 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
+        return (0.2 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)  # 20% de la demande à Fos
     elif area == "Alpin" : 
-        return (0.1 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
+        return (0.1 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)  # 10% de la demande à Fos
     else :
         return (0.7 * 33.e3 / 8760) * demande_t_an[k] * np.ones(nHours)
 

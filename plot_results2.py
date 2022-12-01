@@ -38,7 +38,7 @@ def show_power_Dvar(outputFolder = 'out_scenario1'):
     df_year.plot(kind='bar')
     plt.ylabel('GWh')
     plt.legend()
-    plt.title(f'puissance de fonctionnement des technologies avec {outputFolder}')
+    plt.title(f'énergie annuelle de fonctionnement des technologies avec {outputFolder}')
     plt.savefig(f'show_power_Dvar_{outputFolder}')
 
 
@@ -150,17 +150,17 @@ def show_capacityCosts(outputFolder = 'out_scenario1'):
 
     # affichage
     # return df_year
-    df_year /= 1e3
+    df_year /= 1e6
     df_year.plot(kind='bar')
-    plt.ylabel('GWh')
+    plt.ylabel('M€')
     plt.legend()
     plt.title(f'coût annuel des installations avec {outputFolder}')
     plt.savefig(f'show_capacityCosts_Pvar_{outputFolder}')
 
 # TRACE GRAPHES
 for i in range(1,3):
-    # show_power_Dvar(f'out_scenario{i}')
-    # show_import_Dvar(f'out_scenario{i}')
-    # show_capacityCosts(f'out_scenario{i}')
+    show_power_Dvar(f'out_scenario{i}')
+    show_import_Dvar(f'out_scenario{i}')
+    show_capacityCosts(f'out_scenario{i}')
     show_Tmax_tot(f'out_scenario{i}')
 plt.show()
