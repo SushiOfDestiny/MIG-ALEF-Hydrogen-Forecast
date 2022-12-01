@@ -12,12 +12,24 @@ vlist = ['capacityInvest_Dvar', 'transInvest_Dvar', 'capacity_Pvar', 'capacityDe
          'stockLevel_Pvar', 'importation_Dvar', 'Cmax_Pvar', 'carbon_Pvar', 'powerCosts_Pvar', 'capacityCosts_Pvar', 'importCosts_Pvar', 'storageCosts_Pvar', 'turpeCosts_Pvar', 'Pmax_Pvar', 'max_PS_Dvar', 'carbonCosts_Pvar',
          'Tmaxtot_Pvar']
 
+def create_res_dict(outputFolder):
+    """returns result dictionary where each key is a csv file's name and the correspondant value is the file"""
+    return {v: pd.read_csv(outputFolder + '/' + v +
+                          '.csv').drop(columns='Unnamed: 0') for v in vlist}
+
+def split_df(variable, dff, entity_list, df_res):
+    """add columns to df_res corresponding to sliced dataframes from dff depending on entity_list """
+    dic = {}
+    for entity in entity_list:
+        dic[entity] = dff.loc[(slice(None), entity), :]
+        df_res[entity] = pd.DataFrame(dic[entity].values, index=dic[entity].index.droplevel(
+            1), columns=[variable])[variable]
+
 
 def show_power_Dvar(outputFolder='out_scenario1'):
-    '''shows the 'power_Dvar' by year and area from all tech'''
+    '''shows the annual energy consumption by year and area from all tech'''
 
-    res = {v: pd.read_csv(outputFolder + '/' + v +
-                          '.csv').drop(columns='Unnamed: 0') for v in vlist}
+    res = create_res_dict(outputFolder)
 
     df = res['power_Dvar'].set_index(
         ['YEAR_op', 'TIMESTAMP', 'TECHNOLOGIES', 'AREA'])
@@ -26,11 +38,13 @@ def show_power_Dvar(outputFolder='out_scenario1'):
     df_year = pd.DataFrame()
     df_year_area = df.groupby(['YEAR_op', 'AREA']).sum()
 
-    dic = {}
-    for ville in areaList:
-        dic[ville] = df_year_area.loc[(slice(None), ville), :]
-        df_year[ville] = pd.DataFrame(dic[ville].values, index=dic[ville].index.droplevel(
-            1), columns=['power_Dvar'])['power_Dvar']
+    # dic = {}
+    # for ville in areaList:
+    #     dic[ville] = df_year_area.loc[(slice(None), ville), :]
+    #     df_year[ville] = pd.DataFrame(dic[ville].values, index=dic[ville].index.droplevel(
+    #         1), columns=['power_Dvar'])['power_Dvar']
+    
+    split_df('power_Dvar',df_year_area,areaList,df_year)
 
     df_year /= 1e3
     df_year.plot(kind='bar')
@@ -43,8 +57,7 @@ def show_power_Dvar(outputFolder='out_scenario1'):
 
 def show_import_Dvar(outputFolder='out_scenario1'):
     """shows import by year by ressource by area"""
-    res = {v: pd.read_csv(outputFolder + '/' + v +
-                          '.csv').drop(columns='Unnamed: 0') for v in vlist}
+    res = create_res_dict(outputFolder)
 
     df = res['importation_Dvar'].set_index(
         ['YEAR_op', 'TIMESTAMP', 'RESOURCES', 'AREA'])
@@ -53,19 +66,21 @@ def show_import_Dvar(outputFolder='out_scenario1'):
     df2 = df.groupby(['YEAR_op', 'RESOURCES', 'AREA']).sum()
 
     # for electricity and hydrogen by year and area
-    for variable in ['electricity', 'hydrogen']:
-        df3 = df2.loc[(slice(None), variable, slice(None)), :]
+    for resource in ['electricity', 'hydrogen']:
+        df3 = df2.loc[(slice(None), resource, slice(None)), :]
         df4 = pd.DataFrame(df3.values,
                            index=df3.index.droplevel(1),
                            columns=['importation_Dvar']
                            )
 
         df_year = pd.DataFrame()
-        dic = {}
-        for ville in areaList:
-            dic[ville] = df4.loc[(slice(None), ville), :]
-            df_year[ville] = pd.DataFrame(dic[ville].values, index=dic[ville].index.droplevel(
-                1), columns=['importation_Dvar'])['importation_Dvar']
+        # dic = {}
+        # for ville in areaList:
+        #     dic[ville] = df4.loc[(slice(None), ville), :]
+        #     df_year[ville] = pd.DataFrame(dic[ville].values, index=dic[ville].index.droplevel(
+        #         1), columns=['importation_Dvar'])['importation_Dvar']
+
+        split_df('import_Dvar',df4,areaList,df_year)
 
         # affichage
         # return df_year
@@ -75,14 +90,15 @@ def show_import_Dvar(outputFolder='out_scenario1'):
         plt.legend()
         # juste pour présentation
         plt.title(
-            f'importation annuelle d\'électricité avec scénario {outputFolder[-1]}')
-        plt.savefig(f'show_import_Dvar_{variable}_{outputFolder}')
+            f'importation annuelle de {resource} avec scénario {outputFolder[-1]}')
+        plt.savefig(f'show_import_Dvar_{resource}_{outputFolder}')
 
 
 def show_storageConsumption_Pvar(outputFolder='out_scenario1'):
-    """shows storageConsumption_Pvar by year by ressource by area for all stech"""
-    res = {v: pd.read_csv(outputFolder + '/' + v +
-                          '.csv').drop(columns='Unnamed: 0') for v in vlist}
+    """shows storageConsumption_Pvar by year by ressource by area for all stech,
+    to be upgraded"""
+    res = create_res_dict(outputFolder)
+
     df = res['storageConsumption_Pvar'].set_index(
         ['YEAR_op', 'TIMESTAMP', 'STOCK_TECHNO', 'AREA'])
     df.dropna(inplace=True)
@@ -107,9 +123,9 @@ def show_storageConsumption_Pvar(outputFolder='out_scenario1'):
 
 
 def show_Tmax_tot(outputFolder='out_scenario1'):
-    """show max transport flow by year and ttech from all transport axes"""
-    res = {v: pd.read_csv(outputFolder + '/' + v +
-                          '.csv').drop(columns='Unnamed: 0') for v in vlist}
+    """show transport units by year and ttech from all transport axes"""
+    res = create_res_dict(outputFolder)
+
     df = res['Tmaxtot_Pvar'].set_index(
         ['YEAR_invest', 'TRANS_TECHNO', 'AREA', 'AREA.1'])
     df.dropna(inplace=True)
@@ -118,14 +134,16 @@ def show_Tmax_tot(outputFolder='out_scenario1'):
     df_year.columns = ['Total']
     df2 = df.groupby(['YEAR_invest', 'TRANS_TECHNO']).sum()
 
-    dic = {}
-    for ttech in ttechs_list:
-        dic[ttech] = df2.loc[(slice(None), ttech), :]
-        df_year[ttech] = pd.DataFrame(dic[ttech].values, index=dic[ttech].index.droplevel(
-            1), columns=['capacityCosts_Pvar'])['capacityCosts_Pvar']
+    # dic = {}
+    # for ttech in ttechs_list:
+    #     dic[ttech] = df2.loc[(slice(None), ttech), :]
+    #     df_year[ttech] = pd.DataFrame(dic[ttech].values, index=dic[ttech].index.droplevel(
+    #         1), columns=['Tmaxtot_Pvar'])['Tmaxtot_Pvar']
+
+    split_df('Tmaxtot_Pvar',df2,ttechs_list,df_year)
 
     df_year.columns = ["Total", "Pipeline_S", "Pipeline_M",
-                       "Pipeline_M", "Camion transporteur d'hydrogène"]
+                       "Pipeline_L", "Camion transporteur d'hydrogène"]
     # affichage
     # return df_year
 
@@ -140,8 +158,8 @@ def show_Tmax_tot(outputFolder='out_scenario1'):
 
 def show_capacityCosts(outputFolder='out_scenario1'):
     """shows capacityCosts_Pvar (capex and opex) by year by ressource by area for all stech"""
-    res = {v: pd.read_csv(outputFolder + '/' + v +
-                          '.csv').drop(columns='Unnamed: 0') for v in vlist}
+    res = create_res_dict(outputFolder)
+
     df = res['capacityCosts_Pvar'].set_index(
         ['YEAR_op', 'TECHNOLOGIES', 'AREA'])
     df.dropna(inplace=True)
