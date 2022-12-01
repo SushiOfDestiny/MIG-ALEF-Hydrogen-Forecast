@@ -85,9 +85,9 @@
 83,2030,Pipeline_S,Marseille,Alpin,0.0
 84,2030,Pipeline_S,Nice,Marseille,0.0
 85,2030,Pipeline_S,Nice,Nice,0.0
-86,2030,Pipeline_S,Nice,Alpin,2.0
+86,2030,Pipeline_S,Nice,Alpin,0.0
 87,2030,Pipeline_S,Alpin,Marseille,0.0
-88,2030,Pipeline_S,Alpin,Nice,2.0
+88,2030,Pipeline_S,Alpin,Nice,0.0
 89,2030,Pipeline_S,Alpin,Alpin,0.0
 90,2030,truckTransportingHydrogen,Marseille,Marseille,0.0
 91,2030,truckTransportingHydrogen,Marseille,Nice,0.0

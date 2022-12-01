@@ -1,109 +1,109 @@
 ,YEAR_op,TECHNOLOGIES,AREA,capacityCosts_Pvar
-0,2040,Offshore wind - floating,Marseille,0.0
-1,2040,Offshore wind - floating,Nice,0.0
-2,2040,Offshore wind - floating,Alpin,0.0
-3,2040,ElectrolysisM,Marseille,2092700.2271902624
-4,2040,ElectrolysisM,Nice,0.0
-5,2040,ElectrolysisM,Alpin,0.0
+0,2040,Existing SMR,Marseille,0.0
+1,2040,Existing SMR,Nice,0.0
+2,2040,Existing SMR,Alpin,0.0
+3,2040,ElectrolysisS,Marseille,0.0
+4,2040,ElectrolysisS,Nice,0.0
+5,2040,ElectrolysisS,Alpin,0.0
 6,2040,CCS2,Marseille,0.0
 7,2040,CCS2,Nice,0.0
 8,2040,CCS2,Alpin,0.0
-9,2040,Ground PV,Marseille,21285681.499893356
-10,2040,Ground PV,Nice,0.0
-11,2040,Ground PV,Alpin,9176726.233021928
-12,2040,SMR,Marseille,0.0
-13,2040,SMR,Nice,0.0
-14,2040,SMR,Alpin,0.0
-15,2040,SMR + CCS1,Marseille,0.0
-16,2040,SMR + CCS1,Nice,0.0
-17,2040,SMR + CCS1,Alpin,0.0
-18,2040,CCS1,Marseille,0.0
-19,2040,CCS1,Nice,0.0
-20,2040,CCS1,Alpin,0.0
-21,2040,ElectrolysisS,Marseille,0.0
-22,2040,ElectrolysisS,Nice,0.0
-23,2040,ElectrolysisS,Alpin,0.0
-24,2040,Existing SMR,Marseille,0.0
-25,2040,Existing SMR,Nice,0.0
-26,2040,Existing SMR,Alpin,0.0
-27,2040,ElectrolysisL,Marseille,101490748.39715655
-28,2040,ElectrolysisL,Nice,0.0
-29,2040,ElectrolysisL,Alpin,27605493.17374649
-30,2040,SMR + CCS2,Marseille,0.0
-31,2040,SMR + CCS2,Nice,0.0
-32,2040,SMR + CCS2,Alpin,0.0
+9,2040,SMR + CCS1,Marseille,0.0
+10,2040,SMR + CCS1,Nice,0.0
+11,2040,SMR + CCS1,Alpin,0.0
+12,2040,ElectrolysisL,Marseille,101490748.39715655
+13,2040,ElectrolysisL,Nice,33830249.46571884
+14,2040,ElectrolysisL,Alpin,11276749.821906282
+15,2040,SMR + CCS2,Marseille,0.0
+16,2040,SMR + CCS2,Nice,0.0
+17,2040,SMR + CCS2,Alpin,0.0
+18,2040,Ground PV,Marseille,21285681.499893356
+19,2040,Ground PV,Nice,0.0
+20,2040,Ground PV,Alpin,3074728.39154659
+21,2040,ElectrolysisM,Marseille,2092700.2271902624
+22,2040,ElectrolysisM,Nice,0.0
+23,2040,ElectrolysisM,Alpin,8912215.885812322
+24,2040,Offshore wind - floating,Marseille,0.0
+25,2040,Offshore wind - floating,Nice,0.0
+26,2040,Offshore wind - floating,Alpin,0.0
+27,2040,SMR,Marseille,0.0
+28,2040,SMR,Nice,3.391216719701735e-10
+29,2040,SMR,Alpin,0.0
+30,2040,CCS1,Marseille,0.0
+31,2040,CCS1,Nice,0.0
+32,2040,CCS1,Alpin,0.0
 33,2040,Onshore wind,Marseille,73713373.40964726
-34,2040,Onshore wind,Nice,0.0
-35,2040,Onshore wind,Alpin,28889974.32874911
-36,2050,Offshore wind - floating,Marseille,0.0
-37,2050,Offshore wind - floating,Nice,0.0
-38,2050,Offshore wind - floating,Alpin,0.0
-39,2050,ElectrolysisM,Marseille,1376755.0494265393
-40,2050,ElectrolysisM,Nice,0.0
-41,2050,ElectrolysisM,Alpin,0.0
+34,2040,Onshore wind,Nice,25328114.36519548
+35,2040,Onshore wind,Alpin,10924489.471033188
+36,2050,Existing SMR,Marseille,0.0
+37,2050,Existing SMR,Nice,0.0
+38,2050,Existing SMR,Alpin,0.0
+39,2050,ElectrolysisS,Marseille,0.0
+40,2050,ElectrolysisS,Nice,0.0
+41,2050,ElectrolysisS,Alpin,71476.12398504249
 42,2050,CCS2,Marseille,0.0
 43,2050,CCS2,Nice,0.0
 44,2050,CCS2,Alpin,0.0
-45,2050,Ground PV,Marseille,19859155.51184963
-46,2050,Ground PV,Nice,0.0
-47,2050,Ground PV,Alpin,8574288.069509238
-48,2050,SMR,Marseille,0.0
-49,2050,SMR,Nice,0.0
-50,2050,SMR,Alpin,0.0
-51,2050,SMR + CCS1,Marseille,0.0
-52,2050,SMR + CCS1,Nice,0.0
-53,2050,SMR + CCS1,Alpin,0.0
-54,2050,CCS1,Marseille,0.0
-55,2050,CCS1,Nice,0.0
-56,2050,CCS1,Alpin,0.0
-57,2050,ElectrolysisS,Marseille,0.0
-58,2050,ElectrolysisS,Nice,0.0
-59,2050,ElectrolysisS,Alpin,0.0
-60,2050,Existing SMR,Marseille,0.0
-61,2050,Existing SMR,Nice,0.0
-62,2050,Existing SMR,Alpin,0.0
-63,2050,ElectrolysisL,Marseille,16962194.61031293
-64,2050,ElectrolysisL,Nice,0.0
-65,2050,ElectrolysisL,Alpin,12915802.220490485
-66,2050,SMR + CCS2,Marseille,0.0
-67,2050,SMR + CCS2,Nice,0.0
-68,2050,SMR + CCS2,Alpin,0.0
+45,2050,SMR + CCS1,Marseille,0.0
+46,2050,SMR + CCS1,Nice,0.0
+47,2050,SMR + CCS1,Alpin,0.0
+48,2050,ElectrolysisL,Marseille,16962194.61031293
+49,2050,ElectrolysisL,Nice,5654064.870104309
+50,2050,ElectrolysisL,Alpin,1884688.2900347703
+51,2050,SMR + CCS2,Marseille,0.0
+52,2050,SMR + CCS2,Nice,0.0
+53,2050,SMR + CCS2,Alpin,0.0
+54,2050,Ground PV,Marseille,19859155.51184963
+55,2050,Ground PV,Nice,0.0
+56,2050,Ground PV,Alpin,2900984.6731642163
+57,2050,ElectrolysisM,Marseille,1376755.0494265393
+58,2050,ElectrolysisM,Nice,0.0
+59,2050,ElectrolysisM,Alpin,1031452.8811835939
+60,2050,Offshore wind - floating,Marseille,0.0
+61,2050,Offshore wind - floating,Nice,0.0
+62,2050,Offshore wind - floating,Alpin,0.0
+63,2050,SMR,Marseille,0.0
+64,2050,SMR,Nice,2.2909845045534536e-10
+65,2050,SMR,Alpin,0.0
+66,2050,CCS1,Marseille,0.0
+67,2050,CCS1,Nice,0.0
+68,2050,CCS1,Alpin,0.0
 69,2050,Onshore wind,Marseille,48174816.05195401
-70,2050,Onshore wind,Nice,0.0
-71,2050,Onshore wind,Alpin,18814064.931820653
-72,2030,Offshore wind - floating,Marseille,0.0
-73,2030,Offshore wind - floating,Nice,0.0
-74,2030,Offshore wind - floating,Alpin,0.0
-75,2030,ElectrolysisM,Marseille,0.0
-76,2030,ElectrolysisM,Nice,0.0
-77,2030,ElectrolysisM,Alpin,0.0
+70,2050,Onshore wind,Nice,16643663.74706832
+71,2050,Onshore wind,Alpin,7139705.088325456
+72,2030,Existing SMR,Marseille,8647221.360970221
+73,2030,Existing SMR,Nice,0.0
+74,2030,Existing SMR,Alpin,0.0
+75,2030,ElectrolysisS,Marseille,0.0
+76,2030,ElectrolysisS,Nice,0.0
+77,2030,ElectrolysisS,Alpin,0.0
 78,2030,CCS2,Marseille,0.0
 79,2030,CCS2,Nice,0.0
 80,2030,CCS2,Alpin,0.0
-81,2030,Ground PV,Marseille,106818.05825547827
-82,2030,Ground PV,Nice,0.0
-83,2030,Ground PV,Alpin,0.0
-84,2030,SMR,Marseille,0.0
-85,2030,SMR,Nice,0.0
-86,2030,SMR,Alpin,0.0
-87,2030,SMR + CCS1,Marseille,0.0
-88,2030,SMR + CCS1,Nice,0.0
-89,2030,SMR + CCS1,Alpin,0.0
-90,2030,CCS1,Marseille,0.0
-91,2030,CCS1,Nice,0.0
-92,2030,CCS1,Alpin,0.0
-93,2030,ElectrolysisS,Marseille,0.0
-94,2030,ElectrolysisS,Nice,0.0
-95,2030,ElectrolysisS,Alpin,0.0
-96,2030,Existing SMR,Marseille,8647221.360970221
-97,2030,Existing SMR,Nice,8647221.360970221
-98,2030,Existing SMR,Alpin,8647221.360970221
-99,2030,ElectrolysisL,Marseille,150231100.2869766
-100,2030,ElectrolysisL,Nice,0.0
-101,2030,ElectrolysisL,Alpin,16692344.476330733
-102,2030,SMR + CCS2,Marseille,0.0
-103,2030,SMR + CCS2,Nice,0.0
-104,2030,SMR + CCS2,Alpin,0.0
+81,2030,SMR + CCS1,Marseille,0.0
+82,2030,SMR + CCS1,Nice,0.0
+83,2030,SMR + CCS1,Alpin,0.0
+84,2030,ElectrolysisL,Marseille,150231100.2869766
+85,2030,ElectrolysisL,Nice,50077033.428992204
+86,2030,ElectrolysisL,Alpin,16692344.476330733
+87,2030,SMR + CCS2,Marseille,0.0
+88,2030,SMR + CCS2,Nice,0.0
+89,2030,SMR + CCS2,Alpin,0.0
+90,2030,Ground PV,Marseille,106818.05825547827
+91,2030,Ground PV,Nice,0.0
+92,2030,Ground PV,Alpin,320454.1747664348
+93,2030,ElectrolysisM,Marseille,0.0
+94,2030,ElectrolysisM,Nice,0.0
+95,2030,ElectrolysisM,Alpin,13192256.63093217
+96,2030,Offshore wind - floating,Marseille,0.0
+97,2030,Offshore wind - floating,Nice,0.0
+98,2030,Offshore wind - floating,Alpin,0.0
+99,2030,SMR,Marseille,0.0
+100,2030,SMR,Nice,0.0
+101,2030,SMR,Alpin,0.0
+102,2030,CCS1,Marseille,0.0
+103,2030,CCS1,Nice,0.0
+104,2030,CCS1,Alpin,0.0
 105,2030,Onshore wind,Marseille,112389396.24790518
 106,2030,Onshore wind,Nice,0.0
-107,2030,Onshore wind,Alpin,12523389.86762372
+107,2030,Onshore wind,Alpin,16697853.156831626
