@@ -448,7 +448,7 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_invest, model.YEAR_invest, model.TECHNOLOGIES, model.AREA, domain=NonNegativeIntegers)
 
     # variables encore réelles
-    # capacité des installations d'une technologie dans une zone, en unités de puissance max
+    # capacité (en sortie) des installations d'une technologie dans une zone, en unités de puissance max
     model.capacity_Pvar = Var(
         model.YEAR_op, model.TECHNOLOGIES, model.AREA, domain=NonNegativeIntegers, initialize=0)
     # Maximum capacity of a storage mean
