@@ -114,6 +114,28 @@ print(scenario['resourceDemand'].tail())
 '''
 scenario['conversionTechs'] = []
 
+# un effort est fait pour reprendre les données choisies dans les scénarios du groupe infrastructure
+# capex, opex, lifespan ne sont pas changés et restent déterminés par electrolyser_capex_Reksten2022
+
+# propriétés électrolyseurs
+# on prend 33 kWh/kg comme densité énergétique de l'hydrogène gazeux
+# facteur conversion électricité -> hydrogène
+conv_el_h = 0.65 
+# hydrogène produit par électrolyseur de taille S (en MW), selon scénario 1 
+# (1MW de conso électrique pour 18kg/h ~ 600kW d'hydrogène produit)
+power_S = 600e-3  #MW
+
+# liste des puissances max de ressources produites par une installation de techno (en MW)
+pel = {
+    "Offshore wind - floating" : 12,
+    "Onshore wind" : 6,
+    "Ground PV" : 6.4*10**(-5),
+    "ElectrolysisS" : power_S,
+    "ElectrolysisM" : 10 * power_S,
+    "ElectrolysisL" : 100 * power_S
+}
+
+
 for area in areaList:
     for k, year in enumerate(yearList):
         tech = "Offshore wind - floating"
@@ -121,7 +143,6 @@ for area in areaList:
         if area == "Alpin":
             maxcap = 0
 
-        pel = 12
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
         scenario['conversionTechs'].append(
@@ -132,7 +153,7 @@ for area in areaList:
                                 'EmissionCO2': 0, 'Conversion': {'electricity': 0.4, 'hydrogen': 0},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
                                 'capacityLim': 100e3,  # capacité max d'une zone et d'une techno
-                                'techUnitPower': pel  # puissance fonctionnelle maximale d'une unité
+                                'techUnitPower': pel[tech]  # puissance fonctionnelle maximale produite par une unité
                                 }
                                }
                          )
@@ -140,7 +161,6 @@ for area in areaList:
 
         tech = "Onshore wind"
         maxcap = 10000
-        pel = 6
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
         if area == "Nice":
@@ -152,7 +172,7 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': maxcap,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': 0.25, 'hydrogen': 0},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': pel
+                                'capacityLim': 100e3, 'techUnitPower': pel[tech]
                                 },
                                }
                          )
@@ -160,7 +180,6 @@ for area in areaList:
 
         tech = "Ground PV"
         maxcap = 10000
-        pel = 6.4*10**(-5)
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
         if area == "Nice":
@@ -172,17 +191,14 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': maxcap,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': 0.16, 'hydrogen': 0},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': pel
+                                'capacityLim': 100e3, 'techUnitPower': pel[tech]
                                 },
                                }
                          )
         )
 
-        conv_el_h = 0.65 # facteur conversion électricité -> hydrogène
-        power_S = 600e-3 # hydrogène produit par électrolyseur de taille S (en MW)
 
         tech = "ElectrolysisS"
-        pel = power_S / conv_el_h # puissance en hydrogène produite (en MW) / conversion = puissance électrique consommée 
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
         scenario['conversionTechs'].append(
@@ -192,14 +208,13 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': 10000,  # cap à investir
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': conv_el_h},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': pel
+                                'capacityLim': 100e3, 'techUnitPower': pel[tech]
                                 },
                                }
                          )
         )
 
         tech = "ElectrolysisM"
-        pel = 10 * power_S / conv_el_h
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
         scenario['conversionTechs'].append(
@@ -209,14 +224,13 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': 10000,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': conv_el_h},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': pel
+                                'capacityLim': 100e3, 'techUnitPower': pel[tech]
                                 },
                                }
                          )
         )
 
         tech = "ElectrolysisL"
-        pel = 100 * power_S / conv_el_h
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
         scenario['conversionTechs'].append(
@@ -226,7 +240,7 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': 10000,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': conv_el_h},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': pel
+                                'capacityLim': 100e3, 'techUnitPower': pel[tech]
                                 },
                                }
                          )
