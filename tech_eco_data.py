@@ -63,14 +63,14 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
             'ref':  interp1d(years, [25, 30, 30, 30, 30]),
         }
 
-    # modification des puissances pel selon les données de scenarios.py
+    # modification des puissances p_max_fonc selon les données de scenarios.py
 	# comme Pel est ici la puissance électrique consommée, on divise par le facteur de conversion élec->H 
     elif tech == "ElectrolysisS":
         capex = {
             'ref':  interp1d(
                 years,
                 electrolyser_capex_Reksten2022(
-                    tech='PEM', Pel=scenarios.pel[tech] / scenarios.conv_el_h, year=np.array(years)
+                    tech='PEM', Pel=scenarios.p_max_fonc[tech] / scenarios.conv_el_h, year=np.array(years)
                 )
             ),
         }
@@ -83,7 +83,14 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 
     elif tech == "ElectrolysisM":
         capex = {
-            'ref':  interp1d(years, electrolyser_capex_Reksten2022(tech='PEM', Pel=scenarios.pel[tech] / scenarios.conv_el_h, year=np.array(years))),
+            'ref':  interp1d(
+				years, 
+				electrolyser_capex_Reksten2022(
+					tech='PEM', 
+					Pel=scenarios.p_max_fonc[tech] / scenarios.conv_el_h, 
+					year=np.array(years)
+					)
+					),
         }
         opex = {
             'ref': interp1d(years, [12] * 5),
@@ -94,7 +101,14 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 
     elif tech == "ElectrolysisL":
         capex = {
-            'ref':  interp1d(years, electrolyser_capex_Reksten2022(tech='PEM', Pel=scenarios.pel[tech] / scenarios.conv_el_h, year=np.array(years))),
+            'ref':  interp1d(
+				years, 
+				electrolyser_capex_Reksten2022(
+					tech='PEM', 
+					Pel=scenarios.p_max_fonc[tech] / scenarios.conv_el_h, 
+					year=np.array(years)
+					)
+					),
         }
         opex = {
             'ref': interp1d(years, [12] * 5),
@@ -152,7 +166,8 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 def electrolyser_capex_Reksten2022(tech, Pel, year=2020):
     '''
     Reference: Reksten et al. (2022) https://www.sciencedirect.com/science/article/pii/S0360319922040253
-    Pel: electrolyser electrical power consumption in MW
+    
+	Pel: electrolyser electrical power consumption (MW)
     tech: electrolyser technology
     year: installation year 
     '''
