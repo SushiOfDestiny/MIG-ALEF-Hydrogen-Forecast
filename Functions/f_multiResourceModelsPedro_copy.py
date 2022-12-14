@@ -130,15 +130,15 @@ def loadScenario(scenario, printTables=False):
     ResParameters = pd.concat((
         k.melt(id_vars=['TIMESTAMP', 'YEAR', 'AREA'], var_name=[
                'RESOURCES'], value_name=name).set_index(['YEAR', 'TIMESTAMP', 'RESOURCES', 'AREA'])
-        for k, name in [(scenario['resourceImportPrices'], 'importCost'), (scenario['resourceImportCO2eq'], 'emission')]
+        for k, name in [(scenario['resourceImportPrices'], 'importCost'), (scenario['resourceImportCO2eq'], 'importEmissionCO2')]
     ), axis=1)
 
     availabilityFactor = scenario['availability']
 
-    # Return hydrogen annual consumption in kt
+    # Return hydrogen annual consumption in kt (sachant areaConsumption en MW)
     if printTables:
         print(areaConsumption.loc[slice(None), slice(
-            None), 'electricity'].groupby('YEAR').sum()/33e3)
+            None), 'electricity'].groupby('YEAR').sum()/33e-3)
         print(TechParameters)
         print(CarbonTax)
         print(conversionFactor)
@@ -610,10 +610,10 @@ def systemModelPedro(scenario, isAbstract=False):
         model.YEAR_op, model.RESOURCES, rule=BiogazDef_rule)
 
     # Carbon emission definition Constraints hors transport
-    # c'est quoi model.emission ??
+    # c'est quoi model.importEmissionCO2 ??
     def CarbonDef_rule(model, y, t, area):
         return sum((model.power_Dvar[y, t, tech, area] * model.EmissionCO2[y-dy, tech, area]) for tech in model.TECHNOLOGIES) + \
-            sum(model.importation_Dvar[y, t, res, area] * model.emission[y, t, res, area]
+            sum(model.importation_Dvar[y, t, res, area] * model.importEmissionCO2[y, t, res, area]
                 for res in model.RESOURCES) == model.carbon_Pvar[y, t, area]
     model.CarbonDefCtr = Constraint(
         model.YEAR_op, model.TIMESTAMP, model.AREA, rule=CarbonDef_rule)
