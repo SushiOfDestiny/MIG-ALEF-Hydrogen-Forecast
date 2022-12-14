@@ -113,39 +113,6 @@ print(scenario['resourceDemand'].tail())
 '''
 scenario['conversionTechs'] = []
 
-#############################
-# PROPRIETES TECHNOLOGIQUES #
-#############################
-# un effort est fait pour reprendre les données choisies dans les scénarios du groupe infrastructure
-# capex, opex, lifespan ne sont pas changés et restent déterminés par electrolyser_capex_Reksten2022
-
-# on distingue la puissance de consommation et de production
-
-# propriétés électrolyseurs
-# facteur conversion électricité -> hydrogène
-conv_el_h = 0.65 
-# hydrogène produit par électrolyseur de taille S (en MW), selon scénario 1 
-# (1MW de conso électrique pour 18kg/h ~ 600kW d'hydrogène produit)
-power_S = 600e-3  #MW
-
-# liste des puissances max de ressources 
-# - pour une tech : produites par une installation (en MW)
-# - pour une ttech : transportables par km (en MW/km)
-p_max_fonc = {
-    "Offshore wind - floating" : 12,
-    "Onshore wind" : 6,
-    "Ground PV" : 6.4*10**(-5),
-    "ElectrolysisS" : power_S,
-    "ElectrolysisM" : 10 * power_S,
-    "ElectrolysisL" : 100 * power_S,
-    "Pipeline_S" : 100, # puissance maximale de fonctionnement du pipeline (=débit max), fixée
-    "Pipeline_M" : 1000,
-    "Pipeline_L" : 10000,
-    # capacité d'un camion : C = 600kg = 600*33 = 19800 kWh = 19.8 MWh
-    # c'est aussi la qté d'hydrogène qu'un camion transport en 1 heure sur 1 km
-    "truckTransportingHydrogen" : 19.8
-}
-
 
 for area in areaList:
     for k, year in enumerate(yearList):
@@ -164,7 +131,7 @@ for area in areaList:
                                 'EmissionCO2': 0, 'Conversion': {'electricity': 0.4, 'hydrogen': 0},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
                                 'capacityLim': 100e3,  # capacité de production max d'une zone et d'une techno
-                                'techUnitPower': p_max_fonc[tech]  # puissance fonctionnelle maximale produite par une unité
+                                'techUnitPower': tech_eco_data.p_max_fonc[tech]  # puissance fonctionnelle maximale produite par une unité
                                 }
                                }
                          )
@@ -183,7 +150,7 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': maxcap,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': 0.25, 'hydrogen': 0},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': p_max_fonc[tech]
+                                'capacityLim': 100e3, 'techUnitPower': tech_eco_data.p_max_fonc[tech]
                                 },
                                }
                          )
@@ -202,7 +169,7 @@ for area in areaList:
                                 'minCapacity': 0, 'maxCapacity': maxcap,
                                 'EmissionCO2': 0, 'Conversion': {'electricity': 0.16, 'hydrogen': 0},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': p_max_fonc[tech]
+                                'capacityLim': 100e3, 'techUnitPower': tech_eco_data.p_max_fonc[tech]
                                 },
                                }
                          )
@@ -217,9 +184,9 @@ for area in areaList:
                                {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                                 'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
                                 'minCapacity': 0, 'maxCapacity': 10000,  # cap à investir
-                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': conv_el_h},
+                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': tech_eco_data.conv_el_h},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': p_max_fonc[tech]
+                                'capacityLim': 100e3, 'techUnitPower': tech_eco_data.p_max_fonc[tech]
                                 },
                                }
                          )
@@ -233,9 +200,9 @@ for area in areaList:
                                {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                                 'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
                                 'minCapacity': 0, 'maxCapacity': 10000,
-                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': conv_el_h},
+                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': tech_eco_data.conv_el_h},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': p_max_fonc[tech]
+                                'capacityLim': 100e3, 'techUnitPower': tech_eco_data.p_max_fonc[tech]
                                 },
                                }
                          )
@@ -249,9 +216,9 @@ for area in areaList:
                                {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                                 'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
                                 'minCapacity': 0, 'maxCapacity': 10000,
-                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': conv_el_h},
+                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': tech_eco_data.conv_el_h},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
-                                'capacityLim': 100e3, 'techUnitPower': p_max_fonc[tech]
+                                'capacityLim': 100e3, 'techUnitPower': tech_eco_data.p_max_fonc[tech]
                                 },
                                }
                          )
@@ -417,7 +384,7 @@ for k, year in enumerate(yearList):
                             'transportDischargeFactors': {'hydrogen': 5e-3},
                             'transportDissipation': 2e-5,
                             # puissance maximale de fonctionnement du pipeline (=débit max), fixée
-                            'transportUnitPower': p_max_fonc[ttech]
+                            'transportUnitPower': tech_eco_data.p_max_fonc[ttech]
                             }
                            }
                      )
@@ -436,7 +403,7 @@ for k, year in enumerate(yearList):
                             'transportDischargeFactors': {'hydrogen': 5e-3},
                             'transportDissipation': 2e-5,
                             # puissance maximale de fonctionnement du pipeline (=débit max), fixée
-                            'transportUnitPower': p_max_fonc[ttech]
+                            'transportUnitPower': tech_eco_data.p_max_fonc[ttech]
                             }
                            }
                      )
@@ -454,7 +421,7 @@ for k, year in enumerate(yearList):
                             'transportChargeFactors': {'hydrogen': 5e-3},
                             'transportDischargeFactors': {'hydrogen': 5e-3},
                             'transportDissipation': 2e-5,
-                            'transportUnitPower': p_max_fonc[ttech]
+                            'transportUnitPower': tech_eco_data.p_max_fonc[ttech]
                             }
                            }
                      )
@@ -475,7 +442,7 @@ for k, year in enumerate(yearList):
                             'transportChargeFactors': {'hydrogen': 0.1},
                             'transportDischargeFactors': {'hydrogen': 0.001},
                             'transportDissipation': 0.0,
-                            'transportUnitPower': p_max_fonc[ttech]
+                            'transportUnitPower': tech_eco_data.p_max_fonc[ttech]
                             }
                            }
                      )
@@ -506,14 +473,14 @@ scenario['economicParameters'] = pd.DataFrame({
 }
 )
 
-
+# données des importations
 df_res_ref = pd.read_csv('./Data/Raw/set2020-2050_horaire_TIMExRESxYEAR.csv',
                          sep=',', decimal='.', skiprows=0, comment="#").set_index(["YEAR", "TIMESTAMP", 'RESOURCES'])
 t8760 = df_res_ref.index.get_level_values('TIMESTAMP').unique().values
 
 # en €/MWh
 # 4.5€ le kg d'H soit les 33*e-3 MWh donc 4.5/(33*e-3)€ le MWh
-prix_kg = 0.0000005
+prix_kg = 0.0000005  # test
 prix_MWh = prix_kg/ (33 * 1e-3)
 
 scenario['resourceImportPrices'] = pd.concat(
@@ -545,7 +512,8 @@ scenario['resourceImportCO2eq'] = pd.concat(
             'natural gas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1 + 203.5 * (1 - tech_eco_data.get_biogas_share_in_network_RTE(year)),
             'biogas': max(0, 0.03 * (1 - (year - yearZero)/(2050 - yearZero))) * 29 / 13.1,
             # Taking 100 yr GWP of H2 and 5% losses due to upstream leaks. Leaks fall to 2% in 2050 See: https://www.energypolicy.columbia.edu/research/commentary/hydrogen-leakage-potential-risk-hydrogen-economy
-            'hydrogen': max(0, 0.05 - .03 * (year - yearZero)/(2050 - yearZero)) * 11 / 33,
+            'hydrogen': 0
+            # max(0, 0.05 - .03 * (year - yearZero)/(2050 - yearZero)) * 11 / 33,
         }) for k, year in enumerate(yearList[1:])
         for area in areaList
     )

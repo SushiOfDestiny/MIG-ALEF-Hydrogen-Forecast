@@ -1,6 +1,38 @@
 from scipy.interpolate import interp1d
 import numpy as np
-import scenarios
+
+#############################
+# PROPRIETES TECHNOLOGIQUES #
+#############################
+# un effort est fait pour reprendre les données choisies dans les scénarios du groupe infrastructure
+# capex, opex, lifespan ne sont pas changés et restent déterminés par electrolyser_capex_Reksten2022
+
+# on distingue la puissance de consommation et de production
+
+# propriétés électrolyseurs
+# facteur conversion électricité -> hydrogène
+conv_el_h = 0.65 
+# hydrogène produit par électrolyseur de taille S (en MW), selon scénario 1 
+# (1MW de conso électrique pour 18kg/h ~ 600kW d'hydrogène produit)
+power_S = 600e-3  #MW
+
+# liste des puissances max de ressources 
+# - pour une tech : produites par une installation (en MW)
+# - pour une ttech : transportables par km (en MW/km)
+p_max_fonc = {
+    "Offshore wind - floating" : 12,
+    "Onshore wind" : 6,
+    "Ground PV" : 6.4*10**(-5),
+    "ElectrolysisS" : power_S,
+    "ElectrolysisM" : 10 * power_S,
+    "ElectrolysisL" : 100 * power_S,
+    "Pipeline_S" : 100, # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+    "Pipeline_M" : 1000,
+    "Pipeline_L" : 10000,
+    # capacité d'un camion : C = 600kg = 600*33 = 19800 kWh = 19.8 MWh
+    # c'est aussi la qté d'hydrogène qu'un camion transport en 1 heure sur 1 km
+    "truckTransportingHydrogen" : 19.8
+}
 
 
 def get_biogas_share_in_network_RTE(year):
@@ -64,13 +96,10 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
         }
 
     # modification des puissances p_max_fonc selon les données de scenarios.py
-	# comme Pel est ici la puissance électrique consommée, on divise par le facteur de conversion élec->H 
+        # comme Pel est ici la puissance électrique consommée, on divise par le facteur de conversion élec->H
     elif tech == "ElectrolysisS":
         capex = {
-            'ref':  interp1d(
-                years,
-                electrolyser_capex_Reksten2022(
-                    tech='PEM', Pel=scenarios.p_max_fonc[tech] / scenarios.conv_el_h, year=np.array(years)
+            'ref':  interp1d(years,electrolyser_capex_Reksten2022(tech='PEM', Pel=p_max_fonc[tech] / conv_el_h, year=np.array(years)
                 )
             ),
         }
@@ -83,14 +112,8 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 
     elif tech == "ElectrolysisM":
         capex = {
-            'ref':  interp1d(
-				years, 
-				electrolyser_capex_Reksten2022(
-					tech='PEM', 
-					Pel=scenarios.p_max_fonc[tech] / scenarios.conv_el_h, 
-					year=np.array(years)
-					)
-					),
+            'ref':  interp1d(years,electrolyser_capex_Reksten2022(tech='PEM',Pel=p_max_fonc[tech] /conv_el_h,year=np.array(years))
+            ),
         }
         opex = {
             'ref': interp1d(years, [12] * 5),
@@ -102,13 +125,13 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
     elif tech == "ElectrolysisL":
         capex = {
             'ref':  interp1d(
-				years, 
-				electrolyser_capex_Reksten2022(
-					tech='PEM', 
-					Pel=scenarios.p_max_fonc[tech] / scenarios.conv_el_h, 
-					year=np.array(years)
-					)
-					),
+                years,
+                electrolyser_capex_Reksten2022(
+                    tech='PEM',
+                    Pel=p_max_fonc[tech] / conv_el_h,
+                    year=np.array(years)
+                )
+            ),
         }
         opex = {
             'ref': interp1d(years, [12] * 5),
@@ -166,8 +189,8 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 def electrolyser_capex_Reksten2022(tech, Pel, year=2020):
     '''
     Reference: Reksten et al. (2022) https://www.sciencedirect.com/science/article/pii/S0360319922040253
-    
-	Pel: electrolyser electrical power consumption (MW)
+
+        Pel: electrolyser electrical power consumption (MW)
     tech: electrolyser technology
     year: installation year 
     '''
