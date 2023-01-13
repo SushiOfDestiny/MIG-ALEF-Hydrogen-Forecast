@@ -181,8 +181,6 @@ def print_global_transport_camembert_instant(y, power_Dvar='out/transportFlowOut
     except :
         return f"Il n'y a pas de transport sur l'année {y}"
    
-    
-def prod_H2_an(y, file = "out/power_Dvar.csv", tot = False) :
 
 def print_global_H2_bar_install(power_Dvar='out/capacity_Pvar.csv'):
     YEAR = [2030, 2040, 2050]
@@ -330,8 +328,27 @@ def energy_H2(file = "out_scenario1bis/energy_Pvar.csv") :
         aggfunc = 'sum'
     ))
 
+def h_fonct(fenergy = 'out_scenario1/energy_Pvar.csv',fpuissance = 'out_scenario1/power_Dvar.csv') :
+    dfe = pd.read_csv(fenergy)
+    dfp = pd.read_csv(fpuissance)
+    print(dfe.columns)
+    print(dfp)
 
-prod_H2_an(2050, tot=False)
-plt.show()
+def prov_transport(zone, year, file = 'out_scenario2/transportFlowIn_Dvar.csv') :
+    df = pd.read_csv(file)
+    df = df[(df['AREA.1'] == zone) & (df['RESOURCES'] == 'hydrogen') & (df['YEAR_op'] == year)]
+    piv = df.pivot_table(index = 'AREA',
+    values = 'transportFlowIn_Dvar',
+    aggfunc = 'sum')
+    piv.columns = ["quantité d'importations"]
+    piv.plot(kind='pie', subplots=True, title=f"Provenance des importations d'hydrogène à {zone} en {year}")
+
+
+#prod_H2_an(2050, tot=False)
+
+#plt.show()
+for year in range(2040, 2060, 10) :
+    prov_transport('Marseill', year)
+    plt.savefig(f'Importations_Nice_{year}')
 
 
