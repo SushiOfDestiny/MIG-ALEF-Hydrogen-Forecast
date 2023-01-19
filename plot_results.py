@@ -182,7 +182,7 @@ def print_global_transport_camembert_instant(y, power_Dvar='out/transportFlowOut
         return f"Il n'y a pas de transport sur l'année {y}"
    
     
-def prod_H2_an(y, file = "out/power_Dvar.csv", tot = False) :
+# def prod_H2_an(y, file = "out/power_Dvar.csv", tot = False) :
 
 def print_global_H2_bar_install(power_Dvar='out/capacity_Pvar.csv'):
     YEAR = [2030, 2040, 2050]
@@ -321,7 +321,7 @@ def prod_H2_an(file = "out_scenario1/power_Dvar.csv") :
         title="Puissance instantanée par moyen de transformation par année"
     )
  
-def energy_H2(file = "out_scenario1bis/energy_Pvar.csv") :
+def energy_H2(file = "out_scenario1/energy_Pvar.csv") :
     df = pd.read_csv(file)
     print(df.pivot_table(
         index = 'RESOURCES',
@@ -331,7 +331,10 @@ def energy_H2(file = "out_scenario1bis/energy_Pvar.csv") :
     ))
 
 
-prod_H2_an(2050, tot=False)
+print_global_H2_bar()
+# prod_H2_an(2050, tot=False)
+energy_H2()
+print_global_H2_bar_install_capex
 plt.show()
 
 

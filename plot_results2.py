@@ -27,7 +27,7 @@ def split_df(variable, dff, entity_list, df_res):
 
 
 def show_power_Dvar(outputFolder='out_scenario1'):
-    '''shows the annual energy consumption by year and area from all tech'''
+    '''shows the annual energy production by year and area from all tech for all resources'''
 
     res = create_res_dict(outputFolder)
 

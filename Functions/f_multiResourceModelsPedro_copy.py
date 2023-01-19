@@ -534,9 +534,11 @@ def systemModelPedro(scenario, isAbstract=False):
             + model.turpeCosts_Pvar[y, 'electricity', area]
             + model.carbonCosts_Pvar[y, area]
             for y in model.YEAR_op for area in model.AREA) \
-            + 0.5 * sum(model.transportCarbonCosts_Pvar[y, ttech, area1, area2] + model.transportPowerCosts_Pvar[y, ttech, area1, area2]
+            + 0.5 * sum(model.transportCarbonCosts_Pvar[y, ttech, area1, area2] +
+                        model.transportPowerCosts_Pvar[y, ttech, area1, area2]
                         + model.transportEconomicalCosts_Pvar[y-dy, ttech, area1, area2]
-                        for y in model.YEAR_op for ttech in model.TRANS_TECHNO for area1 in model.AREA for area2 in model.AREA
+                        for y in model.YEAR_op for ttech in model.TRANS_TECHNO
+                        for area1 in model.AREA for area2 in model.AREA
                         )
     model.OBJ = Objective(rule=ObjectiveFunction_rule, sense=minimize)
 
@@ -996,11 +998,15 @@ def systemModelPedro(scenario, isAbstract=False):
 
     def FlowTot_lim_rule(model, y, t, res, ttech, area1, area2):
         if (res == model.transportResource[y, ttech]) and (area1 != area2):
-            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] <= model.TmaxTot_Pvar[y, ttech, area1, area2] * model.transportUnitPower[y, ttech]
+            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] <= \
+                model.TmaxTot_Pvar[y, ttech, area1, area2] * \
+                model.transportUnitPower[y, ttech]
         else:
-            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] == 0
+            return model.transportFlowOut_Dvar[y+dy, t, res, ttech, area1, area2] \
+                == 0
     model.FlowTot_lim = Constraint(
-        model.YEAR_invest, model.TIMESTAMP, model.RESOURCES, model.TRANS_TECHNO, model.AREA_AREA, rule=FlowTot_lim_rule)
+        model.YEAR_invest, model.TIMESTAMP, model.RESOURCES,
+        model.TRANS_TECHNO, model.AREA_AREA, rule=FlowTot_lim_rule)
 
     # Définition de TmaxTot en y, en fonction de TmaxTot en y-dy
     # encore valable avec des entiers

@@ -61,9 +61,9 @@ def demande_h_area(scenar, area, k):
         # demande  annuelle en millions de kilos d'hydrogènes
         demande_t_an = [100, 150, 175, 200]
     elif scenar == 1:
-        demande_t_an = [100, 739, 1092, 1974] # modifié selon scénario 1
+        demande_t_an = [100, 739, 1092, 1974]  # modifié selon scénario 1
     elif scenar == 2:
-        demande_t_an = [100, 464, 848, 1647] # modifié selon scénario 2
+        demande_t_an = [100, 464, 848, 1647]  # modifié selon scénario 2
     elif scenar == 3:
         demande_t_an = [100, 248, 239, 236]
 
@@ -85,7 +85,7 @@ def demande_h_area(scenar, area, k):
 
 def stockage_h_area(area):
     if area == "Fos":
-        return 100000
+        return 100000  # unité ?
     else:
         return 0
 
@@ -131,7 +131,8 @@ for area in areaList:
                                 'EmissionCO2': 0, 'Conversion': {'electricity': 0.4, 'hydrogen': 0},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
                                 'capacityLim': 100e3,  # capacité de production max d'une zone et d'une techno
-                                'techUnitPower': tech_eco_data.p_max_fonc[tech]  # puissance fonctionnelle maximale produite par une unité
+                                # puissance fonctionnelle maximale produite par une unité
+                                'techUnitPower': tech_eco_data.p_max_fonc[tech]
                                 }
                                }
                          )
@@ -175,7 +176,6 @@ for area in areaList:
                          )
         )
 
-
         tech = "ElectrolysisS"
         capex, opex, LifeSpan = tech_eco_data.get_capex_new_tech_RTE(
             tech, hyp='ref', year=year)
@@ -184,7 +184,7 @@ for area in areaList:
                                {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                                 'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
                                 'minCapacity': 0, 'maxCapacity': 10000,  # cap à investir
-                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': tech_eco_data.conv_el_h},
+                                'EmissionCO2': 0, 'Conversion': {'electricity': -1 / tech_eco_data.conv_el_h, 'hydrogen': 1},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
                                 'capacityLim': 100e3, 'techUnitPower': tech_eco_data.p_max_fonc[tech]
                                 },
@@ -200,7 +200,7 @@ for area in areaList:
                                {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                                 'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
                                 'minCapacity': 0, 'maxCapacity': 10000,
-                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': tech_eco_data.conv_el_h},
+                                'EmissionCO2': 0, 'Conversion': {'electricity': -1 / tech_eco_data.conv_el_h, 'hydrogen': 1},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
                                 'capacityLim': 100e3, 'techUnitPower': tech_eco_data.p_max_fonc[tech]
                                 },
@@ -216,7 +216,7 @@ for area in areaList:
                                {'AREA': area, 'YEAR': year, 'Category': 'Hydrogen production',
                                 'LifeSpan': LifeSpan, 'powerCost': 0, 'investCost': capex, 'operationCost': opex,
                                 'minCapacity': 0, 'maxCapacity': 10000,
-                                'EmissionCO2': 0, 'Conversion': {'electricity': -1, 'hydrogen': tech_eco_data.conv_el_h},
+                                'EmissionCO2': 0, 'Conversion': {'electricity': -1 / tech_eco_data.conv_el_h, 'hydrogen': 1},
                                 'EnergyNbhourCap': 0,  # used for hydroelectricity
                                 'capacityLim': 100e3, 'techUnitPower': tech_eco_data.p_max_fonc[tech]
                                 },
@@ -481,7 +481,7 @@ t8760 = df_res_ref.index.get_level_values('TIMESTAMP').unique().values
 # en €/MWh
 # 4.5€ le kg d'H soit les 33*e-3 MWh donc 4.5/(33*e-3)€ le MWh
 prix_kg = 0.0000005  # test
-prix_MWh = prix_kg/ (33 * 1e-3)
+prix_MWh = prix_kg / (33 * 1e-3)
 
 scenario['resourceImportPrices'] = pd.concat(
     (
@@ -493,7 +493,7 @@ scenario['resourceImportPrices'] = pd.concat(
             'natural gas': 2 * np.interp(t, t8760, df_res_ref.loc[(year, slice(None), 'gazNat'), 'importCost'].values),
             'biogas': 150 * np.ones(nHours),
 
-            'hydrogen': prix_MWh * np.ones(nHours), # à changer
+            'hydrogen': prix_MWh * np.ones(nHours),  # à changer
         }) for k, year in enumerate(yearList[1:])
         for area in areaList
     )
