@@ -11,27 +11,28 @@ import numpy as np
 
 # propriétés électrolyseurs
 # facteur conversion électricité -> hydrogène
-conv_el_h = 0.65 
-# hydrogène produit par électrolyseur de taille S (en MW), selon scénario 1 
+conv_el_h = 0.65
+# hydrogène produit par électrolyseur de taille S (en MW), selon scénario 1
 # (1MW de conso électrique pour 18kg/h ~ 600kW d'hydrogène produit)
-power_S = 600e-3  #MW
+power_S = 600e-3  # MW
 
-# liste des puissances max de ressources 
+# liste des puissances max de ressources
 # - pour une tech : produites par une installation (en MW)
 # - pour une ttech : transportables par km (en MW/km)
 p_max_fonc = {
-    "Offshore wind - floating" : 12,
-    "Onshore wind" : 6,
-    "Ground PV" : 6.4*10**(-5),
-    "ElectrolysisS" : power_S,
-    "ElectrolysisM" : 10 * power_S,
-    "ElectrolysisL" : 100 * power_S,
-    "Pipeline_S" : 100, # puissance maximale de fonctionnement du pipeline (=débit max), fixée
-    "Pipeline_M" : 1000,
-    "Pipeline_L" : 10000,
+    "Offshore wind - floating": 12,
+    "Onshore wind": 6,
+    "Ground PV": 6.4*10**(-5),
+    "ElectrolysisS": power_S,
+    "ElectrolysisM": 10 * power_S,
+    "ElectrolysisL": 100 * power_S,
+    # puissance maximale de fonctionnement du pipeline (=débit max), fixée
+    "Pipeline_S": 100,
+    "Pipeline_M": 1000,
+    "Pipeline_L": 10000,
     # capacité d'un camion : C = 600kg = 600*33 = 19800 kWh = 19.8 MWh
     # c'est aussi la qté d'hydrogène qu'un camion transport en 1 heure sur 1 km
-    "truckTransportingHydrogen" : 19.8
+    "truckTransportingHydrogen": 19.8
 }
 
 
@@ -96,12 +97,12 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
         }
 
     # modification des puissances p_max_fonc selon les données de scenarios.py
-        # comme Pel est ici la puissance électrique consommée, on divise par le facteur de conversion élec->H
+    # comme Pel est ici la puissance électrique consommée, on divise par le facteur de conversion élec->H
     elif tech == "ElectrolysisS":
         capex = {
-            'ref':  interp1d(years,electrolyser_capex_Reksten2022(tech='PEM', Pel=p_max_fonc[tech] / conv_el_h, year=np.array(years)
-                )
-            ),
+            'ref':  interp1d(years, electrolyser_capex_Reksten2022(tech='PEM', Pel=p_max_fonc[tech] / conv_el_h, year=np.array(years)
+                                                                   )
+                             ),
         }
         opex = {
             'ref': interp1d(years, [12] * 5),
@@ -112,8 +113,8 @@ def get_capex_new_tech_RTE(tech, hyp='ref', year=2020, var=None):
 
     elif tech == "ElectrolysisM":
         capex = {
-            'ref':  interp1d(years,electrolyser_capex_Reksten2022(tech='PEM',Pel=p_max_fonc[tech] /conv_el_h,year=np.array(years))
-            ),
+            'ref':  interp1d(years, electrolyser_capex_Reksten2022(tech='PEM', Pel=p_max_fonc[tech] / conv_el_h, year=np.array(years))
+                             ),
         }
         opex = {
             'ref': interp1d(years, [12] * 5),
@@ -194,7 +195,7 @@ def electrolyser_capex_Reksten2022(tech, Pel, year=2020):
     tech: electrolyser technology
     year: installation year 
     '''
-    # conversion en kW, unité dans laquelle la formule est écrite
+    # conversion des MW en kW, unité dans laquelle la formule est écrite
     pel_kW = Pel * 1.e3
 
     if tech == 'PEM':
@@ -203,3 +204,7 @@ def electrolyser_capex_Reksten2022(tech, Pel, year=2020):
         alpha, beta, k0, k = 0.649, -27.33, 301.04, 11603
 
     return (k0 + k/pel_kW * pel_kW**alpha) * (year/2020) ** beta
+
+# capex/kW pour electrolyseur S en 2050 = 748.70€
+# M : 654€
+# L : 614.41€
